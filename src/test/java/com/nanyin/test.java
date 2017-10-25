@@ -1,0 +1,19 @@
+package com.nanyin;
+
+import org.junit.Test;
+
+import java.sql.Time;
+import java.util.Date;
+
+/**
+ * Created by NanYin on 2017-10-01 下午9:40.
+ * 包名： com.nanyin
+ * 类描述：
+ */
+public class test {
+    @Test
+    public void test1(){
+        System.out.println(System.currentTimeMillis());
+        System.out.println(new Date());
+    }
+}

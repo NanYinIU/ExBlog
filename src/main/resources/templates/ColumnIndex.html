@@ -1,0 +1,273 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>blog</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="/assets/js/ie/html5shiv.js"></script><![endif]-->
+        <script src="/assets/js/jquery.min.js"></script>
+        <script src="/assets/js/template-web.js"></script>
+		<link rel="stylesheet" href="/assets/css/main.css" />
+        <link rel="stylesheet" href="/assets/css/dianzan/style.css" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="/assets/css/ie9.css" /><![endif]-->
+		<!--[if lte IE 8]><link rel="stylesheet" href="/assets/css/ie8.css" /><![endif]-->
+	</head>
+	<body>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="#">Social Blog</a></h1>
+						<nav class="links">
+							<ul>
+								<li><a href="#">博客专栏</a></li>
+								<li><a href="#">博文排行</a></li>
+								<li><a href="#">博客砖家</a></li>
+								<li><a href="#">我的博客</a></li>
+							</ul>
+						</nav>
+						<nav class="main">
+							<ul>
+								<li class="search">
+									<a class="fa-search" href="#search">Search</a>
+									<form id="searchForm" method="post" action="#">
+										<input type="text" name="search" id="search" placeholder="Search" />
+									</form>
+								</li>
+								<li class="menu">
+									<a class="fa-bars" href="#menu">Menu</a>
+								</li>
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<section id="menu">
+
+						<!-- Search -->
+							<section>
+								<form class="search" method="post" action="#">
+									<input type="text" name="search" placeholder="Search" />
+								</form>
+							</section>
+						<!-- Links -->
+							<section>
+								<ul class="links">
+									<li>
+										<a href="#">
+											<h3>博客专栏</h3>
+											<p>Feugiat tempus veroeros dolor</p>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<h3>博文排行</h3>
+											<p>Sed vitae justo condimentum</p>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<h3>博客砖家</h3>
+											<p>Phasellus sed ultricies mi congue</p>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<h3>我的博客</h3>
+											<p>Porta lectus amet ultricies</p>
+										</a>
+									</li>
+								</ul>
+							</section>
+						<!-- Actions -->
+							<section>
+								<ul class="actions vertical">
+									<a th:if="${session.user == null}"><li><a href="/user/login" class="button big fit">登录</a></li></a>
+									<a th:if="${session.user != null}"><li><a href="/user/logout" class="button big fit">更换账号</a></li></a>
+								</ul>
+							</section>
+
+					</section>
+
+
+				<!-- Main -->
+				<!--post-->
+
+
+				<div id="main">
+
+
+					<!-- Post -->
+					<article class="post" th:each="list,pageStat :${list}" >
+
+								<div class="mini-posts">
+									<!-- Mini Post -->
+									<article class="mini-post">
+										<header>
+											<h2><a href="#" th:text="${list.title}"></a></h2>
+											<time class="published" datetime="2015-10-20" th:text="${list.c_create_time}"></time>
+
+										</header>
+										<a href="#" class="image"><img height="200%" width="200%" th:src="${list.image}" alt="" /></a>
+									</article>
+								</div>
+
+
+					</article>
+
+
+
+					<ul class="actions pagination">
+						<li><a class="button big">return home</a></li>
+
+					</ul>
+
+
+
+
+
+						<!--&lt;!&ndash; Pagination &ndash;&gt;-->
+                        <!--<ul class="actions pagination">-->
+                            <!--<li><a href="#" class="button big next">more pages..</a></li>-->
+                        <!--</ul>-->
+
+
+					</div>
+
+			<!-- Sidebar -->
+					<!--<section id="sidebar">-->
+
+						<!--&lt;!&ndash; Intro &ndash;&gt;-->
+							<!--<section id="intro">-->
+
+                                <!--<a th:if="${session.user != null}"><a href="#" class="logo"><img src="/images/logo.jpg" alt="" /></a></a>-->
+                                <!--<a th:if="${session.user == null}"><a href="/user/login" class="logo"><img src="/images/unlogin.jpg" alt="" /></a></a>-->
+								<!--<header>-->
+                                    <!--<a th:if="${session.user == null}"><h3>&nbsp;未登录</h3></a>-->
+                                    <!--<a th:if="${session.user != null}"><h3>欢迎&nbsp;<a th:text="${session.user}">......</a></h3></a>-->
+									<!--&lt;!&ndash;<p th:text="${session.user}">..Another fine 每天都有好心情</p>&ndash;&gt;-->
+								<!--</header>-->
+							<!--</section>-->
+
+						<!--&lt;!&ndash; Mini Posts 主题 &ndash;&gt;-->
+						<!--<script type="text/html" id="mini_post">-->
+							<!--<section>-->
+								<!--<div class="mini-posts">-->
+
+									<!--&lt;!&ndash; Mini Post &ndash;&gt;-->
+									<!--<article class="mini-post">-->
+										<!--<header>-->
+											<!--<h3><a href="#">{{title}}</a></h3>-->
+											<!--<time class="published" datetime="2015-10-20">{{c_create_time}}</time>-->
+
+										<!--</header>-->
+										<!--<a href="#" class="image"><img src="{{image}}" alt="" /></a>-->
+									<!--</article>-->
+								<!--</div>-->
+							<!--</section>-->
+						<!--</script>-->
+
+						<!--<script type="text/javascript">-->
+                            <!--var html2 ='';-->
+                            <!--$(document).ready(function () {-->
+                                <!--url = '/column/findColumByCount';-->
+                                <!--$.ajax( {-->
+                                    <!--type : "post",-->
+                                    <!--dataType:"json",-->
+                                    <!--url : url,-->
+                                    <!--timeout : 20000,-->
+                                    <!--cache : false,-->
+                                    <!--success : function(data) {-->
+                                        <!--var i;-->
+                                        <!--for(i in data.colum){-->
+                                            <!--html2 = template('mini_post', data.colum[i])+html2;-->
+                                        <!--}-->
+                                        <!--document.getElementById('content').innerHTML = html2;-->
+                                    <!--}-->
+
+                                <!--});-->
+                            <!--})-->
+						<!--</script>-->
+
+						<!--<div class="span12">-->
+							<!--<div id="content"></div>-->
+						<!--</div>-->
+
+						<!--&lt;!&ndash; postlist  &ndash;&gt;-->
+						<!--<script type="text/html" id="post_list">-->
+
+							<!--<section>-->
+								<!--<ul class="posts">-->
+									<!--<li>-->
+										<!--<article>-->
+											<!--<header>-->
+												<!--<h3><a href="#">{{title}}</a></h3>-->
+												<!--<h4><a href="#">{{login_name}}</a></h4>-->
+												<!--<time class="published" datetime="2015-10-20">{{create_time}}</time>-->
+											<!--</header>-->
+											<!--<a href="#" class="image"><img src="{{head}}" alt="" /></a>-->
+										<!--</article>-->
+									<!--</li>-->
+								<!--</ul>-->
+							<!--</section>-->
+						<!--</script>-->
+
+
+						<!--<script type="text/javascript">-->
+                            <!--var html3 ='';-->
+                            <!--$(document).ready(function () {-->
+                                <!--url = '/PapersByMark';-->
+                                <!--$.ajax( {-->
+                                    <!--type : "post",-->
+                                    <!--dataType:"json",-->
+                                    <!--url : url,-->
+                                    <!--timeout : 20000,-->
+                                    <!--cache : false,-->
+                                    <!--success : function(data) {-->
+<!--//                alert(JSON.stringify(data.column[0]));-->
+                                        <!--var i;-->
+                                        <!--var j;-->
+                                        <!--for(i in data.paper){-->
+                                            <!--html3 = template('post_list', data.paper[i])+html3;-->
+                                        <!--}-->
+                                        <!--document.getElementById('content4').innerHTML = html3;-->
+                                    <!--}-->
+
+                                <!--});-->
+                            <!--})-->
+						<!--</script>-->
+
+						<!--<div class="span12">-->
+							<!--<div id="content4"></div>-->
+						<!--</div>-->
+
+						<!--&lt;!&ndash; About &ndash;&gt;-->
+							<!--<section class="blurb">-->
+								<!--<h2>关于</h2>-->
+								<!--<p>Mauris neque quam, fermentum ut nisl vitae, convallis maximus nisl. Sed mattis nunc id lorem euismod amet placerat. Vivamus porttitor magna enim, ac accumsan tortor cursus at phasellus sed ultricies.</p>-->
+								<!--<ul class="actions">-->
+									<!--<li><a href="#" class="button">了解更多</a></li>-->
+                                    <!--<li><a th:text="${username}">..</a></li>-->
+								<!--</ul>-->
+							<!--</section>-->
+
+						<!--&lt;!&ndash; Footer &ndash;&gt;-->
+							<!--<section id="footer">-->
+								<!--<p class="copyright">&copy; Untitled..</p>-->
+							<!--</section>-->
+
+					<!--</section>-->
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="/assets/js/jquery.min.js"></script>
+			<script src="/assets/js/skel.min.js"></script>
+			<script src="/assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="/assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="/assets/js/main.js"></script>
+
+	</body>
+</html>
