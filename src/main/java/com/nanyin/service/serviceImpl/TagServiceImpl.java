@@ -27,4 +27,19 @@ public class TagServiceImpl implements TagService {
     public int findTagCountByTagName(String name, String tag_name) {
         return tagMapper.findTagCountByTagName(name, tag_name);
     }
+
+    @Override
+    public int insertTagByUserId(List<String> tagName, int paperId) {
+        return tagMapper.insertTagByUserId(tagName,paperId);
+    }
+
+    @Override
+    public int delectTag(int paper_id) {
+        return tagMapper.delectTag(paper_id);
+    }
+
+    @Override
+    public int findHasTagByPaperId(int paper_id) {
+        return tagMapper.findHasTagByPaperId(paper_id);
+    }
 }

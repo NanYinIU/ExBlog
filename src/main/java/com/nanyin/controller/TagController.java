@@ -45,4 +45,17 @@ public class TagController {
         map.put("tagList",List);
         return map;
     }
+    @RequestMapping("/findAllTagsByName/{name}")
+    public @ResponseBody Map<String,Object> findAllTagsByName(@PathVariable("name") String name){
+            Set<String> list = tagService.findTagNameByUser(name);
+            logger.info("set:"+list);
+            Map<String ,Object> map = new HashMap<>();
+            boolean flag = true ;
+            if(list.size() == 0){
+                flag = false;
+            }
+            map.put("flag",flag);
+            map.put("list",list);
+            return map;
+    }
 }

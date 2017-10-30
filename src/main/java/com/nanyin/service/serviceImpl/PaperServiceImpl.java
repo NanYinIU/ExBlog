@@ -3,15 +3,19 @@ package com.nanyin.service.serviceImpl;
 import com.nanyin.config.AllAttriOfPaper;
 import com.nanyin.config.PaperAndComments;
 import com.nanyin.mapper.PaperMapper;
+import com.nanyin.mapper.UserMapper;
 import com.nanyin.model.Column;
 import com.nanyin.model.Comments;
 import com.nanyin.model.Paper;
 import com.nanyin.model.Users;
 import com.nanyin.service.CommentsService;
 import com.nanyin.service.PaperService;
+import com.nanyin.service.UserService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +32,9 @@ public class PaperServiceImpl implements PaperService {
     PaperMapper paperMapper;
     @Autowired
     CommentsService commentsService;
-
+    @Autowired
+    UserService userService;
+    Logger logger = Logger.getLogger(this.getClass());
     @Override
     public Map<String, Object> findAllPapersByTime() {
         Map<String,Object> map = new HashMap<>();
@@ -43,6 +49,7 @@ public class PaperServiceImpl implements PaperService {
           int count = commentsService.findCommentCountByTitle(title);
           paperAndComments1.setTitle(title);
           paperAndComments1.setContent(paper.getContent());
+          paperAndComments1.setSegment(paper.getSgement());
           paperAndComments1.setCount(count);
           paperAndComments1.setCreate_time(paper.getCreate_time());
           paperAndComments1.setPaper_image(paper.getPaper_image());
@@ -136,6 +143,8 @@ public class PaperServiceImpl implements PaperService {
             paperAndCommentss.setTitle(title);
             paperAndCommentss.setContent(paper.getContent());
             paperAndCommentss.setCount(count);
+            paperAndCommentss.setSegment(paper.getSgement());
+            logger.info("paper segment:"+ paper.getSgement());
             paperAndCommentss.setCreate_time(paper.getCreate_time());
             paperAndCommentss.setPaper_image(paper.getPaper_image());
             paperAndCommentss.setMark(paper.getMark());
@@ -181,4 +190,50 @@ public class PaperServiceImpl implements PaperService {
 
         return paperMapper.deletePaperByPaperId(id);
     }
+
+    @Override
+    public Map<String,Object> findPaperByUser(String name,String pageNum) {
+        int limit = 10 ;
+        logger.info(pageNum);
+        int pageNum1 = Integer.parseInt(pageNum);
+        Map<String,Object> map = new HashMap<>();
+        int count = paperMapper.findCountOfPaperByUser(name);
+        List<Paper> papers = paperMapper.findPaperByUser(name,(pageNum1-1) * limit,limit);
+//        logger.info(papers);
+        map.put("code",0);
+        map.put("mes","");
+        map.put("count",count);
+        map.put("data",papers);
+        return map;
+    }
+
+    @Override
+    public Paper findPaperById(String id) {
+        int id1 = Integer.parseInt(id);
+        return paperMapper.findPaperById(id1);
+    }
+
+    @Override
+    public int updatePaperContentById(String content, String id) {
+        int id1 = Integer.parseInt(id);
+        return paperMapper.updatePaperContentById(content,id1);
+    }
+
+    @Override
+    public int insertPaper(String title, String content, String segment, String name) {
+//        需要把name通过usermapper转为id插入
+        int author = userService.findAuthorByName(name);
+        Timestamp createTime = new Timestamp(System.currentTimeMillis());
+        int mark = 1 ;
+        String is_pass = "正在审核";
+        return paperMapper.insertPaper(title,content,createTime,author,segment,mark,is_pass);
+    }
+
+    @Override
+    public int findPaperId(String title, String segment,String name) {
+        int author = userService.findAuthorByName(name);
+        return paperMapper.findPaperId(title,segment,author);
+    }
+
+
 }

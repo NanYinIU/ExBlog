@@ -12,4 +12,6 @@ import org.springframework.stereotype.Service;
 public interface UserService {
 
     Users findUsersByName(String name);
+
+    int findAuthorByName(String name);
 }

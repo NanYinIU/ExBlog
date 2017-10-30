@@ -13,6 +13,7 @@ public class PaperAndComments {
     private int id;
     private String title;
     private String content;
+    private String segment;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp create_time;
     private int mark;
@@ -20,6 +21,14 @@ public class PaperAndComments {
     private int count;
     private String login_name;
     private String head;
+
+    public String getSegment() {
+        return segment;
+    }
+
+    public void setSegment(String segment) {
+        this.segment = segment;
+    }
 
     public String getHead() {
         return head;

@@ -17,4 +17,16 @@ public interface TagService {
     Set<String> findTagNameByUser(String name);
 
     int findTagCountByTagName(String name,String tag_name);
+
+    /**
+     * 为paper添加tag标签
+     * @param tagName
+     * @param paperId
+     * @return
+     */
+    int insertTagByUserId(List<String> tagName,int paperId);
+
+    int delectTag(int paper_id);
+
+    int findHasTagByPaperId(int paper_id);
 }

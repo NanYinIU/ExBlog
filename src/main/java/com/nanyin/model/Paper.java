@@ -18,6 +18,30 @@ public class Paper {
     private int mark;
     private String paper_image;
     private int author;
+    /**
+     *  片段
+     */
+    private String segment;
+    /**
+     *  文章状态
+     */
+    private String is_pass;
+
+    public String getIs_pass() {
+        return is_pass;
+    }
+
+    public void setIs_pass(String is_pass) {
+        this.is_pass = is_pass;
+    }
+
+    public String getSgement() {
+        return segment;
+    }
+
+    public void setSgement(String semgent) {
+        this.segment = semgent;
+    }
 
     public int getId() {
         return id;

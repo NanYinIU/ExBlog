@@ -1,6 +1,7 @@
 package com.nanyin.mapper;
 
 import com.nanyin.model.Column;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -38,7 +39,21 @@ public interface ColumMapper {
             "WHERE cp.Column_id = c.id AND cp.paper_id = p.id AND u.id = p.author AND u.login_name=#{name}")
     Set<String> findCoumnByUser(String name);
 
+    /**
+     *  根据插入的column title 查询到对应的id
+     * @param title column title
+     * @return column id
+     */
+    @Select("SELECT id FROM social_blog.`Column` WHERE title=#{title}")
+    int findColumnId(String title);
 
+    /**
+     * 专题和paper对应的表
+     * @param columnId
+     * @param paperId
+     * @return
+     */
+    @Insert("INSERT INTO social_blog.Column_paper(Column_id,paper_id) VALUES(#{Column_id},#{paper_id})")
+    int insertColumnPaper(@Param("Column_id") int columnId,@Param("paper_id") int paperId);
 
-// 保证了专题和对应的paper的数量
 }

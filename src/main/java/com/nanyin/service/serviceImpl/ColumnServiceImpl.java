@@ -37,4 +37,14 @@ public class ColumnServiceImpl implements ColumnService {
     public int findCountByTitle(String title, String name) {
         return columMapper.findCountByTitle(title, name);
     }
+
+    @Override
+    public int insertColumnPaper(int clumnId, int paperId) {
+        return columMapper.insertColumnPaper(clumnId,paperId);
+    }
+
+    @Override
+    public int findColumnId(String title) {
+        return columMapper.findColumnId(title);
+    }
 }

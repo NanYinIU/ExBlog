@@ -3,6 +3,7 @@ package com.nanyin;
 import org.junit.Test;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -15,5 +16,6 @@ public class test {
     public void test1(){
         System.out.println(System.currentTimeMillis());
         System.out.println(new Date());
+        System.out.println(new Timestamp(System.currentTimeMillis()));
     }
 }

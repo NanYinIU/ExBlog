@@ -5,6 +5,7 @@ import com.nanyin.model.*;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public interface PaperMapper {
     List<Paper> findAllPapersByTime();
 
 //  按照热度排序
-    @Select("SELECT * FROM social_blog.paper p ORDER BY p.mark DESC ")
+    @Select("SELECT * FROM social_blog.paper p ORDER BY p.mark DESC limit 0,7")
     List<Paper> findAllPapersByMark();
     // 根据文章title 查作者信息
     @Select("SELECT u.* FROM social_blog.users u , social_blog.paper p WHERE p.author = u.id AND p.id=#{id}")
@@ -65,6 +66,9 @@ public interface PaperMapper {
     @Select("SELECT c.title FROM social_blog.paper p,social_blog.`Column` c ,social_blog.Column_paper cp WHERE cp.Column_id = c.id AND cp.paper_id = p.id AND p.id = #{id}")
     String findColumnsById(int id);
 
+    /**
+     * 根据id查询paper
+     */
     @Select("SELECT * FROM social_blog.paper p WHERE p.id = #{id}")
     Paper findPaperById(int id);
 
@@ -84,7 +88,64 @@ public interface PaperMapper {
     })
     List<Paper> findPaperByUserName(@Param("name") String name,@Param("search") String search);
 
+    /**
+     * 根据id删除paper信息
+     * @param id paperid
+     * @return
+     */
     @Delete("DELETE FROM social_blog.paper WHERE id=#{id}")
     int deletePaperByPaperId(int id);
 
+    /**
+     * 查到所有的文章信息
+     *  @param name user's name
+     *  @param page = pageNum*limit-1
+     *  @param limit             
+     */
+    @Select("SELECT p.* FROM social_blog.paper p LEFT JOIN social_blog.users u ON u.id = p.author WHERE u.login_name=#{name} LIMIT #{page},#{limit}")
+    List<Paper> findPaperByUser(@Param("name") String name,@Param("page") int page,@Param("limit") int limit);
+
+    /**
+     * 查询总条数
+     */
+    @Select("SELECT COUNT(*) FROM social_blog.paper p LEFT JOIN social_blog.users u ON u.id = p.author WHERE u.login_name=#{name}")
+    int findCountOfPaperByUser(String name);
+
+    /**
+     * 更新文章内容
+     * @param content
+     * @param id
+     * @return
+     */
+    @Update("UPDATE social_blog.paper p SET p.content = #{content} WHERE p.id = #{id} ")
+    int updatePaperContentById(@Param("content") String content,@Param("id") int id);
+
+
+    /**
+     *
+     * @param title 标题
+     * @param content 文章正文
+     * @param createTime 创建时间
+     * @param author 作者
+     * @param segment 片段
+     * @param mark 初始设为一
+     * @param is_pass 初始设置 正在审核
+     * @return
+     */
+    @Insert("INSERT INTO social_blog.paper(title,content,create_time,mark,author,segment,is_pass) " +
+            "VALUES(#{title},#{content},#{createTime},#{mark},#{author},#{segment},#{is_pass})")
+    int insertPaper(
+            @Param("title") String title,  @Param("content")String content,
+            @Param("createTime") Timestamp createTime, @Param("author")int author,
+            @Param("segment") String segment,@Param("mark") int mark,@Param("is_pass") String is_pass);
+
+    /**
+     * 根据信息查id
+     * @param title
+     * @param segment
+     * @param author
+     * @return
+     */
+    @Select("SELECT id FROM social_blog.paper WHERE title=#{title} AND segment=#{segment} AND author = #{author}")
+    int findPaperId(@Param("title") String title,@Param("segment") String segment,@Param("author") int author);
 }

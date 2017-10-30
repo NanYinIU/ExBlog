@@ -22,5 +22,16 @@ public interface ColumnService {
 
     int findCountByTitle(String title,String name);
 
+    /**
+     * 为paper添加主题
+     * @param clumnId
+     * @param paperId
+     * @return
+     */
+    int insertColumnPaper(int clumnId,int paperId);
+
+    int findColumnId(String title);
+
+
 
 }

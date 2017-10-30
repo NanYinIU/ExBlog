@@ -3,21 +3,16 @@ package com.nanyin.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.nanyin.config.AllAttriOfPaper;
+import com.nanyin.config.InsertPojo;
 import com.nanyin.model.Paper;
-import com.nanyin.service.CommentsService;
-import com.nanyin.service.PaperService;
+import com.nanyin.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -33,6 +28,12 @@ public class PaperController {
     PaperService paperService;
     @Autowired
     CommentsService commentsService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    TagService tagService;
+    @Autowired
+    ColumnService columnService;
     @RequestMapping("/returnHome")
     public ModelAndView returnHome(){
 
@@ -170,9 +171,69 @@ public class PaperController {
     public @ResponseBody
     int deletePaperByPaperId(@PathVariable("id") int id){
         int A = paperService.deletePaperByPaperId(id);
+        //这里手动把对应的tag删除
+        //先查对应的paperid里有没有tag
+        int hasTag = tagService.findHasTagByPaperId(id);
+        if(hasTag!=0){
+            tagService.delectTag(id);
+        }
+        else {
+            logger.info("这个paper没有tag");
+        }
         logger.info("返回值："+A);
         return A;
     }
 
+    @RequestMapping("/paper/findPaperByName/{name}/{pageNum}")
+    public @ResponseBody Map<String,Object> findPaperByName(
+            @PathVariable("name") String name, @PathVariable("pageNum") String pageNum){
+        Map<String ,Object> map = paperService.findPaperByUser(name,pageNum);
+        map.put("pageNum",pageNum);
+        return map;
+    }
+
+    @RequestMapping("/paper/updateContent/{id}")
+    public @ResponseBody int updateContent(@PathVariable("id") String id,String content){
+        return paperService.updatePaperContentById(content,id);
+    }
+
+    /**
+     * @param insertPojo 插入的数据类型
+     * @return 返回值 根据返回值判断是否返回成功
+     */
+    @RequestMapping(value = "/paper/insertAll/{user}",method = RequestMethod.POST)
+    public @ResponseBody int insertAll(
+              InsertPojo insertPojo
+            , @PathVariable("user") String user){
+        String title = insertPojo.getTitle();
+        String content = insertPojo.getMain1();
+        String newTag = insertPojo.getNewTag();
+        String segment = insertPojo.getSegment();
+        List<String> tags = new LinkedList<>();
+        List<String> tag = insertPojo.getTag();
+
+        if(tag!=null){
+            tags.addAll(tag);
+        }
+        tags.add(newTag);
+        String theme = insertPojo.getTheme();
+        logger.info("theme:"+theme+"is null?"+theme.equals(null));
+        logger.info("表单内容"+insertPojo);
+        logger.info(insertPojo.getSegment());
+        // 插入里一条paper的记录 自动生成一个id值
+        int result = paperService.insertPaper(title,content,segment,user);
+        // 根据信息查询paper的id
+        int paperid = paperService.findPaperId(title,segment,user);
+        // 插入tag和主题
+        if(tags.size()!=0){
+            tagService.insertTagByUserId(tags,paperid);
+        }
+        if(theme != null && !"".equals(theme)){
+            int columnId = columnService.findColumnId(theme);
+            int result1 = columnService.insertColumnPaper(columnId,paperid);
+        }
+
+        return result ;
+    }
 
 }

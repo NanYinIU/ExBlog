@@ -11,9 +11,10 @@
 
         <link rel="stylesheet" href="/assets/css/main.css" />
         <link rel="stylesheet" href="/assets/css/select2.min.css" />
-        <link rel="stylesheet" href="/assets/css/dianzan/style.css" />
-		<!--[if lte IE 9]><link rel="stylesheet" href="/assets/css/ie9.css" /><![endif]-->
-		<!--[if lte IE 8]><link rel="stylesheet" href="/assets/css/ie8.css" /><![endif]-->
+
+		<link rel="stylesheet" href="/layui/plugins/layui/css/layui.css" media="all" />
+		<script src="/layui/plugins/layui/layui.js"></script>
+		<script src="/assets/js/jquery.min.js"></script>
 
 		<link rel="stylesheet" href="/editmd/css/editormd.css" />
 		<link rel="stylesheet" href="/editmd/css/editormd.preview.css" />
@@ -30,166 +31,64 @@
 		<script src="/editmd/lib/jquery.flowchart.min.js"></script>
 	</head>
 	<body>
+    <input type="hidden" id="getUser" th:value="${session.user}"/>
+    <input type="hidden" id="getContent" th:value="${content}"/>
+	<div style="margin: 15px;">
+		<fieldset class="layui-elem-field">
+            <legend><button class="layui-btn layui-btn-danger layui-btn-radius" id="insertContent">发表博客</button></legend>
+			<div id="test-editormd">  </div>
+		</fieldset>
+	</div>
+        <div class="mini-posts">
+                <script>
+                    var getUser = document.getElementById("getUser").value;
+                    var getContent = document.getElementById("getContent").value;
+                    layui.use([ 'layer', 'element'], function(){
+                        layer = layui.layer;//弹层
+                    });
+                    function get() {
+						alert(getUser)
+                    }
+                    function push(content) {
 
-		<!-- Wrapper -->
-			<div id="wrapper">
+						
+                        layer.open({
+                            title:'内容',
+                            area: ['800px', '550px'],
+                            type: 2,
+                            content: '/M1',
+                            success:function () {
 
-				<!-- Header -->
-					<header id="header">
-						<h1><a href="#">Social Blog</a></h1>
-						<nav class="links">
-							<ul>
-								<li><a href="#">博客专栏</a></li>
-								<li><a href="#">博文排行</a></li>
-								<li><a href="#">博客砖家</a></li>
-								<li><a href="#">我的博客</a></li>
-							</ul>
-						</nav>
-						<nav class="main">
-							<ul>
-								<li class="search">
-									<a class="fa-search" href="#search">Search</a>
-									<form id="searchForm" method="post" action="#">
-										<input type="text" name="search" id="search" placeholder="Search" />
-									</form>
-								</li>
-								<li class="menu">
-									<a class="fa-bars" href="#menu">Menu</a>
-								</li>
-							</ul>
-						</nav>
-					</header>
-
-				<!-- Menu -->
-					<section id="menu">
-
-						<!-- Search -->
-							<section>
-								<form class="search" method="post" action="#">
-									<input type="text" name="search" placeholder="Search" />
-								</form>
-							</section>
-						<!-- Links -->
-							<section>
-								<ul class="links">
-									<li>
-										<a href="#">
-											<h3>博客专栏</h3>
-											<p>Feugiat tempus veroeros dolor</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<h3>博文排行</h3>
-											<p>Sed vitae justo condimentum</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<h3>博客砖家</h3>
-											<p>Phasellus sed ultricies mi congue</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<h3>我的博客</h3>
-											<p>Porta lectus amet ultricies</p>
-										</a>
-									</li>
-								</ul>
-							</section>
-						<!-- Actions -->
-							<section>
-								<ul class="actions vertical">
-									<a th:if="${session.user == null}"><li><a href="/user/login" class="button big fit">登录</a></li></a>
-									<a th:if="${session.user != null}"><li><a href="/user/logout" class="button big fit">更换账号</a></li></a>
-								</ul>
-							</section>
-
-					</section>
+                            }
+                        });
+                    }
+                </script>
 
 
-				<!-- Main -->
-				<!--post-->
+                <script type="text/javascript">
+                            var newContent;
+                            var testEditor;
+                            $(function() {
+                                   testEditor = editormd("test-editormd", {
+                                       width: "90%",
+                                       height: 640,
+                                       path : '../editmd/lib/',
+                                       imageUpload : true,
+                                       imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                                       imageUploadURL : "/uploadFile",
+                                       emoji : true,
+                                       taskList : true,
+                                       saveHTMLToTextarea : true
+                                   });
+                            });
+                            $("#insertContent").bind('click', function(){
+                                newContent = testEditor.getMarkdown();
+                                push(newContent);
+
+                            });
 
 
-				<div id="main">
-
-
-					<!-- Post -->
-					<article class="post"  >
-
-								<div class="mini-posts">
-									<!-- Mini Post -->
-									<article class="mini-post">
-									<div id="test-editormd">  </div>
-										<script type="text/javascript">
-                                            var testEditor;
-
-                                            $(function() {
-                                                testEditor = editormd("test-editormd", {
-                                                    width: "90%",
-                                                    height: 640,
-                                                    path : '../editmd/lib/',
-                                                    imageUpload : true,
-                                                    imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-                                                    imageUploadURL : "/uploadFile",
-                                                    emoji : true,
-                                                    taskList : true,
-                                                    saveHTMLToTextarea : true
-                                                });
-                                            });
-                                        </script>
-									</article>
-								</div>
-
-					</article>
-
-
-                </div>
-                <section id="sidebar">
-                    <section>
-                        <div class="mini-posts">
-
-                            <!-- Mini Post -->
-                            <article class="mini-post">
-                                <header>
-                                    <form>
-                                        文章标题： <input type="text"/>
-                                        文章标签： <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
-                                                        <option value="AL">Alabama</option>
-                                                        <option value="WY">Wyoming</option>
-                                                        <option value="AL">Alabama</option>
-                                                        <option value="WY">Wyoming</option>
-                                                    </select>
-                                        文章主题：<select class="js-example-basic-single" name="state">
-                                                    <option value="AL">Alabama</option>
-                                                    <option value="WY">Wyoming</option>
-                                                    <option value="AL">Alabama</option>
-                                                    <option value="WY">Wyoming</option>
-                                                  </select>
-                                        <script type="text/javascript">
-                                            $(document).ready(function() {
-                                                $('.js-example-basic-multiple').select2();
-                                                $('.js-example-basic-single').select2();
-                                            });
-                                        </script>
-                                    </form>
-
-                                </header>
-                            </article>
-                        </div>
-                    </section>
-                </section>
-
-			</div>
-
-		<!-- Scripts -->
-			<!--<script src="/assets/js/jquery.min.js"></script>-->
-			<script src="/assets/js/skel.min.js"></script>
-			<script src="/assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="/assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="/assets/js/main.js"></script>
-
+                </script>
+        </div>
 	</body>
 </html>

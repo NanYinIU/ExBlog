@@ -110,7 +110,9 @@
 							</div>
 							<div class="title">
 								<!--th:href="@{/paper/SelectPaper/}+${page.id}"-->
-								<h2><a id="title"><a th:text="${page.title}"> </a></a></h2>
+								<h2><a id="title"><a th:text="${page.title}"> </a></a>
+								</h2>
+                                <p th:text="${page.segment}"></p>
 							</div>
 						</header>
 						<footer>

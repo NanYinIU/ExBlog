@@ -32,4 +32,15 @@ public interface PaperService {
     List<Paper> findPaperByUserName(String name,String search);
 
     int deletePaperByPaperId(int id);
+
+    Map<String,Object> findPaperByUser(String name,String pageNum);
+
+    Paper findPaperById(String id);
+
+    int updatePaperContentById(String content,String id);
+
+    int insertPaper(String title,String content,String segment,String name);
+
+    int findPaperId(String title,String segment,String name);
+
 }
