@@ -3,6 +3,7 @@ package com.nanyin.service;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -29,4 +30,32 @@ public interface TagService {
     int delectTag(int paper_id);
 
     int findHasTagByPaperId(int paper_id);
+
+    Map<String,Object> findTagNamesByPaperId(int id);
+
+    /**
+     *  删除标签
+     * @param id
+     * @param name
+     * @return
+     */
+    int delectTagByPaperIdAndTagName(int id,String name);
+
+    /**
+     * 修改
+     * @param newName
+     * @param id
+     * @param name
+     * @return
+     */
+
+    int updateTagNameByPaperIdAndTagName(String newName,int id,String name);
+
+    /**
+     *  插入
+     * @param name
+     * @param id
+     * @return
+     */
+    int insertTagNameByPaperId(String name,int id);
 }

@@ -5,8 +5,7 @@ import com.nanyin.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by NanYin on 2017-10-08 下午2:03.
@@ -41,5 +40,39 @@ public class TagServiceImpl implements TagService {
     @Override
     public int findHasTagByPaperId(int paper_id) {
         return tagMapper.findHasTagByPaperId(paper_id);
+    }
+
+    @Override
+    public Map<String,Object> findTagNamesByPaperId(int id) {
+        List<Object> list = new LinkedList<>();
+        Set<String> set =  tagMapper.findTagNamesByPaperId(id);
+        Iterator iterator = set.iterator();
+        while (iterator.hasNext()){
+            String tag = (String) iterator.next();
+            Map<String,String> objectMap = new HashMap<>();
+            objectMap.put("tags",tag);
+            list.add(objectMap);
+        }
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("data",list);
+        map.put("code",0);
+        map.put("mes","");
+        return map;
+    }
+
+    @Override
+    public int delectTagByPaperIdAndTagName(int id, String name) {
+        return tagMapper.delectTagByPaperIdAndTagName(id,name);
+    }
+
+    @Override
+    public int updateTagNameByPaperIdAndTagName(String newName, int id, String name) {
+        return tagMapper.updateTagNameByPaperIdAndTagName(newName,id,name);
+    }
+
+    @Override
+    public int insertTagNameByPaperId(String name, int id) {
+        return tagMapper.insertTagNameByPaperId(name,id);
     }
 }

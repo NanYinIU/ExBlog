@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <title>layui在线调试</title>
+    <link rel="stylesheet" href="/layui/plugins/layui/css/layui.css" media="all" />
+    <script src="/layui/plugins/layui/layui.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <style>
+        body{margin: 10px;}
+        .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
+    </style>
+</head>
+<body>
+
+    <input id="userName" name="userName" type="hidden" th:value="${session.user}"/>
+    <input id="url" name="url" type="hidden" th:value="${url}"/>
+    <input id="count" name="count" type="hidden" />
+    <input id="pageNum" name="pageNum" type="hidden" />
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field">
+        <legend>文章标签管理页面 </legend>
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">添加标签</label>
+                <div class="layui-input-block">
+                    <input type="text" name="newTag" lay-verify="required" placeholder="请输入标签" autocomplete="off" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit=""  lay-filter="formDemo">立即提交</button>
+                </div>
+            </div>
+
+        </form>
+        <table id="tagList" class="layui-table" lay-filter="demo">
+        </table>
+    </fieldset>
+</div>
+
+<div id="tagDemo"></div>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-mini" lay-event="edit">编辑标签 </a>
+    <a>&nbsp; &nbsp;&nbsp; </a>
+    <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del"> 删除标签</a>
+</script>
+<script>
+    var username = document.getElementById("userName").value;
+//    var url = 'tag/tagsByPaperId/'+parentid;
+
+    var url = window.location.pathname;
+    var lit = url.split("/tag/tagPage/");
+    layui.use(['laypage', 'layer', 'table','form', 'element'], function(){
+
+          layer = layui.layer;//弹层
+          table = layui.table; //表格
+          var form = layui.form;
+//        table.init('filter', options); //转化静态表格
+        table.render({
+            id:'tagid',
+            elem:'#tagList',
+            width:800,
+//            page:'true',
+            url:'/tag/tagsByPaperId/'+lit[1],
+            cols: [[
+                {field:'tags', title: '标签名称', width:546}
+                ,{toolbar:'#barDemo', title: '操作', width:250}
+            ]]
+        });
+
+            form.on('submit(formDemo)',function (data) {
+                var newTag = data.field;
+                layer.alert(JSON.stringify(data.field), {
+                    title: '最终的提交信息'
+                });
+                $.ajax({
+                    type : "post",
+                    data:newTag,
+                    dataType:"json",
+                    url :"/tag/insertTags/"+lit[1],
+                    timeout : 20000,
+                    cache : false,
+                    success:function (data) {
+                        if(data == 1){
+                            layer.alert("插入成功");
+                            parent.layer.closeAll('iframe');
+                        }
+                        else{
+                            layer.alert("出错了");
+                            layer.closeAll('iframe');
+                        }
+
+                    }
+                });
+            })
+            //监听工具条
+            table.on('tool(demo)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data //获得当前行数据
+                tag = data.tags //获得当前行的tag 老tag
+                , layEvent = obj.event; //获得 lay-event 对应的值
+                if (layEvent === 'detail') {
+                    layer.msg('查看操作');
+                    // 为文章添加一个标签.删除某个标签 不做分页
+                } else if (layEvent === 'del') {
+                    layer.confirm('真的删除行么', function (index) {
+                        obj.del(); //删除对应行（tr）的DOM结构
+
+                        $.ajax({
+                            url:"/tag/delectTags/"+lit[1]+"/"+tag,    //请求的url地址
+                            dataType:"json",   //返回格式为json
+                            type:"GET",   //请求方式
+                            success:function (data) {
+                                if (data == '1'){
+                                    layer.confirm('删除成功')
+                                }
+                                else {
+                                    layer.confirm('删除出错')
+                                }
+                            }
+                        });
+                        layer.close(index);
+                    });
+                } else if (layEvent === 'edit') {
+                    layer.open({
+                        type: 2,
+                        area: ['1000px', '600px'],
+                        content: '/tag/updateTag'
+                    });
+                }
+            });
+
+    });
+
+</script>
+
+</body>
+</html>

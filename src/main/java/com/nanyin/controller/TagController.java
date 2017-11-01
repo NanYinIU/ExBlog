@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.*;
@@ -58,4 +59,36 @@ public class TagController {
             map.put("list",list);
             return map;
     }
+
+    @RequestMapping("/tagPage/{id}")
+    public String tagPage(@PathVariable("id") int id){
+        return "InnerLayui/tagMes";
+    }
+
+    @RequestMapping("/tagsByPaperId/{id}")
+    public @ResponseBody Map<String, Object> tagsByPaperId(@PathVariable("id") int id){
+        return tagService.findTagNamesByPaperId(id);
+    }
+    @RequestMapping("/updateTag")
+    public String updateTag(){
+        return "InnerLayui/updateTag";
+    }
+
+    @RequestMapping("/delectTags/{id}/{tags}")
+    public @ResponseBody int delectTags(@PathVariable("id") int id,@PathVariable("tags") String tags){
+        return tagService.delectTagByPaperIdAndTagName(id,tags);
+    }
+
+    @RequestMapping("/updateTags/{id}/{oldTag}")
+    public @ResponseBody int updateTags(@PathVariable("id") int id,@PathVariable("oldTag") String oldTag,@RequestParam("title") String newTag){
+        return tagService.updateTagNameByPaperIdAndTagName(newTag,id,oldTag);
+    }
+    @RequestMapping("/insertTags/{id}")
+    public @ResponseBody int insertTags(@RequestParam("newTag") String name,@PathVariable("id") int id){
+        logger.info(name);
+        int insert = tagService.insertTagNameByPaperId(name, id);
+        logger.info("返回值:"+insert);
+        return insert;
+    }
+
 }

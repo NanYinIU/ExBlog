@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="utf-8"/>
+		<title>表单</title>
+		<meta name="renderer" content="webkit"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="format-detection" content="telephone=no"/>
+
+		<link rel="stylesheet" href="/layui/plugins/layui/css/layui.css" media="all" />
+		<script src="/assets/js/jquery.min.js"></script>
+        <script src="/assets/js/template-web.js"></script>
+        <script src="/layui/plugins/layui/layui.js"></script>
+    </head>
+
+	<body>
+
+    <input type="hidden" id="user2" th:value="${session.user}"/>
+		<div style="margin: 15px;">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+				<legend>标签修改</legend>
+			</fieldset>
+
+			<form class="layui-form" action="" style="height: 100%" >
+				<div class="layui-form-item">
+					<label class="layui-form-label">修改标签</label>
+					<div class="layui-input-block">
+						<input type="text" name="title" id="title" lay-verify="title" autocomplete="off" placeholder="请输入新标签(必填)" class="layui-input"/>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+						<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script>
+			layui.use(['form', 'layedit', 'laydate'], function() {
+				var form = layui.form,
+					layer = layui.layer,
+					layedit = layui.layedit,
+					laydate = layui.laydate;
+				tags = parent.tag;
+				page_id = parent.lit[1];
+				alert(tags);
+				//监听提交
+				form.on('submit(demo1)', function(data) {
+					layer.alert(JSON.stringify(data.field), {
+						title: '最终的提交信息'
+					});
+                    var user2 = document.getElementById("user2").value;
+					$.ajax({
+                        type : "post",
+                        data:data.field,
+                        dataType:"json",
+                        url :"/tag/updateTags/"+page_id+"/"+tags,
+                        timeout : 20000,
+                        cache : false,
+                        success:function (data) {
+                            if(data == 1){
+                                layer.alert("更改成功");
+                                parent.layer.closeAll('iframe');
+                            }
+                            else{
+                                layer.alert("出错了");
+                                layer.closeAll('iframe');
+                            }
+
+                        }
+                    });
+					return false;
+				});
+			});
+		</script>
+	</body>
+
+</html>

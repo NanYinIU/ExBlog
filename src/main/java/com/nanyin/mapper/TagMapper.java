@@ -46,4 +46,39 @@ public interface TagMapper {
             + "</script>")
     int insertTagByUserId(@Param("tag_name") List<String> tagName,@Param("paper_id") int paperId);
 
+    /**
+     * 根据文章的id查询tag
+     * @param id
+     * @return
+     */
+    @Select("SELECT tag_name FROM social_blog.tag WHERE paper_id=#{id}")
+    Set<String> findTagNamesByPaperId(@Param("id") int id);
+
+    /**
+     * 根据paperid和tagname删除tag表的内容
+     * @param id
+     * @param name
+     * @return
+     */
+    @Delete("DELETE FROM social_blog.tag WHERE paper_id=#{paper_id} AND tag_name = #{tag_name}")
+    int delectTagByPaperIdAndTagName(@Param("paper_id") int id,@Param("tag_name")String name);
+
+    /**
+     * 根据paperid和tagname修改tagname
+     * @param newName
+     * @param id
+     * @param name
+     * @return
+     */
+    @Update("UPDATE social_blog.tag SET tag_name = #{newName} WHERE tag_name = #{tag_name} AND paper_id = #{paper_id}")
+    int updateTagNameByPaperIdAndTagName(@Param("newName") String newName,@Param("paper_id") int id,@Param("tag_name")String name);
+
+    /**
+     * 新建标签
+     * @param tagName
+     * @param id
+     * @return
+     */
+    @Insert("INSERT INTO social_blog.tag(tag_name,paper_id) VALUES(#{tag_name},#{paper_id})")
+    int insertTagNameByPaperId(@Param("tag_name") String tagName,@Param("paper_id") int id);
 }
