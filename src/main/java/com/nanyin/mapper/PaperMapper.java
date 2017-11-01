@@ -30,8 +30,8 @@ public interface PaperMapper {
     @Select("SELECT u.* FROM social_blog.users u , social_blog.paper p WHERE p.author = u.id AND p.id=#{id}")
     Users findUserByPaperId(int id);
 
-    @Update("UPDATE social_blog.paper SET mark = #{mark} WHERE title = #{title}")
-    int updateMarkByTitle(@Param("mark") int mark, @Param("title")String title);
+    @Update("UPDATE social_blog.paper SET mark = #{mark} WHERE id = #{id}")
+    int updateMarkByTitle(@Param("mark") int mark, @Param("id")int id);
 
     @Select({"<script>",
             "SELECT p.* FROM social_blog.paper p , social_blog.users s WHERE s.id = p .author AND s.login_name = #{name}",
@@ -71,6 +71,14 @@ public interface PaperMapper {
      */
     @Select("SELECT * FROM social_blog.paper p WHERE p.id = #{id}")
     Paper findPaperById(int id);
+
+    /**
+     * 根据id查询Title
+     * @param id
+     * @return
+     */
+    @Select("SELECT p.title FROM social_blog.paper p WHERE p.id = #{id}")
+    String findPaperTitleById(int id);
 
     @Select("SELECT p.title " +
             "FROM social_blog.paper p, social_blog.`Column` c ,social_blog.Column_paper cp " +

@@ -6,11 +6,7 @@ var navs = [{
 		"title": "文章管理",
 		"icon": "&#xe641;",
 		"href": "/cte"
-	}, {
-		"title": "评论管理",
-		"icon": "&#xe63c;",
-		"href": "table.html"
-	}, {
+	},  {
         "title": "新建文章",
         "icon": "&#xe63c;",
         "href": "/ci"

@@ -19,7 +19,7 @@ public interface PaperService {
 
     Map<String,Object>  findAllPapersByMark();
 
-    int updateMarkByTitle(int mark,String title);
+    int updateMarkByTitle(int mark,String id);
 
     List<Paper> findAllPaperByUser(String name,String search);
 
@@ -36,6 +36,8 @@ public interface PaperService {
     Map<String,Object> findPaperByUser(String name,String pageNum);
 
     Paper findPaperById(String id);
+
+    String findPaperTitleById(int id);
 
     int updatePaperContentById(String content,String id);
 

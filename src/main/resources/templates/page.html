@@ -120,8 +120,12 @@
 									</div>
 									<div class="title">
 
-                                        <h2><a id="title">
-                                            <a id="paperTitle" th:text="${page.paper.title}"> </a></a></h2>
+                                        <h2>
+                                            <a id="title">
+                                            <a id="paperTitle" th:text="${page.paper.title}"></a>
+                                                <input type="hidden" id="paperId" th:value="${page.paper.id}"/>
+                                            </a>
+                                        </h2>
 									</div>
 
 								</header>
@@ -193,6 +197,8 @@
                                             $(document).ready(function()
                                             {
                                                 var title = document.getElementById("paperTitle").innerHTML;
+                                                var pageId = document.getElementById("paperId").value;
+//                                                alert(pageId)
                                                 $('body').on("click",'.heart',function()
                                                 {
                                                     var A=$(this).attr("id");
@@ -206,7 +212,7 @@
                                                     {
                                                         $("#likeCount"+messageID).html(C+1);
                                                         var url = '/markAdd';
-                                                        var data = {"mark":C,"title":title};
+                                                        var data = {"mark":C,"id":pageId};
                                                         $.ajax({
                                                             type : "post",
                                                             dataType:"json",
@@ -254,7 +260,7 @@
                             <header>
                                 <div class="meta" id="ju">
                                     <h2 th:text="${pageStat.index+1}+'楼：'"></h2>
-                                    <a class="name" th:text="${comment.email}"></a> <time class="published" datetime="2015-11-01" th:text="${comment.comments_time}"></time>
+                                    <time class="published" datetime="2015-11-01" th:text="${comment.comments_time}"></time>
                                 </div>
                                 <div class="title">
                                     <p th:text="${comment.comments_content}"></p>
@@ -271,8 +277,7 @@
 
                             </header>
                             <footer>
-                                <ul class="actions pagination"><li><h3>邮箱:（方便联系）</h3></li>
-                                    <li><input type="text" id="email" name="email" /></li>
+                                <ul class="actions pagination">
                                     <li><input type="submit" class="button big" value="Submit"/></li>
                                 </ul>
                             </footer>

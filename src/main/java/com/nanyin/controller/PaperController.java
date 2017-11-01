@@ -49,10 +49,10 @@ public class PaperController {
     }
 
     @RequestMapping("/markAdd")
-    public @ResponseBody int markAdd(String mark,String title){
+    public @ResponseBody int markAdd(String mark,String id){
         System.out.println(mark);
         int marked = Integer.parseInt(mark);
-        return paperService.updateMarkByTitle(marked+1, title);
+        return paperService.updateMarkByTitle(marked+1, id);
     }
 
 //    同样限制在5 篇
@@ -81,6 +81,7 @@ public class PaperController {
         PageInfo pageInfo = new PageInfo(papers);
 
         modelAndView.addObject("pageInfo",pageInfo);
+        logger.info("数据格式"+modelAndView.getModel()+" ");
         return modelAndView;
     }
     @RequestMapping("/HomePage/{pageNum}")
@@ -93,8 +94,9 @@ public class PaperController {
         PageHelper.startPage(pageNum,8);
 
         List<Paper> papers = paperService.findAllPapers(search);
-
+        logger.info("paperlist:--"+papers.size());
         PageInfo pageInfo = new PageInfo(papers);
+        logger.info("pageInfo:_______"+pageInfo);
 
         modelAndView.addObject("pageInfo",pageInfo);
         return modelAndView;

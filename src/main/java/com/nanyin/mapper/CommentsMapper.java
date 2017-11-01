@@ -1,7 +1,11 @@
 package com.nanyin.mapper;
 
+import com.nanyin.model.Comments;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * Created by NanYin on 2017-10-02 下午8:01.
@@ -12,11 +16,29 @@ import org.apache.ibatis.annotations.Select;
 public interface CommentsMapper {
     @Select("SELECT COUNT(*) " +
             "FROM social_blog.comments c ,social_blog.paper p " +
-            "WHERE p.id = c.comments_paper AND p.title=#{title}")
-    int findCommentCountByTitle(String title);
+            "WHERE p.id = c.comments_paper AND p.id=#{title}")
+    int findCommentCountByTitle(int title);
 
     @Select("SELECT COUNT(*) " +
             "FROM social_blog.comments c ,social_blog.paper p " +
             "WHERE p.id = c.comments_paper AND p.id=#{id}")
     int findCommentCountByid(int id);
+
+    /**
+     * 删除评论
+     * @param id
+     * @return
+     */
+    @Delete("DELETE FROM social_blog.comments WHERE id=#{id}")
+    int deleteCommentById(int id);
+
+    /**
+     * 查询对应paper的所有comments
+     * @param id
+     * @return
+     */
+    @Select("SELECT c.* FROM social_blog.comments c " +
+            "LEFT JOIN social_blog.paper p ON c.comments_paper = p.id " +
+            "WHERE comments_paper=#{id}")
+    List<Comments> findAllCommentsByPaperId(int id);
 }

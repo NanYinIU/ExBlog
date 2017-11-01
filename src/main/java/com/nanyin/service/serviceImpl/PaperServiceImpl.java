@@ -47,7 +47,7 @@ public class PaperServiceImpl implements PaperService {
           String title = paper.getTitle();
           int id = paper.getId();
           Users users1 = paperMapper.findUserByPaperTitle(id);
-          int count = commentsService.findCommentCountByTitle(title);
+          int count = commentsService.findCommentCountByTitle(id);
           paperAndComments1.setTitle(title);
           paperAndComments1.setContent(paper.getContent());
           paperAndComments1.setSegment(paper.getSgement());
@@ -77,7 +77,7 @@ public class PaperServiceImpl implements PaperService {
             int id = paper.getId();
             String title = paper.getTitle();
             Users users1 = paperMapper.findUserByPaperTitle(id);
-            int count = commentsService.findCommentCountByTitle(title);
+            int count = commentsService.findCommentCountByTitle(id);
             paperAndCommentss.setTitle(title);
             paperAndCommentss.setContent(paper.getContent());
             paperAndCommentss.setCount(count);
@@ -97,8 +97,9 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
-    public int updateMarkByTitle(int mark ,String title) {
-        return paperMapper.updateMarkByTitle(mark, title);
+    public int updateMarkByTitle(int mark ,String id) {
+        int id1 = Integer.parseInt(id);
+        return paperMapper.updateMarkByTitle(mark, id1);
     }
 
 //    这里会有分页
@@ -113,7 +114,7 @@ public class PaperServiceImpl implements PaperService {
             String title = paper.getTitle();
             int id = paper.getId();
             Users users1 = paperMapper.findUserByPaperTitle(id);
-            int count = commentsService.findCommentCountByTitle(title);
+            int count = commentsService.findCommentCountByTitle(id);
             paperAndCommentss.setTitle(title);
             paperAndCommentss.setContent(paper.getContent());
             paperAndCommentss.setCount(count);
@@ -134,13 +135,14 @@ public class PaperServiceImpl implements PaperService {
     public List findAllPapers(String search) {
         List<PaperAndComments> paperAndComments = new ArrayList<>();
         List<Paper> papers =  paperMapper.findAllPapers(search);
+        logger.info(papers);
         for(int i = 0 ; i < papers.size() ; i ++){
             PaperAndComments paperAndCommentss = new PaperAndComments();
             Paper paper = papers.get(i);
             String title = paper.getTitle();
             int id = paper.getId();
             Users users1 = paperMapper.findUserByPaperTitle(id);
-            int count = commentsService.findCommentCountByTitle(title);
+            int count = commentsService.findCommentCountByTitle(id);
             paperAndCommentss.setTitle(title);
             paperAndCommentss.setContent(paper.getContent());
             paperAndCommentss.setCount(count);
@@ -230,6 +232,11 @@ public class PaperServiceImpl implements PaperService {
     public Paper findPaperById(String id) {
         int id1 = Integer.parseInt(id);
         return paperMapper.findPaperById(id1);
+    }
+
+    @Override
+    public String findPaperTitleById(int id) {
+        return paperMapper.findPaperTitleById(id);
     }
 
     @Override

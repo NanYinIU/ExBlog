@@ -35,7 +35,9 @@
     <a>&nbsp;</a>
     <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">查看标签</a>
     <a>&nbsp;  </a>
-    <a class="layui-btn layui-btn-mini" lay-event="col">主题修改</a>
+    <a class="layui-btn layui-btn-mini" lay-event="col">专题修改</a>
+    <a>&nbsp;  </a>
+    <a class="layui-btn layui-btn-mini" lay-event="com">评论管理</a>
 </script>
 <script>
     var username = document.getElementById("userName").value;
@@ -66,7 +68,7 @@
                 ,{field:'theme', title: '所属主题', width:144, sort: true}
                 ,{field:'createTime', title: '创建时间', width:220, sort: true}
                 ,{field:'is_pass', title: '文章状态', width:100}
-                ,{toolbar:'#barDemo', title: '操作', width:250}
+                ,{toolbar:'#barDemo', title: '操作', width:330}
             ]]
         });
 
@@ -89,8 +91,8 @@
                 ,curr: currPage
                 , skin: '#1E9FFF' //自定义选中色值
                 , skip: true //开启跳页
-                , prev: '《 '
-                , next: ' 》'
+                , prev: 'prePage '
+                , next: ' nextPage'
                 , jump: function (obj, first) {
                     if (!first) {
                         var currentPage = obj.curr;//获取点击的页码
@@ -148,6 +150,13 @@
                         type: 2,
                         area: ['700px', '450px'],
                         content: '/column/updateTheme'
+                    });
+                }
+                else if(layEvent === 'com'){
+                    layer.open({
+                        type: 2,
+                        area: ['700px', '450px'],
+                        content: '/comments/getComments'
                     });
                 }
             });
