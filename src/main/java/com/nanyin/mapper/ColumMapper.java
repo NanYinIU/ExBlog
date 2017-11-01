@@ -1,10 +1,7 @@
 package com.nanyin.mapper;
 
 import com.nanyin.model.Column;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import javax.swing.border.TitledBorder;
 import java.util.List;
@@ -55,5 +52,22 @@ public interface ColumMapper {
      */
     @Insert("INSERT INTO social_blog.Column_paper(Column_id,paper_id) VALUES(#{Column_id},#{paper_id})")
     int insertColumnPaper(@Param("Column_id") int columnId,@Param("paper_id") int paperId);
+
+    /**
+     * 通过paper的id查询所属的column
+     * @param id paperid
+     * @return column
+     */
+    @Select("SELECT c.* " +
+            "FROM social_blog.`Column` c " +
+            "LEFT JOIN social_blog.Column_paper cp ON c.id = cp.Column_id " +
+            "LEFT JOIN social_blog.paper p ON cp.paper_id = p.id WHERE p.id = #{id}  ")
+    Column findColumnByPaperId(int id);
+
+    @Select("SELECT id FROM social_blog.`Column` WHERE title = #{title}")
+    int findColumnIdByTitle(String title);
+
+    @Update("UPDATE social_blog.Column_paper SET Column_id = #{column_id} WHERE paper_id = #{paper_id}")
+    int updateColumnByPaperId(@Param("paper_id") int paperId,@Param("column_id") int columnId);
 
 }

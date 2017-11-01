@@ -1,6 +1,5 @@
 package com.nanyin.controller;
 
-import com.nanyin.mapper.ColumMapper;
 import com.nanyin.model.Column;
 import com.nanyin.service.ColumnService;
 import javafx.scene.effect.SepiaTone;
@@ -8,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -77,6 +77,16 @@ public class ColumnController {
         Map<String,Object> map1 = new HashMap<>();
         map.put("columnList",List);
         return map;
+    }
+    @RequestMapping("/updateTheme")
+    public String updateTheme(){
+        return "InnerLayui/colMes";
+    }
+
+    @RequestMapping("/updateColumnName/{id}")
+    public @ResponseBody int updateColumnName(@PathVariable(name = "id") int paperId,@RequestParam("theme") String title){
+        return columnService.updateColumnByPaperId(paperId,title);
+
     }
 
 }

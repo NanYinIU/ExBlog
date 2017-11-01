@@ -2,6 +2,7 @@ package com.nanyin.service;
 
 
 import com.nanyin.model.Column;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Set;
@@ -31,6 +32,10 @@ public interface ColumnService {
     int insertColumnPaper(int clumnId,int paperId);
 
     int findColumnId(String title);
+
+    Column findColumnByPaperId(int id);
+
+    int updateColumnByPaperId(int paperId,String columnName);
 
 
 

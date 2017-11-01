@@ -1,6 +1,7 @@
 package com.nanyin.service.serviceImpl;
 
 import com.nanyin.config.AllAttriOfPaper;
+import com.nanyin.config.PaperAndColumn;
 import com.nanyin.config.PaperAndComments;
 import com.nanyin.mapper.PaperMapper;
 import com.nanyin.mapper.UserMapper;
@@ -8,6 +9,7 @@ import com.nanyin.model.Column;
 import com.nanyin.model.Comments;
 import com.nanyin.model.Paper;
 import com.nanyin.model.Users;
+import com.nanyin.service.ColumnService;
 import com.nanyin.service.CommentsService;
 import com.nanyin.service.PaperService;
 import com.nanyin.service.UserService;
@@ -16,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by NanYin on 2017-10-02 下午2:06.
@@ -34,6 +33,8 @@ public class PaperServiceImpl implements PaperService {
     CommentsService commentsService;
     @Autowired
     UserService userService;
+    @Autowired
+    ColumnService columnService;
     Logger logger = Logger.getLogger(this.getClass());
     @Override
     public Map<String, Object> findAllPapersByTime() {
@@ -199,11 +200,29 @@ public class PaperServiceImpl implements PaperService {
         Map<String,Object> map = new HashMap<>();
         int count = paperMapper.findCountOfPaperByUser(name);
         List<Paper> papers = paperMapper.findPaperByUser(name,(pageNum1-1) * limit,limit);
+        List<PaperAndColumn> li1 = new ArrayList<>();
+        Iterator iterator = papers.iterator();
+        while (iterator.hasNext()){
+            PaperAndColumn paperAndColumn = new PaperAndColumn();
+            Paper paper = (Paper) iterator.next();
+            paperAndColumn.setPaperId(paper.getId());
+            paperAndColumn.setCreateTime(paper.getCreate_time());
+            paperAndColumn.setIs_pass(paper.getIs_pass());
+            paperAndColumn.setPaperTitle(paper.getTitle());
+            Column column = columnService.findColumnByPaperId(paper.getId());
+            if(column == null){
+                paperAndColumn.setTheme("暂无");
+            }
+            else {
+                paperAndColumn.setTheme(column.getTitle());
+            }
+            li1.add(paperAndColumn);
+        }
 //        logger.info(papers);
         map.put("code",0);
         map.put("mes","");
         map.put("count",count);
-        map.put("data",papers);
+        map.put("data",li1);
         return map;
     }
 

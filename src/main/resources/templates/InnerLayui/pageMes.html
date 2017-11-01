@@ -30,10 +30,12 @@
 
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-mini" lay-event="edit">编辑 </a>
-    <a>&nbsp; &nbsp;&nbsp; </a>
+    <a>&nbsp; </a>
     <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del"> 删除</a>
-    <a>&nbsp; &nbsp;&nbsp; </a>
+    <a>&nbsp;</a>
     <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">查看标签</a>
+    <a>&nbsp;  </a>
+    <a class="layui-btn layui-btn-mini" lay-event="col">主题修改</a>
 </script>
 <script>
     var username = document.getElementById("userName").value;
@@ -55,13 +57,14 @@
         table.render({
             id:'tid',
             elem:'#pageList',
-            width:1200,
+            width:1350,
 //            page:'true',
             url:turl,
             cols: [[
-                {field:'id', title: '文章ID', width:80, sort: true}
-                ,{field:'title', title: '文章名称', width:544, sort: true}
-                ,{field:'create_time', title: '创建时间', width:220, sort: true}
+                {field:'paperId', title: '文章ID', width:80, sort: true}
+                ,{field:'paperTitle', title: '文章名称', width:400, sort: true}
+                ,{field:'theme', title: '所属主题', width:144, sort: true}
+                ,{field:'createTime', title: '创建时间', width:220, sort: true}
                 ,{field:'is_pass', title: '文章状态', width:100}
                 ,{toolbar:'#barDemo', title: '操作', width:250}
             ]]
@@ -104,14 +107,14 @@
             //监听工具条
             table.on('tool(demo)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 var data = obj.data;//获得当前行数据
-                var id = data.id,
+                id = data.paperId,
 
                 layEvent = obj.event; //获得 lay-event 对应的值
                 if (layEvent === 'detail') {
                     layer.msg('查看操作');
                     layer.open({
                         type: 2,
-                        area: ['1200px', '650px'],
+                        area: ['700px', '450px'],
                         content: '/tag/tagPage/'+id
                     });
                     // 这里应该是一个弹窗 内容大概是 为文章添加一个标签.删除某个标签 不做分页
@@ -139,6 +142,12 @@
                         type: 2,
                         area: ['1200px', '650px'],
                         content: '/newMD/'+id
+                    });
+                } else if(layEvent === 'col'){
+                    layer.open({
+                        type: 2,
+                        area: ['700px', '450px'],
+                        content: '/column/updateTheme'
                     });
                 }
             });

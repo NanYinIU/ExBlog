@@ -7,10 +7,6 @@ var navs = [{
 		"icon": "&#xe641;",
 		"href": "/cte"
 	}, {
-		"title": "类别管理",
-		"icon": "&#xe63c;",
-		"href": "form.html"
-	}, {
 		"title": "评论管理",
 		"icon": "&#xe63c;",
 		"href": "table.html"

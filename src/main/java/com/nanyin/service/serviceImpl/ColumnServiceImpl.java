@@ -47,4 +47,26 @@ public class ColumnServiceImpl implements ColumnService {
     public int findColumnId(String title) {
         return columMapper.findColumnId(title);
     }
+
+    @Override
+    public Column findColumnByPaperId(int id) {
+        return columMapper.findColumnByPaperId(id);
+    }
+
+    @Override
+    public int updateColumnByPaperId(int paperId, String columnName) {
+        int columnId = columMapper.findColumnId(columnName);
+//      根据paperId 查看存在不存在匹配的关系  先看存在不存在
+
+        Column column = columMapper.findColumnByPaperId(paperId);
+        if(column == null){
+            // 是空的那就插入 columnName
+            return columMapper.insertColumnPaper(columnId,paperId);
+        }else{
+            // 不为空才是修改
+            return columMapper.updateColumnByPaperId(paperId,columnId);
+        }
+
+
+    }
 }
