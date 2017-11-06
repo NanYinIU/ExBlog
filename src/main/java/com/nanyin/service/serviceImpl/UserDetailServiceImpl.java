@@ -20,4 +20,14 @@ public class UserDetailServiceImpl implements UserDetailService {
     public UserDetail findUserDetailByUserName(String userName) {
         return userDetailMapper.findUserDetailByUserName(userName);
     }
+
+    @Override
+    public int updateUserDetailByUserId(UserDetail userDetail) {
+        return userDetailMapper.updateUserDetailByUserId(userDetail);
+    }
+
+    @Override
+    public int insertUserDetailByUserId(UserDetail userDetail) {
+        return userDetailMapper.insertUserDetailByUserId(userDetail);
+    }
 }

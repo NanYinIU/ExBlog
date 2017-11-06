@@ -2,7 +2,9 @@ package com.nanyin.mapper;
 
 import com.nanyin.model.Users;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
 
 /**
@@ -36,6 +38,7 @@ public interface UserMapper {
     @Select("SELECT u.id FROM social_blog.users u WHERE u.login_name=#{name}")
     int findAuthorByName(String name);
 
-
+    @Update("UPDATE social_blog.users SET head=#{users.head} , real_name = #{users.real_name},email=#{users.email} WHERE login_name=#{name}")
+    int updateUserMes(@Param("users") Users users,@Param("name") String name);
 
 }

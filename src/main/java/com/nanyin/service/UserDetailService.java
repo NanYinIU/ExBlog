@@ -13,4 +13,8 @@ import org.springframework.stereotype.Service;
 public interface UserDetailService {
 
     UserDetail findUserDetailByUserName( String userName);
+
+    int updateUserDetailByUserId(UserDetail userDetail);
+
+    int insertUserDetailByUserId(UserDetail userDetail);
 }

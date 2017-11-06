@@ -58,35 +58,23 @@
 			</form>
 		</div>
 		<script>
+
+
 			layui.use(['form', 'layedit', 'laydate','upload'], function() {
 				var form = layui.form,
 					layer = layui.layer
 
 				//监听提交
 				form.on('submit(demo1)', function(data) {
-					layer.alert(JSON.stringify(data.field), {
-						title: '最终的提交信息'
-					});
-					var Final =JSON.stringify(data.field);
+                    Final =JSON.stringify(data.field);
                     var user2 = document.getElementById("user2").value;
-					$.ajax({
-                        type : "post",
-                        data:data.field,
-                        dataType:"json",
-                        url :'',
-                        timeout : 20000,
-                        cache : false,
-                        success:function (data) {
-                            if(data == 1){
-                                parent.layer.closeAll('iframe');
-                            }
-                            else{
-                                layer.alert("出错了");
-                                layer.closeAll('iframe');
-                            }
+//                    alert(data.field.pic);
 
-                        }
-                    });
+                    var imgSrc = parent.document.getElementById('test1');
+                    imgSrc.src = data.field.pic;
+					parent.document.getElementById("imgMes").value = data.field.pic;
+
+					layer.close(parent.index);
 					return false;
 				});
 			});

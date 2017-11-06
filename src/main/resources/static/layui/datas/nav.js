@@ -26,7 +26,7 @@ var navs = [{
 	}, {
 		"title": "个人信息完善",
 		"icon": "&#xe62a;",
-		"href": "tab.html"
+		"href": "/user/detailPage"
 	}]
 }, {
 	"title": "管理员管理",

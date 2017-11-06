@@ -29,15 +29,16 @@
                 <div class="layui-form-item">
                     <div class="layui-upload-list">
                         <label class="layui-form-label">用户头像:</label>
-                        <img onmouseover="al()" id="test1" name="img" height="50px" width="50px" src="/images/avatar.jpg" />
-                        <a id="btn1" class="layui-btn layui-btn-small layui-btn-radius">更换头像</a>
+                        <img onmouseover="al()" id="test1" name="img" height="50px" width="50px" th:src="${user.users.head}"/>
+                        <input name="imgMes" id="imgMes" th:value="${user.users.head}" type="hidden"/>
+                        <a id="btn1" class="layui-btn layui-btn-small layui-btn-radius">使用系统头像</a>
                         <p id="demo1"></p>
                     </div>
                 </div>
 				<div class="layui-form-item">
 					<label class="layui-form-label">用户昵称:</label>
                     <div class="layui-input-block">
-                        <input type="text"  class="layui-input" readonly="readonly" th:value="${session.user}"/>
+                        <input type="text" name="userName"  class="layui-input" readonly="readonly" th:value="${session.user}"/>
                     </div>
 				</div>
 				<div class="layui-form-item">
@@ -91,7 +92,7 @@
 
 				<div class="layui-form-item">
 					<div class="layui-input-block">
-						<button class="layui-btn" lay-submit="" lay-filter="demo1" onclick="getvalue()">立即提交</button>
+						<button class="layui-btn" lay-submit="" lay-filter="demo1"  >立即提交</button>
 						<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 					</div>
 				</div>
@@ -103,7 +104,7 @@
                 layer.msg("点击头像可上传自定义头像")
             }
             $("#btn1").click(function () {
-                layer.open({
+                 index = layer.open({
                     type: 2,
                     content: '/user/headPic',
                     area:['700px','700px']
@@ -122,18 +123,26 @@
                 //普通图片上传
                 var uploadInst = upload.render({
                     elem: '#test1'
-                    ,url: '/upload/'
+                    ,url: '/uploadImg'
                     ,before: function(obj){
                         //预读本地文件示例，不支持ie8
                         obj.preview(function(index, file, result){
-                            $('#demo1').attr('src', result); //图片链接（base64）
+                            $('#test1').attr('src', result); //图片链接（base64）
                         });
                     }
                     ,done: function(res){
                         //如果上传失败
-                        if(res.code > 0){
+                        if(res.flag == 0){
                             return layer.msg('上传失败');
-                        }
+                        }else {
+                            // 成功替换到 img 的value
+
+//                            var imgSrc = document.getElementById('test1');
+//                            imgSrc.src=res.imagesPath;
+
+                            var imgMes = document.getElementById('imgMes');
+                            imgMes.value=res.imagesPath;
+						}
                         //上传成功
                     }
                     ,error: function(){
@@ -150,21 +159,23 @@
 
 				//监听提交
 				form.on('submit(demo1)', function(data) {
-					layer.alert(JSON.stringify(data.field), {
-						title: '最终的提交信息'
-					});
+//					layer.alert(JSON.stringify(data.field), {
+//						title: '最终的提交信息'
+//					});
 					var Final =JSON.stringify(data.field);
                     var user2 = document.getElementById("user2").value;
 					$.ajax({
                         type : "post",
                         data:data.field,
                         dataType:"json",
-                        url :'',
+                        url :'/user/updateDetail',
                         timeout : 20000,
                         cache : false,
                         success:function (data) {
                             if(data == 1){
+                                layer.alert("更改成功");
                                 parent.layer.closeAll('iframe');
+
                             }
                             else{
                                 layer.alert("出错了");

@@ -29,12 +29,12 @@ public interface UserDetailMapper {
             "u.address=#{userDetail.address}," +
             "u.sketch=#{userDetail.sketch} " +
             "WHERE user_id=#{userDetail.user_id}")
-    int updateUserDetailByUserId(UserDetail userDetail);
+    int updateUserDetailByUserId(@Param("userDetail") UserDetail userDetail);
 
     @Insert("INSERT INTO " +
             "social_blog.userDetail(`position`,birthday,address,sketch,user_id)" +
             "VALUES (#{userDetail.position},#{userDetail.birthday},#{userDetail.address},#{userDetail.sketch},#{userDetail.user_id})")
-    int insertUserDetailByUserId(UserDetail userDetail);
+    int insertUserDetailByUserId(@Param("userDetail") UserDetail userDetail);
 
 
 

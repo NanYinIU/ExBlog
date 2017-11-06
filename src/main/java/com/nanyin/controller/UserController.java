@@ -12,12 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,17 +90,27 @@ public class UserController {
         map.put("user",userService.getUserParam(name));
         return map;
     }
-    @RequestMapping("/user/detailPage/{name}")
+    @RequestMapping("/user/detailPage")
     public @ResponseBody
-    ModelAndView getDetail(@PathVariable("name") String name){
+    ModelAndView getDetail(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String name = (String) session.getAttribute("user");
+        logger.info("在session中获得username:"+name);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("InnerLayui/userDetail");
         modelAndView.addObject("user",userService.getUserParam(name));
         return modelAndView;
     }
     @RequestMapping("/user/updateDetail")
-    public @ResponseBody int updateOrInsertUserDetail(){
-        return 0;
+    public @ResponseBody int updateUserDetail(@RequestParam("imgMes") String imgMes,
+                                              @RequestParam("userName") String userName,
+                                              @RequestParam("realName") String realName,
+                                              @RequestParam("position") String position,
+                                              @RequestParam("date") String data,
+                                              @RequestParam("email") String email,
+                                              @RequestParam("address") String address,
+                                              @RequestParam("sketch") String sketch) throws ParseException {
+        return userService.updateUserMes(imgMes, userName, realName, position, data, email, address, sketch);
     }
 
     @RequestMapping("/user/headPic")

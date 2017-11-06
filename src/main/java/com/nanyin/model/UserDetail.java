@@ -3,6 +3,7 @@ package com.nanyin.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 
 /**
@@ -22,7 +23,7 @@ public class UserDetail {
      */
     private String position;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private Timestamp birthday;
+    private Date birthday;
     /**
      * 住址
      */
@@ -54,11 +55,11 @@ public class UserDetail {
         this.position = position;
     }
 
-    public Timestamp getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Timestamp birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
