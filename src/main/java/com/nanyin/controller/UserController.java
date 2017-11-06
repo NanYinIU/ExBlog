@@ -1,6 +1,7 @@
 package com.nanyin.controller;
 
 import com.nanyin.model.Users;
+import com.nanyin.service.UserDetailService;
 import com.nanyin.service.UserService;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +32,8 @@ public class UserController {
     Logger logger = Logger.getLogger(this.getClass().getName());
     @Autowired
     UserService userService;
-
+    @Autowired
+    UserDetailService userDetailService;
     @Autowired
     PaperController paperController;
 
@@ -77,5 +80,28 @@ public class UserController {
         Users users = userService.findUsersByName(name);
 
         return users;
+    }
+    @RequestMapping("/user/detailPage2/{name}")
+    public @ResponseBody Map<String,Object> getDetail2(@PathVariable("name") String name){
+        Map<String,Object> map = new HashMap<>();
+        map.put("user",userService.getUserParam(name));
+        return map;
+    }
+    @RequestMapping("/user/detailPage/{name}")
+    public @ResponseBody
+    ModelAndView getDetail(@PathVariable("name") String name){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("InnerLayui/userDetail");
+        modelAndView.addObject("user",userService.getUserParam(name));
+        return modelAndView;
+    }
+    @RequestMapping("/user/updateDetail")
+    public @ResponseBody int updateOrInsertUserDetail(){
+        return 0;
+    }
+
+    @RequestMapping("/user/headPic")
+    public String headPic(){
+        return "InnerLayui/pic";
     }
 }

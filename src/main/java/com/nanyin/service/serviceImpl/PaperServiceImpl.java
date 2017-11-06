@@ -16,6 +16,7 @@ import com.nanyin.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.security.ec.SunEC;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -104,7 +105,7 @@ public class PaperServiceImpl implements PaperService {
 
 //    这里会有分页
     @Override
-    public List findAllPaperByUser(String name,String search) {
+    public List<PaperAndComments> findAllPaperByUser(String name,String search) {
 
         List<PaperAndComments> paperAndComments = new ArrayList<>();
         List<Paper> papers =  paperMapper.findAllPaperByUser(name,search);
@@ -132,10 +133,20 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
+    public int getTotal(String search,String username) {
+        return paperMapper.findAllPaperByUser(username,search).size();
+    }
+
+    @Override
+    public int getAllTotal(String search) {
+        return paperMapper.findAllPapers(search).size();
+    }
+
+    @Override
     public List findAllPapers(String search) {
         List<PaperAndComments> paperAndComments = new ArrayList<>();
         List<Paper> papers =  paperMapper.findAllPapers(search);
-        logger.info(papers);
+        logger.info("papers:"+papers+"数量:"+papers.size());
         for(int i = 0 ; i < papers.size() ; i ++){
             PaperAndComments paperAndCommentss = new PaperAndComments();
             Paper paper = papers.get(i);
@@ -151,13 +162,14 @@ public class PaperServiceImpl implements PaperService {
             paperAndCommentss.setCreate_time(paper.getCreate_time());
             paperAndCommentss.setPaper_image(paper.getPaper_image());
             paperAndCommentss.setMark(paper.getMark());
-            paperAndCommentss.setLogin_name(users1.getLogin_name());
+                paperAndCommentss.setLogin_name(users1.getLogin_name());
             paperAndCommentss.setEmail(users1.getEmail());
             paperAndCommentss.setHead(users1.getHead());
             paperAndCommentss.setId(paper.getId());
             paperAndComments.add(paperAndCommentss);
 
         }
+        logger.info("paperAndComments 数量+"+paperAndComments.size()+paperAndComments);
         return paperAndComments;
     }
 

@@ -2,6 +2,8 @@ package com.nanyin;
 
 import org.junit.Test;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -17,5 +19,6 @@ public class test {
         System.out.println(System.currentTimeMillis());
         System.out.println(new Date());
         System.out.println(new Timestamp(System.currentTimeMillis()));
+        System.out.println(36/10);
     }
 }

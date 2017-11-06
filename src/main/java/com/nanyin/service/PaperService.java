@@ -1,6 +1,8 @@
 package com.nanyin.service;
 
 import com.nanyin.config.AllAttriOfPaper;
+import com.nanyin.config.PaperAndColumn;
+import com.nanyin.config.PaperAndComments;
 import com.nanyin.model.Paper;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +23,13 @@ public interface PaperService {
 
     int updateMarkByTitle(int mark,String id);
 
-    List<Paper> findAllPaperByUser(String name,String search);
+    List<PaperAndComments> findAllPaperByUser(String name, String search);
 
-    List<Paper> findAllPapers(String search);
+    int getTotal(String search,String username);
+
+    int getAllTotal(String search);
+
+    List findAllPapers(String search);
 
     AllAttriOfPaper findAllAttriOfPapaer(int id);
 

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.nanyin.config.AllAttriOfPaper;
 import com.nanyin.config.InsertPojo;
+import com.nanyin.config.PaperAndComments;
 import com.nanyin.model.Paper;
 import com.nanyin.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,12 +77,19 @@ public class PaperController {
         modelAndView.setViewName("PersonalIndex");
         PageHelper.startPage(pageNum,10);
 
-        List papers = paperService.findAllPaperByUser(name,search);
+        List<PaperAndComments> papers = paperService.findAllPaperByUser(name,search);
 
-        PageInfo pageInfo = new PageInfo(papers);
+        PageInfo<PaperAndComments> pageInfo = new PageInfo<>(papers);
+        int total = paperService.getTotal(name,search);
+        pageInfo.setTotal(total);
+        pageInfo.setFirstPage(0);
+        pageInfo.setLastPage((total/8));
+        pageInfo.setPrePage(pageNum-1 >= 0 ? pageNum-1:0);
+        pageInfo.setNextPage(pageNum+1 > (total/8) ? (total/8):pageNum+1);
 
+        logger.info("totle:"+pageInfo.getTotal());
         modelAndView.addObject("pageInfo",pageInfo);
-        logger.info("数据格式"+modelAndView.getModel()+" ");
+        logger.info("数据格式"+pageInfo+" ");
         return modelAndView;
     }
     @RequestMapping("/HomePage/{pageNum}")
@@ -93,11 +101,16 @@ public class PaperController {
         modelAndView.setViewName("SearchIndex");
         PageHelper.startPage(pageNum,8);
 
-        List<Paper> papers = paperService.findAllPapers(search);
-        logger.info("paperlist:--"+papers.size());
-        PageInfo pageInfo = new PageInfo(papers);
-        logger.info("pageInfo:_______"+pageInfo);
+        List<PaperAndComments> papers = paperService.findAllPapers(search);
 
+        PageInfo pageInfo = new PageInfo(papers);
+
+        int total = paperService.getAllTotal(search);
+        pageInfo.setTotal(total);
+        pageInfo.setFirstPage(0);
+        pageInfo.setLastPage((total/8));
+        pageInfo.setPrePage(pageNum-1 >= 0 ? pageNum-1:0);
+        pageInfo.setNextPage(pageNum+1 > (total/8) ? (total/8):pageNum+1);
         modelAndView.addObject("pageInfo",pageInfo);
         return modelAndView;
     }

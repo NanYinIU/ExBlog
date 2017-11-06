@@ -19,6 +19,12 @@ public interface UserMapper {
      *          删除 用 delete ...
      *          修改 用 update ...
      *          */
+
+    /**
+     * 根据昵称查询基本信息
+     * @param name
+     * @return
+     */
     @Select("SELECT * FROM social_blog.users WHERE login_name=#{name}")
     Users findUsersByName(String name);
 
@@ -29,5 +35,7 @@ public interface UserMapper {
      */
     @Select("SELECT u.id FROM social_blog.users u WHERE u.login_name=#{name}")
     int findAuthorByName(String name);
+
+
 
 }

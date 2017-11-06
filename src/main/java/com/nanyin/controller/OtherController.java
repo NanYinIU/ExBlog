@@ -5,12 +5,16 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by NanYin on 2017-10-04 下午1:21.
@@ -74,4 +78,27 @@ public class OtherController {
         modelAndView.setViewName("InnerLayui/UpdatemarkDown");
         return modelAndView;
     }
+
+//    @RequestMapping("/uploadImg")
+//    public ModelAndView uploadImg(String userName ,@RequestParam(value="file",required=false) MultipartFile file,
+//                                  HttpServletRequest request) throws IOException{
+//        //物理路径
+//        String pathRoot = request.getSession().getServletContext().getRealPath("");
+//        logger.info("物理路径:"+pathRoot);
+//
+//        String path="";
+//        if(!file.isEmpty()){
+//            //生成uuid作为文件名称
+//            String uuid = UUID.randomUUID().toString().replaceAll("-","");
+//            //获得文件类型（可以判断如果不是图片，禁止上传）
+//            String contentType=file.getContentType();
+//            //获得文件后缀名称
+//            String imageName=contentType.substring(contentType.indexOf("/")+1);
+//            path="/static/images/"+uuid+"."+imageName;
+//            file.transferTo(new File(pathRoot+path));
+//        }
+//        System.out.println(path);
+//        request.setAttribute("imagesPath", path);
+//    }
+
 }

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by NanYin on 2017-10-30 上午10:08.
  * 包名： com.nanyin.config
- * 类描述：插入式数据绑定的pojo
+ * 类描述：插入时候数据绑定的pojo
  */
 public class InsertPojo {
     private String title;
