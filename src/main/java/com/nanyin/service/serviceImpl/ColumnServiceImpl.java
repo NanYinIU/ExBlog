@@ -6,7 +6,10 @@ import com.nanyin.service.ColumnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -68,5 +71,46 @@ public class ColumnServiceImpl implements ColumnService {
         }
 
 
+    }
+
+    @Override
+    public Map<String, Object> allColumn(String page) {
+        int pageNum = Integer.parseInt(page);
+        int limit = 10 ;
+        List<Column> columns = columMapper.findAllColumnLimit((pageNum-1) * limit,limit);
+
+        List<Column> columns1 = columMapper.findAllColumn();
+        Map<String,Object> map = new HashMap<>();
+        map.put("code",0);
+        map.put("mes","");
+        map.put("count",columns1.size());
+        map.put("data",columns);
+        return map;
+    }
+
+    @Override
+    public int insertInlet(String name, String image) {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Column column = new Column();
+        column.setImage(image);
+        column.setTitle(name);
+        column.setC_create_time(timestamp);
+        return columMapper.insertColumn(column);
+    }
+
+    @Override
+    public int updateInlet(String name, String image, String id) {
+        int id1 = Integer.parseInt(id);
+        return columMapper.updateColumnById(name,image,id1);
+    }
+
+    @Override
+    public int deleteColumnById(int id) {
+        return columMapper.deleteColumnById(id);
+    }
+
+    @Override
+    public Column selectColumnById(int id) {
+        return columMapper.selectColumnById(id);
     }
 }

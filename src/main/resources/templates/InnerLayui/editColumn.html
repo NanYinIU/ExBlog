@@ -22,71 +22,26 @@
     <input type="hidden" id="user2" th:value="${session.user}"/>
 		<div style="margin: 15px;">
 			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-				<legend>用户信息完善</legend>
+				<legend>编辑专题</legend>
 			</fieldset>
 
 			<form class="layui-form" action="" style="height: 100%" >
+				<div class="layui-form-item">
+					<div >
+						<label class="layui-form-label"><b>专题名称</b></label>
+					</div>
+                    <input type="text" name="sTitle" th:value="${column.title}"  class="layui-input"  />
+				</div>
                 <div class="layui-form-item">
                     <div class="layui-upload-list">
-                        <label class="layui-form-label">用户头像:</label>
-                        <img onmouseover="al()" id="test1" name="img" height="50px" width="50px" th:src="${user.users.head}"/>
-                        <input name="imgMes" id="imgMes" th:value="${user.users.head}" type="hidden"/>
-                        <a id="btn1" class="layui-btn layui-btn-small layui-btn-radius">使用系统头像</a>
+                        <label class="layui-form-label">专题图片:</label>
+                        <img onmouseover="al()" id="test1" name="img" height="100px" width="100px" th:src="${column.image}"/>
+                        <input name="imgMes" id="imgMes" th:value="${column.image}" type="hidden"/>
                         <p id="demo1"></p>
                     </div>
                 </div>
-				<div class="layui-form-item">
-					<label class="layui-form-label">用户昵称:</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="userName"  class="layui-input" readonly="readonly" th:value="${session.user}"/>
-                    </div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label">实名</label>
-					<div class="layui-input-block">
-                        <input type="text" name="realName" lay-verify="title" autocomplete="off" placeholder="真实姓名" class="layui-input" th:value="${user.users.real_name}"/>
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label">职位</label>
-					<div class="layui-input-block">
-						<input type="text" name="position" lay-verify="title" autocomplete="off" placeholder="请输入职位" th:value="${user.userDetail.position}" class="layui-input"/>
-					</div>
-				</div>
-				<div class="layui-inline">
-					<label class="layui-form-label">出生日期</label>
-					<div class="layui-input-inline">
-						<input type="text" name="date" id="date" lay-verify="date" placeholder="格式:yyyy-MM-dd" autocomplete="off" th:value="${#dates.format(user.userDetail.birthday,'yyyy-MM-dd')}" class="layui-input"/>
-					</div>
-				</div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">邮箱</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="email" lay-verify="email" th:value="${user.users.email}" autocomplete="off" class="layui-input"/>
-                    </div>
-                </div>
-				<div class="layui-form-item">
-					<label class="layui-form-label">单选框</label>
-					<div class="layui-input-block">
-						<input type="radio" name="sex" value="男" title="男"/>
-						<input type="radio" name="sex" value="女" title="女"/>
-					</div>
-				</div>
 
 
-
-				<div class="layui-form-item">
-					<label class="layui-form-label">住址</label>
-					<div class="layui-input-block">
-						<input type="text" name="address" lay-verify="title" th:value="${user.userDetail.address}" autocomplete="off" placeholder="请输入住址" class="layui-input"/>
-					</div>
-				</div>
-				<div class="layui-form-item layui-form-text">
-					<label class="layui-form-label">简述</label>
-					<div class="layui-input-block">
-						<textarea id="sketch" name="sketch" placeholder="请输入内容" class="layui-textarea" th:text="${user.userDetail.sketch}"></textarea>
-					</div>
-				</div>
 
                 <p> &nbsp;</p>
 
@@ -103,13 +58,7 @@
             function al() {
                 layer.msg("点击头像可上传自定义头像")
             }
-            $("#btn1").click(function () {
-                 	index = layer.open({
-                    type: 2,
-                    content: '/user/headPic',
-                    area:['600px','450px']
-                });
-            });
+
 			layui.use(['form', 'layedit', 'laydate','upload'], function() {
 				var form = layui.form,
 					layer = layui.layer,
@@ -163,18 +112,17 @@
 //						title: '最终的提交信息'
 //					});
 					var Final =JSON.stringify(data.field);
-                    var user2 = document.getElementById("user2").value;
 					$.ajax({
                         type : "post",
                         data:data.field,
                         dataType:"json",
-                        url :'/user/updateDetail',
+                        url :'/column/updateInlet/'+parent.id,
                         timeout : 20000,
                         cache : false,
                         success:function (data) {
                             if(data == 1){
-                                layer.alert("更改成功");
-                                parent.layer.closeAll('iframe');
+                                layer.msg("更改成功");
+//                                parent.layer.closeAll('iframe');
 
                             }
                             else{

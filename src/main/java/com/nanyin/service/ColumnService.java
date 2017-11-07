@@ -5,6 +5,7 @@ import com.nanyin.model.Column;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -37,6 +38,25 @@ public interface ColumnService {
 
     int updateColumnByPaperId(int paperId,String columnName);
 
+    /**
+     *
+     * @param page 页
+     * @return
+     */
+    Map<String,Object> allColumn(String page);
 
+    /**
+     *
+     * @param name 名称
+     * @param image 图片名称
+     * @return
+     */
+    int insertInlet(String name,String image);
+
+    int updateInlet(String name,String image,String id);
+
+    int deleteColumnById(int id);
+
+    Column selectColumnById(int id);
 
 }

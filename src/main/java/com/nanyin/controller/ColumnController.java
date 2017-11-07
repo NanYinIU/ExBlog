@@ -5,6 +5,7 @@ import com.nanyin.service.ColumnService;
 import javafx.scene.effect.SepiaTone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -87,6 +88,46 @@ public class ColumnController {
     public @ResponseBody int updateColumnName(@PathVariable(name = "id") int paperId,@RequestParam("theme") String title){
         return columnService.updateColumnByPaperId(paperId,title);
 
+    }
+
+    @RequestMapping("/addColumn")
+    public String addColumn(String url){
+        return "InnerLayui/addColumn";
+    }
+    @RequestMapping("/columnPage")
+    public ModelAndView columnPage(@RequestParam(value = "url",required = false) String url){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("InnerLayui/columnPage");
+        modelAndView.addObject("url",url);
+        return modelAndView;
+    }
+    @RequestMapping("/allColumn/{pageNum}")
+    public @ResponseBody Map<String,Object> allColumn(@PathVariable("pageNum") String pageNum){
+        Map<String,Object> map = columnService.allColumn(pageNum);
+        map.put("pageNum",pageNum);
+        return map;
+    }
+
+    @RequestMapping("/insertInlet")
+    public @ResponseBody int insertInlet(@RequestParam("userName") String name,@RequestParam("btn") String image){
+    return columnService.insertInlet(name,image);
+    }
+
+    @RequestMapping("/deleteColumn/{id}")
+    public @ResponseBody int deleteColumn(@PathVariable("id") int id){
+        return columnService.deleteColumnById(id);
+    }
+    @RequestMapping("/editColumn/{id}")
+    public ModelAndView editColumn(@PathVariable("id") int id){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("InnerLayui/editColumn");
+        Column column = columnService.selectColumnById(id);
+        modelAndView.addObject("column",column);
+        return modelAndView;
+    }
+    @RequestMapping("/updateInlet/{id}")
+    public @ResponseBody int updateInlet(@RequestParam("sTitle") String name,@RequestParam("imgMes")String image,@PathVariable("id") String id){
+        return columnService.updateInlet(name, image, id);
     }
 
 }

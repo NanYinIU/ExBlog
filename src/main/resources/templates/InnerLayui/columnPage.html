@@ -20,8 +20,10 @@
     <input id="pageNum" name="pageNum" type="hidden" />
 <div style="margin: 15px;">
     <fieldset class="layui-elem-field">
-        <legend>个人文章管理 </legend>
-        <table id="pageList" class="layui-table" lay-filter="demo">
+        <legend>专题管理页面 </legend>
+        <p>&nbsp;</p>
+        <button id="addColumn" class="layui-btn">添加专题项</button>
+        <table id="colList" class="layui-table" lay-filter="demo">
         </table>
     </fieldset>
 </div>
@@ -32,14 +34,20 @@
     <div class="layui-btn-group">
         <button class="layui-btn layui-btn-mini" lay-event="edit">编辑</button>
         <button class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</button>
-        <button class="layui-btn layui-btn-warm layui-btn-mini " lay-event="detail">查看标签</button>
-        <button class="layui-btn layui-btn-normal layui-btn-mini" lay-event="col">修改专题</button>
-        <button class="layui-btn layui-btn-mini" lay-event="com">评论管理</button>
     </div>
 </script>
 <script>
-    var username = document.getElementById("userName").value;
-    var url = '/paper/findPaperByName/'+username+'/1';
+
+        $("#addColumn").click(function () {
+            layer.open({
+                type: 2,
+                content: '/column/addColumn',
+                area:['600px','450px']
+            });
+        })
+
+    
+    var url = '/column/allColumn/1';
     var nurl = document.getElementById("url").value;
     var turl = null;
     if (nurl == ''||nurl == null||nurl==undefined){
@@ -56,17 +64,16 @@
 //        table.init('filter', options); //转化静态表格
         table.render({
             id:'tid',
-            elem:'#pageList',
-            width:1350,
+            elem:'#colList',
+            width:1300,
 //            page:'true',
             url:turl,
             cols: [[
-                {field:'paperId', title: '文章ID', width:80, sort: true}
-                ,{field:'paperTitle', title: '文章名称', width:400, sort: true}
-                ,{field:'theme', title: '所属主题', width:144, sort: true}
-                ,{field:'createTime', title: '创建时间', width:220, sort: true}
-                ,{field:'is_pass', title: '文章状态', width:100}
-                ,{toolbar:'#barDemo', title: '操作', width:330}
+                {field:'id', title: '#', width:80, sort: true}
+                ,{field:'title', title: '专题名称', width:400}
+                ,{field:'image', title: '图片信息', width:444}
+                ,{field:'c_create_time', title: '创建时间', width:220, sort: true}
+                ,{toolbar:'#barDemo', title: '操作', width:150}
             ]]
         });
 
@@ -86,7 +93,7 @@
                 elem: 'pageDemo' //分页容器的id
                 , limit: 10
                 , count: count
-                ,curr: currPage
+                , curr: currPage
                 , skin: '#1E9FFF' //自定义选中色值
                 , skip: true //开启跳页
                 , prev: '上一页 '
@@ -94,9 +101,8 @@
                 , jump: function (obj, first) {
                     if (!first) {
                         var currentPage = obj.curr;//获取点击的页码
-//                        alert(obj.curr);
-                        url = '/paper/findPaperByName/' + username + '/' + currentPage;
-                        window.location.href = '/cte?url=' + url;
+                        url = '/column/allColumn/' + currentPage;
+                        window.location.href = '/column/columnPage?url='+url;
                     }
                 }
 
@@ -107,23 +113,15 @@
             //监听工具条
             table.on('tool(demo)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
                 var data = obj.data;//获得当前行数据
-                id = data.paperId,
+                id = data.id,
 
                 layEvent = obj.event; //获得 lay-event 对应的值
-                if (layEvent === 'detail') {
-                    layer.msg('查看操作');
-                    layer.open({
-                        type: 2,
-                        area: ['700px', '450px'],
-                        content: '/tag/tagPage/'+id
-                    });
-                    // 这里应该是一个弹窗 内容大概是 为文章添加一个标签.删除某个标签 不做分页
-                } else if (layEvent === 'del') {
+                 if (layEvent === 'del') {
                     layer.confirm('真的删除行么', function (index) {
                         obj.del(); //删除对应行（tr）的DOM结构
 
                         $.ajax({
-                            url:"/paper/delect/"+id,    //请求的url地址
+                            url:"/column/deleteColumn/"+id,    //请求的url地址
                             dataType:"json",   //返回格式为json
                             type:"GET",   //请求方式
                             success:function (data) {
@@ -137,26 +135,14 @@
                         });
                         layer.close(index);
                     });
-                } else if (layEvent === 'edit') {
+                 }else if (layEvent === 'edit') {
                     layer.open({
                         type: 2,
-                        area: ['1200px', '650px'],
-                        content: '/newMD/'+id
+                        area: ['600px', '450px'],
+                        content: '/column/editColumn/'+id
                     });
-                } else if(layEvent === 'col'){
-                    layer.open({
-                        type: 2,
-                        area: ['700px', '450px'],
-                        content: '/column/updateTheme'
-                    });
-                }
-                else if(layEvent === 'com'){
-                    layer.open({
-                        type: 2,
-                        area: ['700px', '450px'],
-                        content: '/comments/getComments'
-                    });
-                }
+                 }
+
             });
         }
 

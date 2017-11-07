@@ -104,7 +104,7 @@
 						<header>
 							<div class="meta">
 								<time class="published" datetime="2015-11-01" th:text="${page.create_time}"></time>
-								<a th:href="@{/personalPage/${page.login_name}/0}" class="author"><span class="name" th:text="${page.login_name}"></span><img th:src="${page.head}" alt="" /></a>
+								<a th:href="@{'/personalPage/'+${page.login_name}+'/0'}" class="author"><span class="name" th:text="${page.login_name}"></span><img th:src="${page.head}" alt="" /></a>
 
 								<!--<a href="#" class="author"><span class="name">{{login_name}}</span><img src="{{head}}" alt="" /></a>-->
 							</div>

@@ -4,6 +4,7 @@ import com.nanyin.model.Column;
 import org.apache.ibatis.annotations.*;
 
 import javax.swing.border.TitledBorder;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
@@ -70,4 +71,36 @@ public interface ColumMapper {
     @Update("UPDATE social_blog.Column_paper SET Column_id = #{column_id} WHERE paper_id = #{paper_id}")
     int updateColumnByPaperId(@Param("paper_id") int paperId,@Param("column_id") int columnId);
 
+    /**
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Select("SELECT * FROM social_blog.`Column` LIMIT #{page},#{limit}")
+    List<Column> findAllColumnLimit(@Param("page") int page,@Param("limit") int limit);
+
+    /**
+     *
+     * @param column
+     * @return
+     */
+    @Insert("INSERT into social_blog.`Column`(title,image,C_create_time) VALUES (#{column.title},#{column.image},#{column.c_create_time})")
+    int insertColumn(@Param("column") Column column);
+
+    /**
+     *
+     * @param title
+     * @param image
+     * @param id
+     * @return
+     */
+    @Update("UPDATE social_blog.`Column` c SET c.title=#{title},c.image=#{image} WHERE id=#{id}")
+    int updateColumnById(@Param("title") String title,@Param("image") String image,@Param("id") int id);
+
+    @Delete("DELETE FROM social_blog.`Column` WHERE id = #{id}")
+    int deleteColumnById(int id);
+
+    @Select("SELECT * FROM social_blog.`Column` WHERE id=#{id}")
+    Column selectColumnById(int id);
 }

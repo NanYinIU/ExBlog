@@ -42,17 +42,17 @@ var navs = [{
 		"icon": "&#xe60a;",
 		"href": "http://www.qq.com/"
 	},{
-        "title": "增加专题",
+        "title": "专题管理",
         "icon": "&#xe60a;",
-        "href": "http://www.qq.com/"
+        "href": "/column/columnPage"
     }, {
 		"title": "Druid监控",
 		"icon": "&#xe609;",
-		"href": "http://fly.layui.com/"
+		"href": "/druid/index.html"
 	}]
 }, {
 	"title": "本项目地址",
 	"icon": "fa-github",
-	"href": "https://www.baidu.com",
+	"href": "https://github.com/NanYinIU/ExBlog",
 	"spread": false
 }];
