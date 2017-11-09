@@ -22,10 +22,9 @@
 						<h1><a href="#">Social Blog</a></h1>
 						<nav class="links">
 							<ul>
-								<li><a href="#">博客专栏</a></li>
-								<li><a href="#">博文排行</a></li>
-								<li><a href="#">博客砖家</a></li>
-								<li><a href="#">我的博客</a></li>
+								<li><a th:href="@{/column/findAllColumn/1}">博客专栏</a></li>
+								<li><a th:href="@{/personalPage/}+${session.user}+'/1'">个人主页</a></li>
+								<li><a th:href="@{/cit}">博客管理</a></li>
 							</ul>
 						</nav>
 						<nav class="main">
@@ -53,34 +52,28 @@
 								</form>
 							</section>
 						<!-- Links -->
-							<section>
-								<ul class="links">
-									<li>
-										<a href="#">
-											<h3>博客专栏</h3>
-											<p>Feugiat tempus veroeros dolor</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<h3>博文排行</h3>
-											<p>Sed vitae justo condimentum</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<h3>博客砖家</h3>
-											<p>Phasellus sed ultricies mi congue</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<h3>我的博客</h3>
-											<p>Porta lectus amet ultricies</p>
-										</a>
-									</li>
-								</ul>
-							</section>
+						<section>
+							<ul class="links">
+								<li>
+									<a  th:href="@{/column/findAllColumn/1}">
+										<h3>博客专栏</h3>
+										<p>Feugiat tempus veroeros dolor</p>
+									</a>
+								</li>
+								<li>
+									<a th:href="@{/personalPage/}+${session.user}+'/1'">
+										<h3>个人主页</h3>
+										<p>查看个人主页页面</p>
+									</a>
+								</li>
+								<li>
+									<a th:href="@{/cit}">
+										<h3>博客管理</h3>
+										<p>layUi 后台管理</p>
+									</a>
+								</li>
+							</ul>
+						</section>
 						<!-- Actions -->
 							<section>
 								<ul class="actions vertical">
@@ -106,10 +99,10 @@
 									<!-- Mini Post -->
 									<article class="mini-post">
 										<header>
-											<h2><a href="#" th:text="${list.title}"></a></h2>
+											<h2><a th:href="@{ColumnPage/}+${list.title}+'1'" th:text="${list.title}"></a></h2>
 											<time class="published" datetime="2015-10-20" th:text="${list.c_create_time}"></time>
 										</header>
-										<a href="#" class="image"><img style="height: 300px" th:src="${list.image}" alt="" /></a>
+										<a th:href="@{ColumnPage/}+${list.title}+'1'" class="image"><img style="height: 300px" th:src="${list.image}" alt="" /></a>
 
 									</article>
 
@@ -130,58 +123,29 @@
 					<!-- Intro -->
 					<section id="intro">
 
-						<a th:if="${session.user != null}"><a href="#" class="logo"><img src="/images/logo.jpg" alt="" /></a></a>
+						<a th:if="${session.user != null}"><a href="#" class="logo"><img id="img" src="/images/logo.jpg" alt="" /></a></a>
 						<a th:if="${session.user == null}"><a href="/user/login" class="logo"><img src="/images/unlogin.jpg" alt="" /></a></a>
 						<header>
 							<a th:if="${session.user == null}"><h3>&nbsp;未登录</h3></a>
 							<a th:if="${session.user != null}"><h3>欢迎&nbsp;<a th:text="${session.user}">......</a></h3></a>
-							<!--<p th:text="${session.user}">..Another fine 每天都有好心情</p>-->
 						</header>
 					</section>
-
-					<!--&lt;!&ndash; Mini Posts 主题 &ndash;&gt;-->
-					<!--<script type="text/html" id="mini_post">-->
-						<!--<section>-->
-							<!--<div class="mini-posts">-->
-
-								<!--&lt;!&ndash; Mini Post &ndash;&gt;-->
-								<!--<article class="mini-post">-->
-									<!--<header>-->
-										<!--<h3><a href="#">{{title}}</a></h3>-->
-										<!--<time class="published" datetime="2015-10-20">{{c_create_time}}</time>-->
-
-									<!--</header>-->
-									<!--<a href="#" class="image"><img src="{{image}}" alt="" /></a>-->
-								<!--</article>-->
-							<!--</div>-->
-						<!--</section>-->
-					<!--</script>-->
-
-					<!--<script type="text/javascript">-->
-                        <!--var html2 ='';-->
-                        <!--$(document).ready(function () {-->
-                            <!--url = '/column/findColumByCount';-->
-                            <!--$.ajax( {-->
-                                <!--type : "post",-->
-                                <!--dataType:"json",-->
-                                <!--url : url,-->
-                                <!--timeout : 20000,-->
-                                <!--cache : false,-->
-                                <!--success : function(data) {-->
-                                    <!--var i;-->
-                                    <!--for(i in data.colum){-->
-                                        <!--html2 = template('mini_post', data.colum[i])+html2;-->
-                                    <!--}-->
-                                    <!--document.getElementById('content').innerHTML = html2;-->
-                                <!--}-->
-
-                            <!--});-->
-                        <!--})-->
-					<!--</script>-->
-
-					<!--<div class="span12">-->
-						<!--<div id="content"></div>-->
-					<!--</div>-->
+					<input type="hidden" th:value="${session.user}" id="userId" />
+					<script>
+                        $(document).ready(function () {
+                            var user = document.getElementById("userId").value;
+                            $.ajax({
+                                type: "post",
+                                dataType: "json",
+                                url: '/userMes/' + user,
+                                timeout: 20000,
+                                cache: false,
+                                success: function (data) {
+                                    document.getElementById("img").src = data.head;
+                                }
+                            })
+                        })
+					</script>
 
 					<!-- postlist  -->
 					<script type="text/html" id="post_list">
@@ -191,11 +155,11 @@
 								<li>
 									<article>
 										<header>
-											<h3><a href="#">{{title}}</a></h3>
-											<h4><a href="#">{{login_name}}</a></h4>
+											<h3><a th:href="@{/page/{{id}}}">>{{title}}</a></h3>
+											<h4><a th:href="@{personalPage/{{login_name}}/1}">{{login_name}}</a></h4>
 											<time class="published" datetime="2015-10-20">{{create_time}}</time>
 										</header>
-										<a href="#" class="image"><img src="{{head}}" alt="" /></a>
+										<a th:href="@{personalPage/{{login_name}}/1}" class="image"><img src="{{head}}" alt="" /></a>
 									</article>
 								</li>
 							</ul>

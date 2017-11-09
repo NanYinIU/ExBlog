@@ -46,7 +46,9 @@ public class PaperController {
     @RequestMapping("/PapersByTime")
     public @ResponseBody
     Map<String,Object> PapersByTime(){
-        return  paperService.findAllPapersByTime();
+//        logger.info("格式"+ paperService.findAllPapersByTime().get("paper").toString());
+        Map<String,Object> map = paperService.findAllPapersByTime();
+        return map;
     }
 
     @RequestMapping("/markAdd")

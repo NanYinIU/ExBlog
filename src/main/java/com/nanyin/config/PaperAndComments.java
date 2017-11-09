@@ -111,4 +111,21 @@ public class PaperAndComments {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return "PaperAndComments{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", segment='" + segment + '\'' +
+                ", create_time=" + create_time +
+                ", mark=" + mark +
+                ", paper_image='" + paper_image + '\'' +
+                ", count=" + count +
+                ", login_name='" + login_name + '\'' +
+                ", head='" + head + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

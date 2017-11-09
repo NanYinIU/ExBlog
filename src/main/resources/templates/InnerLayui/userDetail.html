@@ -49,19 +49,25 @@
 				</div>
 				<div class="layui-form-item">
 					<label class="layui-form-label">职位</label>
-					<div class="layui-input-block">
+					<div class="layui-input-block" th:if="${user.userDetail}">
 						<input type="text" name="position" lay-verify="title" autocomplete="off" placeholder="请输入职位" th:value="${user.userDetail.position}" class="layui-input"/>
+					</div>
+					<div class="layui-input-block" th:unless="${user.userDetail}">
+						<input type="text" name="position" lay-verify="title" autocomplete="off" placeholder="请输入职位" class="layui-input"/>
 					</div>
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label">出生日期</label>
-					<div class="layui-input-inline">
+					<div class="layui-input-inline" th:if="${user.userDetail}">
 						<input type="text" name="date" id="date" lay-verify="date" placeholder="格式:yyyy-MM-dd" autocomplete="off" th:value="${#dates.format(user.userDetail.birthday,'yyyy-MM-dd')}" class="layui-input"/>
 					</div>
+                    <div class="layui-input-inline" th:unless="${user.userDetail}">
+                        <input type="text" name="date" id="date2" lay-verify="date" placeholder="输入格式:yyyy-MM-dd" autocomplete="off" class="layui-input"/>
+                    </div>
 				</div>
                 <div class="layui-inline">
                     <label class="layui-form-label">邮箱</label>
-                    <div class="layui-input-inline">
+                    <div class="layui-input-inline" >
                         <input type="text" name="email" lay-verify="email" th:value="${user.users.email}" autocomplete="off" class="layui-input"/>
                     </div>
                 </div>
@@ -77,15 +83,21 @@
 
 				<div class="layui-form-item">
 					<label class="layui-form-label">住址</label>
-					<div class="layui-input-block">
+					<div class="layui-input-block" th:if="${user.userDetail}">
 						<input type="text" name="address" lay-verify="title" th:value="${user.userDetail.address}" autocomplete="off" placeholder="请输入住址" class="layui-input"/>
 					</div>
+                    <div class="layui-input-block" th:unless="${user.userDetail}">
+                        <input type="text" name="address" lay-verify="title"  autocomplete="off" placeholder="请输入住址" class="layui-input"/>
+                    </div>
 				</div>
 				<div class="layui-form-item layui-form-text">
 					<label class="layui-form-label">简述</label>
-					<div class="layui-input-block">
+					<div class="layui-input-block" th:if="${user.userDetail}">
 						<textarea id="sketch" name="sketch" placeholder="请输入内容" class="layui-textarea" th:text="${user.userDetail.sketch}"></textarea>
 					</div>
+                    <div class="layui-input-block" th:unless="${user.userDetail}">
+                        <textarea id="sketch2" name="sketch" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    </div>
 				</div>
 
                 <p> &nbsp;</p>

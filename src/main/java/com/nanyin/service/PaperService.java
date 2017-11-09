@@ -33,7 +33,7 @@ public interface PaperService {
 
     AllAttriOfPaper findAllAttriOfPapaer(int id);
 
-    List<String> findPaperInColumn(String column);
+    List<Paper> findPaperInColumn(String column);
 
     List<Paper> findPaperByUserName(String name,String search);
 

@@ -51,7 +51,7 @@ public interface PaperMapper {
             "ORDER BY  p.create_time DESC",
             "</script>" })
 
-    List<Paper> findAllPapers(String search);
+    List<Paper> findAllPapers(@Param("search") String search);
 
     @Select("SELECT t.tag_name " +
             "FROM social_blog.paper p , social_blog.tag t " +
@@ -80,10 +80,10 @@ public interface PaperMapper {
     @Select("SELECT p.title FROM social_blog.paper p WHERE p.id = #{id}")
     String findPaperTitleById(int id);
 
-    @Select("SELECT p.title " +
+    @Select("SELECT p.* " +
             "FROM social_blog.paper p, social_blog.`Column` c ,social_blog.Column_paper cp " +
             "WHERE cp.Column_id = c.id AND cp.paper_id = p.id AND c.title = #{column}")
-    List<String> findPaperInColumn(String column);
+    List<Paper> findPaperInColumn(String column);
 
     @Select({
             "<script>",

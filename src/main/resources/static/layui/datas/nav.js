@@ -9,7 +9,7 @@ var navs = [{
 	},  {
         "title": "新建文章",
         "icon": "&#xe63c;",
-        "href": "/ci"
+        "href": "/markDown"
     }]
 }, {
 	"title": "个人信息管理",

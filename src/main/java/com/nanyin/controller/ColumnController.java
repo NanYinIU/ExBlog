@@ -64,7 +64,6 @@ public class ColumnController {
         Map<String,Object> map = new HashMap<>();
         List<Integer> countList = new ArrayList<>();
         List<String> titleList = new ArrayList<>();
-//        List<String> list = (List<String>) columnService.findCoumnByUser(name);
         Set<String> set = columnService.findCoumnByUser(name);
         List List = new ArrayList<>();
         Iterator iterator = set.iterator();
@@ -76,9 +75,6 @@ public class ColumnController {
             map1.put("title",title);
             List.add(map1);
         }
-//        map.put("count",countList);
-//        map.put("title",titleList);
-        Map<String,Object> map1 = new HashMap<>();
         map.put("columnList",List);
         return map;
     }

@@ -28,20 +28,16 @@ public class OtherController {
     PaperService paperService;
 
     Logger logger = Logger.getLogger(this.getClass());
-    @RequestMapping("/c")
-    public String c(){
-        return "page";
-    }
-    @RequestMapping("/ci")
-    public String ci(@RequestParam(value = "content",required = false) String content){
+    @RequestMapping("/markDown")
+    public String markDown(@RequestParam(value = "content",required = false) String content){
         return  "markDown";
     }
     @RequestMapping("/cit")
     public String cit(){
         return "Manage";
     }
-    @RequestMapping("/cite")
-    public String cite(){
+    @RequestMapping("/mainPage")
+    public String main(){
         return "InnerLayui/main";
     }
 

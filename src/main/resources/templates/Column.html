@@ -19,23 +19,17 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="#">Social Blog</a></h1>
+						<h1><a th:href="@{/HomePage/1}">Social Blog</a></h1>
 						<nav class="links">
 							<ul>
-								<li><a href="#">博客专栏</a></li>
-								<li><a href="#">博文排行</a></li>
-								<li><a href="#">博客砖家</a></li>
-								<li><a href="#">我的博客</a></li>
+								<li><a th:href="@{/column/findAllColumn/1}">博客专栏</a></li>
+								<li><a th:href="@{/personalPage/}+${session.user}+'/1'">个人主页</a></li>
+								<li><a th:href="@{/cit}">博客管理</a></li>
 							</ul>
 						</nav>
 						<nav class="main">
 							<ul>
-								<li class="search">
-									<a class="fa-search" href="#search">Search</a>
-									<form id="searchForm" method="post" action="#">
-										<input type="text" name="search" id="search" placeholder="Search" />
-									</form>
-								</li>
+
 								<li class="menu">
 									<a class="fa-bars" href="#menu">Menu</a>
 								</li>
@@ -45,38 +39,25 @@
 
 				<!-- Menu -->
 					<section id="menu">
-
-						<!-- Search -->
-							<section>
-								<form class="search" method="post" action="#">
-									<input type="text" name="search" placeholder="Search" />
-								</form>
-							</section>
 						<!-- Links -->
 							<section>
 								<ul class="links">
 									<li>
-										<a href="#">
+										<a  th:href="@{/column/findAllColumn/1}">
 											<h3>博客专栏</h3>
 											<p>Feugiat tempus veroeros dolor</p>
 										</a>
 									</li>
 									<li>
-										<a href="#">
-											<h3>博文排行</h3>
-											<p>Sed vitae justo condimentum</p>
+										<a th:href="@{/personalPage/}+${session.user}+'/1'">
+											<h3>个人主页</h3>
+											<p>查看个人主页页面</p>
 										</a>
 									</li>
 									<li>
-										<a href="#">
-											<h3>博客砖家</h3>
-											<p>Phasellus sed ultricies mi congue</p>
-										</a>
-									</li>
-									<li>
-										<a href="#">
-											<h3>我的博客</h3>
-											<p>Porta lectus amet ultricies</p>
+										<a th:href="@{/cit}">
+											<h3>博客管理</h3>
+											<p>layUi 后台管理</p>
 										</a>
 									</li>
 								</ul>
@@ -103,7 +84,6 @@
 					<article class="post">
 						<header>
 							<div class="title">
-								<!--th:href="@{/paper/SelectPaper/}+${page.id}"-->
 								<h2>专栏：<a id="title"><a th:text="${column}"> </a></a></h2>
 							</div>
 
@@ -116,7 +96,7 @@
 								<li> &nbsp;</li>
 							<div th:each="page,pageStat :${pageInfo.list}">
 									<li>
-										<h3><a href="#" th:text="${page}"></a></h3>
+										<h3><a th:href="@{/page/}+${page.id}" th:text="${page.title}"></a></h3>
 									</li>
 							</div>
 							</ul>
@@ -132,34 +112,37 @@
 					</article>
 
 
-
-
-
-
-
-
-						<!--&lt;!&ndash; Pagination &ndash;&gt;-->
-                        <!--<ul class="actions pagination">-->
-                            <!--<li><a href="#" class="button big next">more pages..</a></li>-->
-                        <!--</ul>-->
-
-
 					</div>
 
 				<!-- Sidebar -->
 					<section id="sidebar">
 
 						<!-- Intro -->
-							<section id="intro">
+						<section id="intro">
 
-                                <a th:if="${session.user != null}"><a href="#" class="logo"><img src="/images/logo.jpg" alt="" /></a></a>
-                                <a th:if="${session.user == null}"><a href="/user/login" class="logo"><img src="/images/unlogin.jpg" alt="" /></a></a>
-								<header>
-                                    <a th:if="${session.user == null}"><h3>&nbsp;未登录</h3></a>
-                                    <a th:if="${session.user != null}"><h3>欢迎&nbsp;<a th:text="${session.user}">......</a></h3></a>
-									<!--<p th:text="${session.user}">..Another fine 每天都有好心情</p>-->
-								</header>
-							</section>
+							<a th:if="${session.user != null}"><a href="#" class="logo"><img id="img" src="/images/logo.jpg" alt="" /></a></a>
+							<a th:if="${session.user == null}"><a href="/user/login" class="logo"><img src="/images/unlogin.jpg" alt="" /></a></a>
+							<header>
+								<a th:if="${session.user == null}"><h3>&nbsp;未登录</h3></a>
+								<a th:if="${session.user != null}"><h3>欢迎&nbsp;<a th:text="${session.user}">......</a></h3></a>
+							</header>
+						</section>
+						<input type="hidden" th:value="${session.user}" id="userId" />
+						<script>
+                            $(document).ready(function () {
+                                var user = document.getElementById("userId").value;
+                                $.ajax({
+                                    type: "post",
+                                    dataType: "json",
+                                    url: '/userMes/' + user,
+                                    timeout: 20000,
+                                    cache: false,
+                                    success: function (data) {
+                                        document.getElementById("img").src = data.head;
+                                    }
+                                })
+                            })
+						</script>
 
 						<!-- Mini Posts 主题 -->
 						<script type="text/html" id="mini_post">
@@ -169,11 +152,11 @@
 									<!-- Mini Post -->
 									<article class="mini-post">
 										<header>
-											<h3><a href="#">{{title}}</a></h3>
+											<h3><a th:href="@{/ColumnPage/{{title}}/1}">{{title}}</a></h3>
 											<time class="published" datetime="2015-10-20">{{c_create_time}}</time>
 
 										</header>
-										<a href="#" class="image"><img src="{{image}}" alt="" /></a>
+										<a th:href="@{/ColumnPage/{{title}}/1}" class="image"><img src="{{image}}" alt="" /></a>
 									</article>
 								</div>
 							</section>
@@ -213,11 +196,11 @@
 									<li>
 										<article>
 											<header>
-												<h3><a href="#">{{title}}</a></h3>
-												<h4><a href="#">{{login_name}}</a></h4>
+												<h3><a th:href="@{/page/{{id}}}">{{title}}</a></h3>
+												<h4><a th:href="@{personalPage/{{login_name}}/1}">{{login_name}}</a></h4>
 												<time class="published" datetime="2015-10-20">{{create_time}}</time>
 											</header>
-											<a href="#" class="image"><img src="{{head}}" alt="" /></a>
+											<a th:href="@{personalPage/{{login_name}}/1}" class="image"><img src="{{head}}" alt="" /></a>
 										</article>
 									</li>
 								</ul>

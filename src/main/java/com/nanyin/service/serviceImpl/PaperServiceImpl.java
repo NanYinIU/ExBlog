@@ -59,6 +59,7 @@ public class PaperServiceImpl implements PaperService {
           paperAndComments1.setLogin_name(users1.getLogin_name());
           paperAndComments1.setEmail(users1.getEmail());
           paperAndComments1.setHead(users1.getHead());
+          paperAndComments1.setId(id);
           paperAndComments.add(paperAndComments1);
         }
         map.put("paper",paperAndComments);
@@ -88,7 +89,8 @@ public class PaperServiceImpl implements PaperService {
             paperAndCommentss.setLogin_name(users1.getLogin_name());
             paperAndCommentss.setEmail(users1.getEmail());
             paperAndCommentss.setHead(users1.getHead());
-            paperAndCommentss.setId(paper.getId());
+            paperAndCommentss.setId(id);
+            logger.info("id+"+paperAndCommentss.getId());
             paperAndComments.add(paperAndCommentss);
 
         }
@@ -191,7 +193,7 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
-    public List<String> findPaperInColumn(String column) {
+    public List<Paper> findPaperInColumn(String column) {
         return paperMapper.findPaperInColumn(column);
     }
 
