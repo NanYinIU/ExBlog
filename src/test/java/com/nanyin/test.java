@@ -21,7 +21,7 @@ public class test {
         System.out.println(System.currentTimeMillis());
         System.out.println(new Date());
         System.out.println(new Timestamp(System.currentTimeMillis()));
-        System.out.println(36/10);
+        System.out.println(36%10);
         System.out.println(System.getProperty("user.dir"));
     }
     @Test

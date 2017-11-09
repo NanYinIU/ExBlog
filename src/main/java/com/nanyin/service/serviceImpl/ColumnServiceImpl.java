@@ -1,5 +1,7 @@
 package com.nanyin.service.serviceImpl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.nanyin.mapper.ColumMapper;
 import com.nanyin.model.Column;
 import com.nanyin.service.ColumnService;
@@ -7,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by NanYin on 2017-10-02 下午11:03.
@@ -29,6 +28,16 @@ public class ColumnServiceImpl implements ColumnService {
     @Override
     public List<Column> findAllColumn() {
         return columMapper.findAllColumn();
+    }
+
+    @Override
+    public Map<String,Object> findAllColumnSearch(String search,int pageNum) {
+        PageHelper.startPage(pageNum,5);
+        List<Column> list = columMapper.findAllColumnSearch(search);
+        PageInfo pageInfo = new PageInfo(list);
+        Map<String,Object> map = new HashMap<>();
+        map.put("pageInfo",pageInfo);
+        return map;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.nanyin.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.nanyin.model.Column;
 import com.nanyin.service.ColumnService;
 import javafx.scene.effect.SepiaTone;
@@ -43,14 +45,15 @@ public class ColumnController {
         return map;
     }
 
-    @RequestMapping("/findAllColumn")
+    @RequestMapping("/findAllColumn/{pageNum}")
     public @ResponseBody
-    ModelAndView findAllColumn(){
-        List<Column> list = columnService.findAllColumn();
-        Map<String ,Object> map = new HashMap<>();
+    ModelAndView findAllColumn( @RequestParam(value = "search", required = false) String search,
+                                @PathVariable("pageNum") int pageNum){
+        Map<String,Object> map = columnService.findAllColumnSearch(search, pageNum);
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("ColumnIndex");
-        map.put("list",list);
+
         modelAndView.addAllObjects(map);
         return modelAndView;
     }

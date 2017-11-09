@@ -83,9 +83,9 @@ public class PaperController {
         int total = paperService.getTotal(name,search);
         pageInfo.setTotal(total);
         pageInfo.setFirstPage(0);
-        pageInfo.setLastPage((total/8));
+        pageInfo.setLastPage((total/8)+1);
         pageInfo.setPrePage(pageNum-1 >= 0 ? pageNum-1:0);
-        pageInfo.setNextPage(pageNum+1 > (total/8) ? (total/8):pageNum+1);
+        pageInfo.setNextPage(pageNum+1 > ((total/8)+1) ? ((total/8)+1):pageNum+1);
 
         logger.info("totle:"+pageInfo.getTotal());
         modelAndView.addObject("pageInfo",pageInfo);
@@ -108,9 +108,9 @@ public class PaperController {
         int total = paperService.getAllTotal(search);
         pageInfo.setTotal(total);
         pageInfo.setFirstPage(0);
-        pageInfo.setLastPage((total/8));
+        pageInfo.setLastPage((total/8)+1);
         pageInfo.setPrePage(pageNum-1 >= 0 ? pageNum-1:0);
-        pageInfo.setNextPage(pageNum+1 > (total/8) ? (total/8):pageNum+1);
+        pageInfo.setNextPage(pageNum+1 > ((total/8)+1) ? ((total/8)+1):pageNum+1);
         modelAndView.addObject("pageInfo",pageInfo);
         return modelAndView;
     }

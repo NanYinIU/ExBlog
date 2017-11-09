@@ -28,6 +28,16 @@ public interface ColumMapper {
     @Select("SELECT * FROM social_blog.`Column`")
     List<Column> findAllColumn();
 
+    @Select({
+            "<script>",
+            "SELECT * FROM social_blog.`Column`",
+            "<if test=\"search!=null and search!=''\">",
+            "AND title LIKE concat(concat('%',#{search}),'%') ",
+            "</if>",
+            "</script>"
+    })
+    List<Column> findAllColumnSearch(String search);
+
     @Select("SELECT COUNT(*) FROM social_blog.paper p, social_blog.`Column` c ,social_blog.Column_paper cp ,social_blog.users u " +
             "WHERE cp.Column_id = c.id AND cp.paper_id = p.id AND u.id = p.author AND c.title = #{title} AND u.login_name=#{name}")
     int findCountByTitle(@Param("title") String title,@Param("name") String name);

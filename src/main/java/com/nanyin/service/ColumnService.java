@@ -20,6 +20,8 @@ public interface ColumnService {
 
     List<Column> findAllColumn();
 
+    Map<String,Object> findAllColumnSearch(String search,int pageNum);
+
     Set<String> findCoumnByUser(String name);
 
     int findCountByTitle(String title,String name);
