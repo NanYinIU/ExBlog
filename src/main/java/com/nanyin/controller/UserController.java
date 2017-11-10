@@ -117,4 +117,6 @@ public class UserController {
     public String headPic(){
         return "InnerLayui/pic";
     }
+
+
 }

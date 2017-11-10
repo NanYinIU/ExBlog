@@ -275,5 +275,10 @@ public class PaperServiceImpl implements PaperService {
         return paperMapper.findPaperId(title,segment,author);
     }
 
+    @Override
+    public int findCountOfPaperByUser(String name) {
+        return paperMapper.findCountOfPaperByUser(name);
+    }
+
 
 }

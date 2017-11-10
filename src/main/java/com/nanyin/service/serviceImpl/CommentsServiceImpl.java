@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -59,5 +60,17 @@ public class CommentsServiceImpl implements CommentsService {
         map.put("mes","");
         map.put("data",list);
         return map;
+    }
+
+    @Override
+    public int insertComments(String content, String paperId) {
+        int id = Integer.parseInt(paperId);
+
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Comments comments = new Comments();
+        comments.setComments_content(content);
+        comments.setComments_paper(id);
+        comments.setComments_time(timestamp);
+        return commentsMapper.insertComments(comments);
     }
 }

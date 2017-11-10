@@ -5,10 +5,13 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="/assets/js/ie/html5shiv.js"></script><![endif]-->
+        <link rel="stylesheet" href="/layui/plugins/layui/css/layui.css" media="all" />
         <script src="/assets/js/jquery.min.js"></script>
         <script src="/assets/js/template-web.js"></script>
 		<link rel="stylesheet" href="/assets/css/main.css" />
         <link rel="stylesheet" href="/assets/css/dianzan/style.css" />
+
+        <script src="/layui/plugins/layui/layui.js"></script>
 		<!--[if lte IE 9]><link rel="stylesheet" href="/assets/css/ie9.css" /><![endif]-->
 		<!--[if lte IE 8]><link rel="stylesheet" href="/assets/css/ie8.css" /><![endif]-->
 	</head>
@@ -126,11 +129,109 @@
 						<!-- Intro -->
 							<section id="intro">
 
-
+                                <input id="userId" type="hidden" th:value="${session.user}"/>
                                 <a href="#" class="logo"><img th:src="${pageInfo.list[0].head}" alt="" /></a>
 								<header>
-                                    <h3><a th:text="${pageInfo.list[0].login_name}"></a>&nbsp;的个人主页</h3>
-								</header>
+                                    <h3><a id="ByFocal" th:text="${pageInfo.list[0].login_name}"></a>&nbsp;的个人主页</h3>
+
+                                    <script type="text/html" id="friend_content">
+                                        <div th:if="${session.user} != null">
+                                            <div id="check" th:if="${session.user} != ${pageInfo.list[0].login_name}">
+                                                {{if flag}}
+                                                <button id="cancelFocal"  class="button fit" onclick="cancel()">取消关注</button>
+                                                {{/if}}
+                                                {{if !flag}}
+                                                <button id="addFocal"  class="button fit" onclick="add()">添加关注</button>
+                                                {{/if}}
+                                            </div>
+                                        </div>
+                                    </script>
+
+                                    <script type="text/javascript">
+                                        var friend ='';
+                                        $(document).ready(function () {
+                                            var ByFocal = document.getElementById("ByFocal").innerText;
+                                            var userId = document.getElementById("userId").value;
+                                            $.ajax( {
+                                                type : "post",
+                                                data:{userId:userId,friendId:ByFocal},
+                                                dataType:"json",
+                                                url : '/user/checkFriends',
+                                                timeout : 20000,
+                                                cache : false,
+                                                success : function(data) {
+                                                    friend = template('friend_content', data);
+                                                    document.getElementById('friend').innerHTML = friend;
+                                                }
+
+                                            });
+                                        });
+                                        layui.use(['laypage', 'layer', 'table', 'element'], function() {
+                                            layer = layui.layer;//弹层
+
+
+                                        });
+
+                                       function cancel() {
+                                            // 取消关注
+                                            var ByFocal = document.getElementById("ByFocal").innerText;
+                                            var userId = document.getElementById("userId").value;
+                                            $.ajax( {
+                                                type : "post",
+                                                data:{userId:userId,friendId:ByFocal},
+                                                dataType:"json",
+                                                url : '/user/deleteFriends',
+                                                timeout : 20000,
+                                                cache : false,
+                                                success : function(data) {
+                                                    if(data == 1){
+                                                        layer.alert("取消关注成功！");
+                                                        setTimeout(function () {
+                                                            window.location.reload()
+                                                        },1500)
+//
+                                                    }
+                                                    else{
+                                                        layer.alert("出现错误取消失败！")
+                                                    }
+                                                }
+
+                                            });
+
+                                        };
+
+                                        function add() {
+                                            //添加关注
+                                            var ByFocal = document.getElementById("ByFocal").innerText;
+                                            var userId = document.getElementById("userId").value;
+                                            $.ajax( {
+                                                type : "post",
+                                                data:{userId:userId,friendId:ByFocal},
+                                                dataType:"json",
+                                                url : '/user/addFriends',
+                                                timeout : 20000,
+                                                cache : false,
+                                                success : function(data) {
+
+                                                    if(data == 1){
+                                                        layer.alert("添加成功！");
+                                                        setTimeout(function () {
+                                                            window.location.reload()
+                                                        },1500)
+                                                    }
+                                                    else{
+                                                        layer.alert("出现错误添加失败！")
+                                                    }
+                                                }
+
+                                            });
+
+                                        }
+
+                                    </script>
+                                    <div id="friend"></div>
+
+                                </header>
 							</section>
 
 						<!-- Mini Posts 主题 -->
@@ -186,10 +287,10 @@
 										<article>
 											<header>
 												<h3><a th:href="@{/page/{{id}}}">{{title}}</a></h3>
-												<h4><a th:href="@{personalPage/{{login_name}}/1}">{{login_name}}</a></h4>
+												<h4><a th:href="@{/personalPage/{{login_name}}/1}">{{login_name}}</a></h4>
 												<time class="published" datetime="2015-10-20">{{create_time}}</time>
 											</header>
-											<a th:href="@{personalPage/{{login_name}}/1}" class="image"><img src="{{head}}" alt="" /></a>
+											<a th:href="@{/personalPage/{{login_name}}/1}" class="image"><img src="{{head}}" alt="" /></a>
 										</article>
 									</li>
 								</ul>

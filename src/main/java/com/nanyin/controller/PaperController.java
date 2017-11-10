@@ -88,10 +88,7 @@ public class PaperController {
         pageInfo.setLastPage((total/8)+1);
         pageInfo.setPrePage(pageNum-1 >= 0 ? pageNum-1:0);
         pageInfo.setNextPage(pageNum+1 > ((total/8)+1) ? ((total/8)+1):pageNum+1);
-
-        logger.info("totle:"+pageInfo.getTotal());
         modelAndView.addObject("pageInfo",pageInfo);
-        logger.info("数据格式"+pageInfo+" ");
         return modelAndView;
     }
     @RequestMapping("/HomePage/{pageNum}")

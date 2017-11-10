@@ -20,4 +20,6 @@ public interface CommentsService {
 
     Map<String,Object> findAllCommentsByPaperId(int id);
 
+    int insertComments(String content,String paperId);
+
 }

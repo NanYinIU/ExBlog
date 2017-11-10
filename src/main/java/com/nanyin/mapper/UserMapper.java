@@ -1,5 +1,6 @@
 package com.nanyin.mapper;
 
+import com.nanyin.model.Friend;
 import com.nanyin.model.Users;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -38,7 +39,11 @@ public interface UserMapper {
     @Select("SELECT u.id FROM social_blog.users u WHERE u.login_name=#{name}")
     int findAuthorByName(String name);
 
+    @Select("SELECT u.login_name FROM social_blog.users u WHERE u.id=#{id}")
+    String findUserNameById(int id);
+
     @Update("UPDATE social_blog.users SET head=#{users.head} , real_name = #{users.real_name},email=#{users.email} WHERE login_name=#{name}")
     int updateUserMes(@Param("users") Users users,@Param("name") String name);
+
 
 }

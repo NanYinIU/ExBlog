@@ -2,6 +2,7 @@ package com.nanyin.service.serviceImpl;
 
 import com.nanyin.config.AllParamOfUser;
 import com.nanyin.mapper.UserMapper;
+import com.nanyin.model.Friend;
 import com.nanyin.model.UserDetail;
 import com.nanyin.model.Users;
 import com.nanyin.service.UserDetailService;
@@ -37,6 +38,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public int findAuthorByName(String name) {
         return userMapper.findAuthorByName(name);
+    }
+
+    @Override
+    public String findUserNameById(int id) {
+        return userMapper.findUserNameById(id);
     }
 
     @Override
@@ -110,5 +116,7 @@ public class UserServiceImpl implements UserService {
 
         return userService.updateUserMes1(users2,userName);
     }
+
+
 
 }

@@ -51,4 +51,6 @@ public interface PaperService {
 
     int findPaperId(String title,String segment,String name);
 
+    int findCountOfPaperByUser(String name);
+
 }

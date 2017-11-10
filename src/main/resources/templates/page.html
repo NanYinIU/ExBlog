@@ -179,7 +179,7 @@
                                             $(document).ready(function()
                                             {
                                                 var title = document.getElementById("paperTitle").innerHTML;
-                                                var pageId = document.getElementById("paperId").value;
+                                                pageId = document.getElementById("paperId").value;
 //                                                alert(pageId)
                                                 $('body').on("click",'.heart',function()
                                                 {
@@ -250,21 +250,43 @@
                             </header>
                         </article>
                         <!--   评论提交 -->
-                        <form method="post" action="#">
+                        <form method="post" id="form" name="form" >
                         <article class="post" >
                             <header>
                                 <div class="meta">
                                  <textarea style="width: 840px" cols="50" rows="5" id="comment" name="comment"></textarea>
                                 </div>
-								<input type="hidden" id="id"  th:value="${page.paper.id}"/>
+								<input type="hidden" id="id" name="id"  th:value="${page.paper.id}"/>
                             </header>
                             <footer>
                                 <ul class="actions pagination">
-									<li><button type="submit" class="button big" value="Submit">提交评论</button></li>
+									<li><button type="submit" class="button big" value="Submit" onclick="submitBTN()">提交评论</button></li>
                                 </ul>
                             </footer>
                         </article>
                         </form>
+						<script>
+							function submitBTN() {
+
+                                $.ajax({
+                                    type : "post",
+                                    dataType:"json",
+                                    url : '/comments/insertComments',
+                                    data:$('#form').serializeArray(),
+                                    timeout : 20000,
+                                    cache : false,
+                                    success : function(data) {
+                                        if(data === 1){
+
+                                            window.location.reload();
+                                            window.location.href="/page/"+pageId+"#ju";
+                                        }
+
+
+                                    }
+                                })
+                            }
+						</script>
 					<!--评论区 结束-->
 
                             <!-- Pagination -->

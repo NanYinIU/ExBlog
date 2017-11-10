@@ -1,9 +1,7 @@
 package com.nanyin.mapper;
 
 import com.nanyin.model.Comments;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -41,4 +39,8 @@ public interface CommentsMapper {
             "LEFT JOIN social_blog.paper p ON c.comments_paper = p.id " +
             "WHERE comments_paper=#{id}")
     List<Comments> findAllCommentsByPaperId(int id);
+
+    @Insert("INSERT INTO social_blog.comments(comments_content,comments_time,comments_paper)" +
+            "VALUES(#{comments.comments_content},#{comments.comments_time},#{comments.comments_paper})")
+    int insertComments(@Param("comments") Comments comments);
 }

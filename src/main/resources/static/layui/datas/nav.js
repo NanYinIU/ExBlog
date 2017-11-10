@@ -18,7 +18,7 @@ var navs = [{
 	"children": [{
 		"title": "我的关注",
 		"icon": "&#xe612;",
-		"href": "btable.html"
+		"href": "/user/friendPage"
 	}, {
 		"title": "我的收藏",
 		"icon": "&#xe622;",
