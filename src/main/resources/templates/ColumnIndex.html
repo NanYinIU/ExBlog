@@ -19,7 +19,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="#">Social Blog</a></h1>
+						<h1><a href="/HomePage/1">Social Blog</a></h1>
 						<nav class="links">
 							<ul>
 								<li><a th:href="@{/column/findAllColumn/1}">博客专栏</a></li>
@@ -99,15 +99,33 @@
 									<!-- Mini Post -->
 									<article class="mini-post">
 										<header>
-											<h2><a th:href="@{ColumnPage/}+${list.title}+'1'" th:text="${list.title}"></a></h2>
+											<h2><a th:href="@{/ColumnPage/}+${list.title}+'/1'" th:text="${list.title}"></a></h2>
 											<time class="published" datetime="2015-10-20" th:text="${list.c_create_time}"></time>
 										</header>
-										<a th:href="@{ColumnPage/}+${list.title}+'1'" class="image"><img style="height: 300px" th:src="${list.image}" alt="" /></a>
+										<a th:href="@{/ColumnPage/}+${list.title}+'/1'" class="image"><img style="height: 300px" th:src="${list.image}" alt="" /></a>
 
 									</article>
 
 								</div>
 					</article>
+
+					<script>
+                        layui.use('util', function(){
+                            var util = layui.util;
+                            //执行
+                            util.fixbar({
+                                bar1:'<p style="font-size: 5px">主页&nbsp;&nbsp;&nbsp;</p>'
+//                                    ,bar2:true
+                                ,click: function(type){
+                                    console.log(type);
+                                    if(type === 'bar1'){
+                                        window.location.href='/HomePage/1'
+                                    }
+                                }
+                                ,bgcolor:'#5B5B5B'
+                            });
+                        });
+					</script>
 
 
 					<!-- Pagination -->

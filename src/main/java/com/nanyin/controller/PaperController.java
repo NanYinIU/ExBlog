@@ -231,9 +231,6 @@ public class PaperController {
         }
         tags.add(newTag);
         String theme = insertPojo.getTheme();
-        logger.info("theme:"+theme+"is null?"+theme.equals(null));
-        logger.info("表单内容"+insertPojo);
-        logger.info(insertPojo.getSegment());
         // 插入里一条paper的记录 自动生成一个id值
         int result = paperService.insertPaper(title,content,segment,user);
         // 根据信息查询paper的id
@@ -248,6 +245,12 @@ public class PaperController {
         }
 
         return result ;
+    }
+
+    @RequestMapping("/paper/PreAndNextPage")
+    public @ResponseBody Map<String ,Object> findPreAndNextPage(@RequestParam("paperId") int paperId){
+         Map<String,Object> map = paperService.findPreAndNextPage(paperId);
+         return map;
     }
 
 }

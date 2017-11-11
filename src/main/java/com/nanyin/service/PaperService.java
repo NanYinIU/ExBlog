@@ -53,4 +53,6 @@ public interface PaperService {
 
     int findCountOfPaperByUser(String name);
 
+    Map<String,Object> findPreAndNextPage(int paperId);
+
 }

@@ -8,6 +8,8 @@
         <script src="/assets/js/jquery.min.js"></script>
         <script src="/assets/js/template-web.js"></script>
 
+        <link rel="stylesheet" href="/layui/plugins/layui/css/layui.css" media="all" />
+        <script src="/layui/plugins/layui/layui.js"></script>
 
 		<link rel="stylesheet" href="/assets/css/main.css" />
         <link rel="stylesheet" href="/assets/css/dianzan/style.css" />
@@ -33,7 +35,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="#">Social Blog</a></h1>
+						<h1><a href="/HomePage/1" >Social Blog</a></h1>
 						<nav class="links">
 							<ul>
 								<li><a th:href="@{/column/findAllColumn/1}">博客专栏</a></li>
@@ -288,12 +290,57 @@
                             }
 						</script>
 					<!--评论区 结束-->
+                        <script>
+                            layui.use('util', function(){
+                                var util = layui.util;
+                                //执行
+                                util.fixbar({
+                                    bar1:'<p style="font-size: 5px">主页&nbsp;&nbsp;&nbsp;</p>'
+//                                    ,bar2:true
+                                    ,click: function(type){
+                                        console.log(type);
+                                        if(type === 'bar1'){
+                                           window.location.href='/HomePage/1'
+                                        }
+                                    }
+                                    ,bgcolor:'#5B5B5B'
+                                });
+                            });
+                        </script>
 
                             <!-- Pagination -->
+                        <script type="text/html" id="page" >
                             <ul class="actions pagination">
-                                <li><a  class="button big">回到主页</a></li>
-                                <li><a  class="button big">回到文章专题页</a></li>
+                                {{ if ! isPrePage}}
+								<li><a th:href="@{/page/+{{prePaper.id}}}"  class="button fit">{{prePaper.title}}</a></li>
+                                {{/if}}
+                                {{ if ! isNextPage}}
+								<li><a th:href="@{/page/+{{nextPaper.id}}}"  class="button fit">{{nextPaper.title}}</a></li>
+                                {{/if}}
+
                             </ul>
+                        </script>
+                        <script>
+                            //上一页和下一页的数据
+                           var paperId = document.getElementById("paperId").value;
+                            var Pagination ='';
+                            $(document).ready(function () {
+                                $.ajax( {
+                                    type : "post",
+                                    dataType:"json",
+                                    data:{paperId:paperId},
+                                    url : '/paper/PreAndNextPage',
+                                    timeout : 20000,
+                                    cache : false,
+                                    success : function(data) {
+                                        Pagination = template('page', data);
+                                        document.getElementById('Pagination').innerHTML = Pagination;
+                                    }
+
+                                });
+                            })
+                        </script>
+                        <div id="Pagination"></div>
 
 
 

@@ -20,6 +20,9 @@ public interface PaperMapper {
     @Select("SELECT * FROM social_blog.paper ORDER BY create_time DESC LIMIT 0,5")
     List<Paper> findAllPapersByTime();
 
+    @Select("SELECT * FROM social_blog.paper ORDER BY create_time DESC")
+    List<Paper> findAllPapersByTimeNoLimit();
+
 //  按照热度排序
     @Select("SELECT * FROM social_blog.paper p ORDER BY p.mark DESC limit 0,7")
     List<Paper> findAllPapersByMark();

@@ -280,5 +280,69 @@ public class PaperServiceImpl implements PaperService {
         return paperMapper.findCountOfPaperByUser(name);
     }
 
+    /**
+     * 查询到当前paperId的前一页和后一页的标题和id值
+     * @param paperId
+     * @return
+     */
+    @Override
+    public Map<String,Object> findPreAndNextPage(int paperId) {
+
+        List<Paper> paperList = paperMapper.findAllPapersByTimeNoLimit();
+        Paper paper = paperMapper.findPaperById(paperId);
+
+        int currentPaperNum = 0 ;
+
+        for (int i = 0 ; i < paperList.size() ; i ++){
+            if ( paperList.get(i).getId() == paper.getId() ){
+                currentPaperNum = i ;
+                break;
+            }
+        }
+
+        logger.info("当前页面是第"+currentPaperNum);
+        boolean isPrePage = false;
+        boolean isNextPage = false;
+        // 前一页
+        int prePaperNum = currentPaperNum - 1;
+        int nextPaperNum = currentPaperNum + 1;
+        String prePaperTitle;
+        int prePaperId;
+        if(prePaperNum < 0){
+            prePaperTitle="已经到头了";
+            prePaperId = -1 ;
+            isPrePage = true ;
+        }else {
+            prePaperTitle = "上一篇："+paperList.get(prePaperNum).getTitle();
+            prePaperId = paperList.get(prePaperNum).getId();
+        }
+        Paper prePaper = new Paper();
+        prePaper.setId(prePaperId);
+        prePaper.setTitle(prePaperTitle);
+        // 下一页
+        String nextPaperTitle;
+        int nextPaperId;
+        if(nextPaperNum >= paperList.size()){
+            nextPaperTitle = "已经到末尾了";
+            nextPaperId = -2;
+            isNextPage = true;
+        }else {
+            nextPaperTitle = "下一篇："+paperList.get(nextPaperNum).getTitle();
+            nextPaperId = paperList.get(nextPaperNum).getId();
+        }
+        Paper nextPaper = new Paper();
+        nextPaper.setId(nextPaperId);
+        nextPaper.setTitle(nextPaperTitle);
+
+
+        Map<String,Object> map = new HashMap<>();
+
+        map.put("prePaper",prePaper);
+        map.put("nextPaper",nextPaper);
+        map.put("isPrePage",isPrePage);
+        map.put("isNextPage",isNextPage);
+        return map;
+    }
+
 
 }

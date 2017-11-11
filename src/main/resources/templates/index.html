@@ -19,7 +19,7 @@
 
 				<!-- Header -->
 					<header id="header">
-						<h1><a href="#">Social Blog</a></h1>
+						<h1><a href="/HomePage/1">Social Blog</a></h1>
 						<nav class="links">
                             <ul>
                                 <li><a th:href="@{/column/findAllColumn/1}">博客专栏</a></li>
@@ -132,7 +132,23 @@
 						</div>
 
 
-
+						<script>
+                            layui.use('util', function(){
+                                var util = layui.util;
+                                //执行
+                                util.fixbar({
+                                    bar1:'<p style="font-size: 5px">主页&nbsp;&nbsp;&nbsp;</p>'
+//                                    ,bar2:true
+                                    ,click: function(type){
+                                        console.log(type);
+                                        if(type === 'bar1'){
+                                            window.location.href='/HomePage/1'
+                                        }
+                                    }
+                                    ,bgcolor:'#5B5B5B'
+                                });
+                            });
+						</script>
 
 						<!-- Pagination -->
                         <ul class="actions pagination">
