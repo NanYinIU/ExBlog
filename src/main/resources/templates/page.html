@@ -262,31 +262,36 @@
                             </header>
                             <footer>
                                 <ul class="actions pagination">
-									<li><button type="submit" class="button big" value="Submit" onclick="submitBTN()">提交评论</button></li>
+									<li><button type="submit" class="button big" value="Submit"  onclick="submitBTN()">提交评论</button></li>
                                 </ul>
                             </footer>
                         </article>
                         </form>
 						<script>
+                            function Trim(str)
+                            {
+                                return str.replace(/(^\s*)|(\s*$)/g, "");
+                            }
+
 							function submitBTN() {
 
-                                $.ajax({
-                                    type : "post",
-                                    dataType:"json",
-                                    url : '/comments/insertComments',
-                                    data:$('#form').serializeArray(),
-                                    timeout : 20000,
-                                    cache : false,
-                                    success : function(data) {
-                                        if(data === 1){
+                                    $.ajax({
+                                        type: "post",
+                                        dataType: "json",
+                                        url: '/comments/insertComments',
+                                        data: $('#form').serializeArray(),
+                                        timeout: 20000,
+                                        cache: false,
+                                        success: function (data) {
+                                            if (data === 1) {
 
-                                            window.location.reload();
-                                            window.location.href="/page/"+pageId+"#ju";
+                                                window.location.reload();
+                                                window.location.href = "/page/" + pageId + "#ju";
+                                            }
+
+
                                         }
-
-
-                                    }
-                                })
+                                    })
                             }
 						</script>
 					<!--评论区 结束-->
