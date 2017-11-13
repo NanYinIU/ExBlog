@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <title>layui在线调试</title>
+    <link rel="stylesheet" href="/layui/plugins/layui/css/layui.css" media="all" />
+    <script src="/layui/plugins/layui/layui.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <style>
+        body{margin: 10px;}
+        .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
+    </style>
+</head>
+<body>
+
+    <input id="userName" name="userName" type="hidden" th:value="${session.user}"/>
+    <input id="url" name="url" type="hidden" th:value="${url}"/>
+
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field">
+        <legend>我的收藏 </legend>
+        <p>&nbsp;</p>
+
+
+        <table id="favesList" class="layui-table" lay-filter="demo">
+        </table>
+    </fieldset>
+</div>
+
+<div id="pageDemo"></div>
+
+<script type="text/html" id="barDemo">
+    <div class="layui-btn-group">
+        <button class="layui-btn layui-btn-mini" lay-event="edit">阅读文章</button>
+        <button class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">取消收藏</button>
+    </div>
+</script>
+<script>
+    
+    var url = '/faves/findFaves/1';
+    var nurl = document.getElementById("url").value;
+    var turl = null;
+    if (nurl == ''||nurl == null||nurl==undefined){
+        turl = url;
+    }else turl = nurl;
+    var count = null;
+    var currPage = null;
+    layui.use(['laypage','layer', 'table', 'element'], function(){
+
+          layer = layui.layer;//弹层
+          table = layui.table; //表格
+          element = layui.element;//元素操作
+          laypage = layui.laypage; //分页
+//        table.init('filter', options); //转化静态表格
+        table.render({
+            id:'tid',
+            elem:'#favesList',
+            width:1300,
+//            page:'true',
+            url:turl,
+            cols: [[
+                {field:'id', title: '#', width:80, sort: true}
+                ,{field:'title', title: '文章标题', width:400}
+                ,{field:'segment', title: '文章简述', width:425}
+                ,{field:'login_name', title: '作者', width:238}
+                ,{toolbar:'#barDemo', title: '操作', width:150}
+            ]]
+        });
+
+        $.ajax({
+            url:turl,
+            dataType:"json",   //返回格式为json
+            type:"GET" , //请求方式 get 或者post
+            success:function (data) {
+                page(data);
+            }
+        });
+        function page(data) {
+            count = data.count;
+            currPage = data.pageNum;
+            //分页 ajax 可以的到当前的count
+            laypage.render({
+                elem: 'pageDemo' //分页容器的id
+                , limit: 10
+                , count: count
+                , curr: currPage
+                , skin: '#1E9FFF' //自定义选中色值
+                , skip: true //开启跳页
+                , prev: '上一页 '
+                , next: ' 下一页'
+                , jump: function (obj, first) {
+                    if (!first) {
+                        var currentPage = obj.curr;//获取点击的页码
+                        url = '/faves/findFaves/' + currentPage;
+                        window.location.href = '/faves/favesTable?url='+url;
+                    }
+                }
+
+            });
+
+
+
+            //监听工具条
+            table.on('tool(demo)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data;//获得当前行数据
+                id = data.id,
+                friendName = data.friendName;
+                var userName = document.getElementById("userName").value;
+                layEvent = obj.event; //获得 lay-event 对应的值
+                 if (layEvent === 'del') {
+                    layer.confirm('真的取消收藏么？', function (index) {
+                        obj.del(); //删除对应行（tr）的DOM结构
+
+                        $.ajax({
+                            url:'/faves/subItem',    //请求的url地址
+                            dataType:"json",   //返回格式为json
+                            type:"GET",   //请求方式
+                            data:{userName:userName,pageId:id},
+                            success:function (data) {
+                                if (data == '1'){
+                                    layer.confirm('取消收藏成功')
+                                }
+                                else {
+                                    layer.confirm('取消收藏失败！请重试。。')
+                                }
+                            }
+                        });
+                        layer.close(index);
+                    });
+                 }else if (layEvent === 'edit') {
+                    window.open('/page/'+id);
+                 }
+
+            });
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

@@ -22,7 +22,7 @@ var navs = [{
 	}, {
 		"title": "我的收藏",
 		"icon": "&#xe622;",
-		"href": "navbar.html"
+		"href": "/faves/favesTable"
 	}, {
 		"title": "个人信息完善",
 		"icon": "&#xe62a;",

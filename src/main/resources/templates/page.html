@@ -96,14 +96,111 @@
 
 
 							<!-- Post -->
+                        <input id="userId" type="hidden" th:value="${session.user}"/>
+                        <input type="hidden" id="ByFocal" th:value="${page.login_name}" />
+                        <!--<input type="hidden" id="paperId" th:value="${page.paper.id}" />-->
 							<article class="post">
 								<header>
 									<div class="meta">
+
 										<time class="published" datetime="2015-11-01" th:text="${page.paper.create_time}"></time>
 										<a th:href="@{'/personalPage/'+${page.login_name}+'/0'}" class="author"><span class="name" th:text="${page.login_name}"></span><img th:src="${page.head}" alt="" /></a>
+                                        <script type="text/html" id="friend_content">
+                                            <div th:if="${session.user} != null">
+                                                <div id="check" th:if="${session.user} != ${page.login_name}">
+                                                    {{if flag}}
+                                                    <button id="cancelFocal"  class="button fit" onclick="cancel()">取消关注</button>
+                                                    {{/if}}
+                                                    {{if !flag}}
+                                                    <button id="addFocal"  class="button fit" onclick="add()">添加关注</button>
+                                                    {{/if}}
+                                                </div>
+                                            </div>
+                                        </script>
+                                        <script type="text/javascript">
+                                            var friend ='';
+                                            $(document).ready(function () {
+                                                var ByFocal = document.getElementById("ByFocal").value;
+                                                var userId = document.getElementById("userId").value;
+                                                $.ajax( {
+                                                    type : "post",
+                                                    data:{userId:userId,friendId:ByFocal},
+                                                    dataType:"json",
+                                                    url : '/user/checkFriends',
+                                                    timeout : 20000,
+                                                    cache : false,
+                                                    success : function(data) {
+                                                        friend = template('friend_content', data);
+                                                        document.getElementById('friend').innerHTML = friend;
+                                                    }
+
+                                                });
+                                            });
+                                            layui.use(['laypage', 'layer', 'table', 'element'], function() {
+                                                layer = layui.layer;//弹层
+
+
+                                            });
+
+                                            function cancel() {
+                                                // 取消关注
+                                                var ByFocal = document.getElementById("ByFocal").value;
+                                                var userId = document.getElementById("userId").value;
+                                                $.ajax( {
+                                                    type : "post",
+                                                    data:{userId:userId,friendId:ByFocal},
+                                                    dataType:"json",
+                                                    url : '/user/deleteFriends',
+                                                    timeout : 20000,
+                                                    cache : false,
+                                                    success : function(data) {
+                                                        if(data == 1){
+                                                            layer.alert("取消关注成功！");
+                                                            setTimeout(function () {
+                                                                window.location.reload()
+                                                            },1500)
+//
+                                                        }
+                                                        else{
+                                                            layer.alert("出现错误取消失败！")
+                                                        }
+                                                    }
+
+                                                });
+
+                                            };
+
+                                            function add() {
+                                                //添加关注
+                                                var ByFocal = document.getElementById("ByFocal").value;
+                                                var userId = document.getElementById("userId").value;
+                                                $.ajax( {
+                                                    type : "post",
+                                                    data:{userId:userId,friendId:ByFocal},
+                                                    dataType:"json",
+                                                    url : '/user/addFriends',
+                                                    timeout : 20000,
+                                                    cache : false,
+                                                    success : function(data) {
+                                                        if(data == 1){
+                                                            layer.alert("添加成功！");
+                                                            setTimeout(function () {
+                                                                window.location.reload()
+                                                            },1500)
+                                                        }
+                                                        else{
+                                                            layer.alert("出现错误添加失败！")
+                                                        }
+                                                    }
+
+                                                });
+
+                                            }
+
+                                        </script>
+                                        <div id="friend"></div>
 									</div>
 									<div class="title">
-
                                         <h2>
                                             <a id="title">
                                             <a id="paperTitle" th:text="${page.paper.title}"></a>
@@ -176,7 +273,10 @@
                                                 <a href="#ju" class="icon fa-comment"><span class="font-green" id="likeNum" th:text="${page.count}"></span></a>
                                                 </div>
                                             </li>
+
+                                            <li><button onclick="addItem()" class="button fit">收藏本篇文章</button></li>
                                         </ul>
+                                    <!--点赞js-->
                                         <script >
                                             $(document).ready(function()
                                             {
@@ -232,6 +332,49 @@
                                                     }
                                                 });
                                             });
+                                        </script>
+                                    <!--收藏js-->
+                                        <script>
+                                            function addItem() {
+                                                var pageId = document.getElementById("paperId").value;
+                                                var userName = document.getElementById("userId").value;
+                                                $.ajax( {
+                                                    type : "post",
+                                                    data:{userName:userName,pageId:pageId},
+                                                    dataType:"json",
+                                                    url : '/faves/checkIsFaves',
+                                                    timeout : 20000,
+                                                    cache : false,
+                                                    success : function(data) {
+                                                        if(data.flag == true){
+                                                            layer.alert("已经添加到收藏中，不必重新收藏！");
+                                                        }
+                                                        else{
+                                                            $.ajax( {
+                                                                type : "post",
+                                                                data:{userName:userName,pageId:pageId},
+                                                                dataType:"json",
+                                                                url : '/faves/addItem',
+                                                                timeout : 20000,
+                                                                cache : false,
+                                                                success : function(data) {
+                                                                    if(data == 1){
+                                                                        layer.alert("添加收藏成功")
+                                                                    }
+                                                                    else{
+                                                                        layer.alert("出现错误取消失败！")
+                                                                    }
+                                                                }
+
+                                                            });
+
+                                                        }
+                                                    }
+
+                                                });
+
+
+                                            };
                                         </script>
 
 
@@ -317,10 +460,10 @@
                         <script type="text/html" id="page" >
                             <ul class="actions pagination">
                                 {{ if ! isPrePage}}
-								<li><a th:href="@{/page/+{{prePaper.id}}}"  class="button fit">{{prePaper.title}}</a></li>
+								<li><a th:href="@{/page/{{prePaper.id}}}"  class="button fit">{{prePaper.title}}</a></li>
                                 {{/if}}
                                 {{ if ! isNextPage}}
-								<li><a th:href="@{/page/+{{nextPaper.id}}}"  class="button fit">{{nextPaper.title}}</a></li>
+								<li><a th:href="@{/page/{{nextPaper.id}}}"  class="button fit">{{nextPaper.title}}</a></li>
                                 {{/if}}
 
                             </ul>

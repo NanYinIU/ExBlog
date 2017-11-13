@@ -148,7 +148,7 @@ public class PaperServiceImpl implements PaperService {
     public List findAllPapers(String search) {
         List<PaperAndComments> paperAndComments = new ArrayList<>();
         List<Paper> papers =  paperMapper.findAllPapers(search);
-        logger.info("papers:"+papers+"数量:"+papers.size());
+//        logger.info("papers:"+papers+"数量:"+papers.size());
         for(int i = 0 ; i < papers.size() ; i ++){
             PaperAndComments paperAndCommentss = new PaperAndComments();
             Paper paper = papers.get(i);
@@ -160,7 +160,7 @@ public class PaperServiceImpl implements PaperService {
             paperAndCommentss.setContent(paper.getContent());
             paperAndCommentss.setCount(count);
             paperAndCommentss.setSegment(paper.getSgement());
-            logger.info("paper segment:"+ paper.getSgement());
+//            logger.info("paper segment:"+ paper.getSgement());
             paperAndCommentss.setCreate_time(paper.getCreate_time());
             paperAndCommentss.setPaper_image(paper.getPaper_image());
             paperAndCommentss.setMark(paper.getMark());
@@ -171,7 +171,7 @@ public class PaperServiceImpl implements PaperService {
             paperAndComments.add(paperAndCommentss);
 
         }
-        logger.info("paperAndComments 数量+"+paperAndComments.size()+paperAndComments);
+//        logger.info("paperAndComments 数量+"+paperAndComments.size()+paperAndComments);
         return paperAndComments;
     }
 
