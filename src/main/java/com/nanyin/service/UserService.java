@@ -30,5 +30,6 @@ public interface UserService {
 
     int updateUserMes(String imgMes,String userName, String realName, String position, String data, String email, String address, String sketch) throws ParseException;
 
+    int updateUserPass(String userName,String newPassWord,String oldPassWord);
 
 }

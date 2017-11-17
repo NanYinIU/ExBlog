@@ -117,6 +117,10 @@ public class UserServiceImpl implements UserService {
         return userService.updateUserMes1(users2,userName);
     }
 
+    @Override
+    public int updateUserPass(String userName, String newPassWord, String oldPassWord) {
+        return userMapper.updateUserPass(userName, newPassWord, oldPassWord);
+    }
 
 
 }

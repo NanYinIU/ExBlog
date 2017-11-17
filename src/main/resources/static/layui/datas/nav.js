@@ -24,7 +24,11 @@ var navs = [{
 		"icon": "&#xe622;",
 		"href": "/faves/favesTable"
 	}, {
-		"title": "个人信息完善",
+        "title": "账户安全",
+        "icon": "&#xe631;",
+        "href": "/user/detailPage"
+    },{
+		"title": "完善个人信息",
 		"icon": "&#xe62a;",
 		"href": "/user/detailPage"
 	}]

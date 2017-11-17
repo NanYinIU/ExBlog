@@ -45,5 +45,14 @@ public interface UserMapper {
     @Update("UPDATE social_blog.users SET head=#{users.head} , real_name = #{users.real_name},email=#{users.email} WHERE login_name=#{name}")
     int updateUserMes(@Param("users") Users users,@Param("name") String name);
 
+    /**
+     * 改密码
+     * @param userName 用户名
+     * @param newPassWord 新密码
+     * @param oldPassWord 旧密码
+     * @return 1
+     */
+    @Update("UPDATE social_blog.users SET #{newPassword} = 123 WHERE login_name = #{userName} AND password = #{oldPassword}")
+    int updateUserPass(String userName,String newPassWord,String oldPassWord);
 
 }

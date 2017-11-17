@@ -1,5 +1,6 @@
 package com.nanyin.controller;
 
+import com.nanyin.config.logConfig.Log;
 import com.nanyin.model.Users;
 import com.nanyin.service.UserDetailService;
 import com.nanyin.service.UserService;
@@ -57,6 +58,8 @@ public class UserController {
 //        request.getSession().invalidate();
         return "login";
     }
+
+    @Log(operationName = "用户登录" )
     @RequestMapping("/user/gotoIndex")
     public String gotoIndex( String username, String password,HttpServletRequest request){
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username,password);
@@ -118,5 +121,17 @@ public class UserController {
         return "InnerLayui/pic";
     }
 
-
+    @RequestMapping("/user/updateUserPass")
+    public int updateUserPass(String oldPassword,String newPassword,String newPassword1,HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String userName = (String) session.getAttribute("user");
+        if(newPassword == null || newPassword1 == null ){
+            return 2;
+        }else if(!newPassword.equals(newPassword1)){
+            return 3;
+        }
+        else {
+            return userService.updateUserPass(userName,newPassword,oldPassword);
+        }
+    }
 }

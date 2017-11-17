@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="utf-8"/>
+		<title>表单</title>
+		<meta name="renderer" content="webkit"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="format-detection" content="telephone=no"/>
+
+		<link rel="stylesheet" href="/layui/plugins/layui/css/layui.css" media="all" />
+		<script src="/assets/js/jquery.min.js"></script>
+        <script src="/assets/js/template-web.js"></script>
+        <script src="/layui/plugins/layui/layui.js"></script>
+    </head>
+
+	<body>
+
+    <input type="hidden" id="user2" th:value="${session.user}"/>
+		<div style="margin: 15px;">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+				<legend>账户安全管理</legend>
+			</fieldset>
+
+			<div class="layui-tab layui-tab-brief">
+				<ul class="layui-tab-title">
+					<li class="layui-this">登录日志</li>
+					<li>密码修改</li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-tab-item layui-show">
+                        <ul class="layui-timeline">
+
+                            <script type="text/html" id="sysLog">
+                                {{each list value i}}
+                                <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                <div class="layui-timeline-content layui-text">
+                                    <h3 class="layui-timeline-title">{{value.createDate}}</h3>
+                                   <p>登录IP地址 ： {{value.logIp}}</p>
+                                </div>
+                                </li>
+                                {{/each}}
+                                <li class="layui-timeline-item">
+                                    <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                    <div class="layui-timeline-content layui-text">
+                                        <div class="layui-timeline-title">过去</div>
+                                    </div>
+                                </li>
+                            </script>
+
+                            <script type="text/javascript">
+                                var sysLog ='';
+                                $(document).ready(function () {
+                                    $.ajax( {
+                                        type : "post",
+                                        dataType:"json",
+                                        url : '/sysLog/findSysLog',
+                                        timeout : 20000,
+                                        cache : false,
+                                        success : function(data) {
+                                            sysLog = template('sysLog', data);
+                                            document.getElementById('sysLog_content').innerHTML = sysLog;
+                                        }
+
+                                    });
+                                });
+                            </script>
+                            <div id="sysLog_content"></div>
+
+                        </ul>
+
+
+                        <blockquote class="site-text layui-elem-quote">
+                            登录日志用于查看登录时间和登录IP，如果发现登录异常，请及时更改密码。
+                            <hr class="layui-bg-green" />
+                            注：只显示最近十次的登录日志。
+                        </blockquote>
+                    </div>
+					<div class="layui-tab-item">
+
+                        <form class="layui-form" action="" style="height: 100%" >
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">旧密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="password" name="oldPassword" lay-verify="required,pass" placeholder="请输入旧密码" autocomplete="off" class="layui-input"  />
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">新密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="password" name="newPassword" lay-verify="pass,required" placeholder="请输入新密码" autocomplete="off" class="layui-input" />
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">再次填入新密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="password" name="newPassword1" lay-verify="pass,required" placeholder="请再次输入新密码" autocomplete="off" class="layui-input" />
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                </div>
+                            </div>
+
+                        </form>
+
+
+
+                    </div>
+				</div>
+			</div>
+
+			<script>
+                layui.use('element','form', function(){
+                    var form = layui.form
+                    var element = layui.element;
+//监听提交
+                    form.on('submit(demo1)', function(data) {
+                        layer.alert(JSON.stringify(data.field), {
+                            title: '最终的提交信息'
+                        });
+                        var Final =JSON.stringify(data.field);
+                        $.ajax({
+                            type : "post",
+                            data:data.field,
+                            dataType:"json",
+                            url :'/user/updateUserPass',
+                            timeout : 20000,
+                            cache : false,
+                            success:function (data) {
+                                if(data == 1){
+                                    layer.alert("修改成功");
+                                }
+                                else if(data == 2){
+                                    layer.alert("请输入新密码两次！");
+                                }else if(data == 3){
+                                    layer.alert("重复输入的新密码有误，请重新输入");
+                                }else {
+                                    layer.alert("密码输入错误，请重新输入");
+                                }
+
+                            }
+                        });
+                        return false;
+                    });
+                });
+
+			</script>
+		</div>
+	</body>
+
+</html>
