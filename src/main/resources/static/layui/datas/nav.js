@@ -26,7 +26,7 @@ var navs = [{
 	}, {
         "title": "账户安全",
         "icon": "&#xe631;",
-        "href": "/user/detailPage"
+        "href": "/sysLog/userSecurity"
     },{
 		"title": "完善个人信息",
 		"icon": "&#xe62a;",

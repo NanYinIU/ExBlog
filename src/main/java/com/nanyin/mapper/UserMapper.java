@@ -52,7 +52,7 @@ public interface UserMapper {
      * @param oldPassWord 旧密码
      * @return 1
      */
-    @Update("UPDATE social_blog.users SET #{newPassword} = 123 WHERE login_name = #{userName} AND password = #{oldPassword}")
-    int updateUserPass(String userName,String newPassWord,String oldPassWord);
+    @Update("UPDATE social_blog.users SET password = #{newPassWord} WHERE login_name = #{userName} AND password = #{oldPassWord}")
+    int updateUserPass(@Param("userName") String userName,@Param("newPassWord") String newPassWord,@Param("oldPassWord") String oldPassWord);
 
 }

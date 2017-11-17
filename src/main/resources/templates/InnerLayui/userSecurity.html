@@ -85,20 +85,20 @@
                         <form class="layui-form" action="" style="height: 100%" >
                             <div class="layui-form-item">
                                 <label class="layui-form-label">旧密码</label>
-                                <div class="layui-input-inline">
-                                    <input type="password" name="oldPassword" lay-verify="required,pass" placeholder="请输入旧密码" autocomplete="off" class="layui-input"  />
+                                <div class="layui-input-block">
+                                    <input type="password" name="oldPassword" lay-verify="required|pass" placeholder="请输入旧密码" autocomplete="off" class="layui-input"  />
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <label class="layui-form-label">新密码</label>
-                                <div class="layui-input-inline">
-                                    <input type="password" name="newPassword" lay-verify="pass,required" placeholder="请输入新密码" autocomplete="off" class="layui-input" />
+                                <div class="layui-input-block">
+                                    <input type="password" name="newPassword" lay-verify="pass|required" placeholder="请输入新密码" autocomplete="off" class="layui-input" />
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <label class="layui-form-label">再次填入新密码</label>
-                                <div class="layui-input-inline">
-                                    <input type="password" name="newPassword1" lay-verify="pass,required" placeholder="请再次输入新密码" autocomplete="off" class="layui-input" />
+                                <div class="layui-input-block">
+                                    <input type="password" name="newPassword1" lay-verify="pass|required" placeholder="请再次输入新密码" autocomplete="off" class="layui-input" />
                                 </div>
                             </div>
 
@@ -111,21 +111,16 @@
 
                         </form>
 
-
-
                     </div>
 				</div>
 			</div>
 
 			<script>
-                layui.use('element','form', function(){
-                    var form = layui.form
+                layui.use(['element','form'], function(){
+                    var form = layui.form;
                     var element = layui.element;
-//监听提交
+            //监听提交
                     form.on('submit(demo1)', function(data) {
-                        layer.alert(JSON.stringify(data.field), {
-                            title: '最终的提交信息'
-                        });
                         var Final =JSON.stringify(data.field);
                         $.ajax({
                             type : "post",
@@ -137,11 +132,14 @@
                             success:function (data) {
                                 if(data == 1){
                                     layer.alert("修改成功");
+                                    setTimeout(function () {
+                                        window.location.reload()
+                                    },1500)
                                 }
                                 else if(data == 2){
                                     layer.alert("请输入新密码两次！");
                                 }else if(data == 3){
-                                    layer.alert("重复输入的新密码有误，请重新输入");
+                                    layer.alert("两次输入的密码不一致，请重新输入");
                                 }else {
                                     layer.alert("密码输入错误，请重新输入");
                                 }

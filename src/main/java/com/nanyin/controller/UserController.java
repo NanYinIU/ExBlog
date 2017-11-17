@@ -1,5 +1,6 @@
 package com.nanyin.controller;
 
+import com.nanyin.config.common.ModifiPass;
 import com.nanyin.config.logConfig.Log;
 import com.nanyin.model.Users;
 import com.nanyin.service.UserDetailService;
@@ -33,7 +34,11 @@ import java.util.Map;
  */
 @Controller
 public class UserController {
+
+    private static final int SUCCESS_FOR_NOW = 1 ;
     Logger logger = Logger.getLogger(this.getClass().getName());
+    @Autowired
+    ModifiPass modifiPass;
     @Autowired
     UserService userService;
     @Autowired
@@ -122,15 +127,24 @@ public class UserController {
     }
 
     @RequestMapping("/user/updateUserPass")
-    public int updateUserPass(String oldPassword,String newPassword,String newPassword1,HttpServletRequest request){
+    public @ResponseBody int updateUserPass(@RequestParam("oldPassword") String oldPassword,
+                              @RequestParam("newPassword")String newPassword,
+                              @RequestParam("newPassword1")String newPassword1,HttpServletRequest request){
         HttpSession session = request.getSession();
         String userName = (String) session.getAttribute("user");
-        if(newPassword == null || newPassword1 == null ){
-            return 2;
-        }else if(!newPassword.equals(newPassword1)){
-            return 3;
+        logger.info("newPass:"+newPassword);
+        if(modifiPass.checkOldPassWordIsRight(userName,oldPassword) != SUCCESS_FOR_NOW){
+//  4
+                return modifiPass.checkOldPassWordIsRight(userName,oldPassword);
+        }
+        else if(modifiPass.checkNewPassIsNotNull(newPassword,newPassword1) != SUCCESS_FOR_NOW ){
+            return modifiPass.checkNewPassIsNotNull(newPassword,newPassword1);
+
+        }else if(modifiPass.checkIsEquals(newPassword, newPassword1) != SUCCESS_FOR_NOW){
+            return modifiPass.checkIsEquals(newPassword, newPassword1);
         }
         else {
+            // 1
             return userService.updateUserPass(userName,newPassword,oldPassword);
         }
     }
