@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Created by NanYin on 2017-10-01 下午8:35.
  * 包名： com.nanyin.mapper
@@ -54,5 +56,28 @@ public interface UserMapper {
      */
     @Update("UPDATE social_blog.users SET password = #{newPassWord} WHERE login_name = #{userName} AND password = #{oldPassWord}")
     int updateUserPass(@Param("userName") String userName,@Param("newPassWord") String newPassWord,@Param("oldPassWord") String oldPassWord);
+
+    @Select({
+            "<script>",
+            "SELECT * FROM social_blog.users",
+            "<if test=\"search!=null and search!=''\">",
+            "WHERE login_name LIKE concat(concat('%',#{search}),'%') ",
+            "</if>",
+            "ORDER BY id ASC",
+            "</script>"
+    })
+    List<Users> findAllUsers(@Param("search")String search);
+
+    @Select({
+            "<script>",
+            "SELECT * FROM social_blog.users",
+            "<if test=\"search!=null and search!=''\">",
+            "WHERE login_name LIKE concat(concat('%',#{search}),'%') ",
+            "</if>",
+            "ORDER BY id ASC",
+            "LIMIT #{page},#{limit}",
+            "</script>"
+    })
+    List<Users> findAllUsersLimit(@Param("search") String search,@Param("page") int page,@Param("limit") int limit);
 
 }

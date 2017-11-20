@@ -148,4 +148,20 @@ public class UserController {
             return userService.updateUserPass(userName,newPassword,oldPassword);
         }
     }
+
+    @RequestMapping("/user/userAndAuthor/{pageNum}")
+    public @ResponseBody Map<String,Object> userAndAuthor(@PathVariable("pageNum") int pageNum,
+                                                          @RequestParam(value = "search",required = false) String search){
+        Map<String,Object> map = userService.userAndAuthor(search, pageNum);
+        map.put("pageNum",pageNum);
+        return map;
+    }
+
+    @RequestMapping("/user/returnAuthor")
+    public @ResponseBody ModelAndView returnAuthor(@RequestParam(value = "url",required = false) String url){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("InnerLayui/authorPage");
+        modelAndView.addObject("url",url);
+        return modelAndView;
+    }
 }

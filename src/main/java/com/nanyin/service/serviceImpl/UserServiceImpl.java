@@ -1,10 +1,14 @@
 package com.nanyin.service.serviceImpl;
 
 import com.nanyin.config.AllParamOfUser;
+import com.nanyin.config.Author;
 import com.nanyin.mapper.UserMapper;
 import com.nanyin.model.Friend;
+import com.nanyin.model.Role;
 import com.nanyin.model.UserDetail;
 import com.nanyin.model.Users;
+import com.nanyin.service.PermissionService;
+import com.nanyin.service.RoleService;
 import com.nanyin.service.UserDetailService;
 import com.nanyin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by NanYin on 2017-10-01 下午9:33.
@@ -29,6 +34,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    PermissionService permissionService;
+
+    @Autowired
+    RoleService roleService;
 
     @Override
     public Users findUsersByName(String name) {
@@ -120,6 +131,55 @@ public class UserServiceImpl implements UserService {
     @Override
     public int updateUserPass(String userName, String newPassWord, String oldPassWord) {
         return userMapper.updateUserPass(userName, newPassWord, oldPassWord);
+    }
+
+    @Override
+    public Map<String,Object> userAndAuthor(String search, int pageNum) {
+        int limit = 10 ;
+        Map<String,Object> map = new HashMap<>();
+        List<Author> authorList = new LinkedList<>();
+
+        List<Users> users = userMapper.findAllUsersLimit(search,(pageNum-1) * limit,limit);
+        int tatal = userMapper.findAllUsers(search).size();
+        for(int i = 0 ; i < users.size() ; i++) {
+            StringBuffer roleString = new StringBuffer(" ") ;
+            StringBuffer permissionString = new StringBuffer(" ");
+            Author author = new Author();
+
+
+            Set<String> roles = roleService.findRoleByName(users.get(i).getLogin_name());
+            for (String role: roles
+                 ) {
+                roleString = roleString.append(" "+role);
+            }
+            if(" ".equals(roleString.toString())){
+                author.setRoleName("暂无,等待分配");
+            }else {
+                author.setRoleName(roleString.toString());
+            }
+
+            Set<String> permissions = permissionService.findPermissionByName(users.get(i).getLogin_name());
+            for (String s: permissions
+                 ) {
+                permissionString = permissionString.append(" "+s);
+            }
+            if(" ".equals(permissionString.toString())){
+                author.setPermissionName("暂无,等待分配");
+            }else {
+                author.setPermissionName(permissionString.toString());
+            }
+
+            author.setId(users.get(i).getId());
+            author.setLoginName(users.get(i).getLogin_name());
+            author.setCreateTime(users.get(i).getCreate_time());
+
+            authorList.add(author);
+        }
+        map.put("data",authorList);
+        map.put("count",tatal);
+        map.put("code",0);
+        map.put("mes","");
+        return map;
     }
 
 

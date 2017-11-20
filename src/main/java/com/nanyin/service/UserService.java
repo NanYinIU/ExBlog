@@ -1,6 +1,7 @@
 package com.nanyin.service;
 
 import com.nanyin.config.AllParamOfUser;
+import com.nanyin.config.Author;
 import com.nanyin.model.Friend;
 import com.nanyin.model.Users;
 import org.apache.ibatis.annotations.Param;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.Map;
 
 /**
  * Created by NanYin on 2017-10-01 下午6:07.
@@ -32,4 +34,5 @@ public interface UserService {
 
     int updateUserPass(String userName,String newPassWord,String oldPassWord);
 
+    Map<String,Object> userAndAuthor(String search, int pageNum);
 }
