@@ -93,19 +93,22 @@
 					<div id="main">
 
 
-							<!-- Post -->
+                        <!-- Post -->
 							<article class="post" th:each="page,pageStat :${pageInfo.list}">
 								<header>
 									<input id="pageId" type="hidden" value="${page.id}"/>
-									<div class="meta">
+									<div class="meta" th:unless="${page.title} =='266fb5d2-b97b-41dd-999e-1143c0963fd4'">
 										<time class="published" datetime="2015-11-01" th:text="${page.create_time}"></time>
 									</div>
-									<div class="title">
+                                    <div class="title" th:if="${page.title} =='266fb5d2-b97b-41dd-999e-1143c0963fd4'" >
+                                        <h2><a id="title"><a  th:text="暂时没有文章，请先前往后台新建文章"></a></a></h2>
+                                    </div>
+									<div class="title" th:unless="${page.title} =='266fb5d2-b97b-41dd-999e-1143c0963fd4'" >
                                         <h2><a id="title"><a th:href="@{/page/}+${page.id}" th:text="${page.title}"></a></a></h2>
 									</div>
 								</header>
 								<footer>
-									<ul class="actions">
+									<ul class="actions" th:unless="${page.title} =='266fb5d2-b97b-41dd-999e-1143c0963fd4'">
 										<li><a th:href="@{/page/}+${page.id}" class="button big">阅读完整文章</a></li>
 									</ul>
 								</footer>
@@ -135,9 +138,7 @@
                                 <li><a th:href="@{/personalPage/}+${pageInfo.list[0].login_name}+'/'+${pageInfo.nextPage}" class="button big next">Next Page</a></li>
                             </ul>
 
-
-
-					</div>
+						</div>
 
 				<!-- Sidebar -->
 					<section id="sidebar">

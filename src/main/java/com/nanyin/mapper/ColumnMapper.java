@@ -14,7 +14,7 @@ import java.util.Set;
  * 类描述：
  */
 @Mapper
-public interface ColumMapper {
+public interface ColumnMapper {
 
     // 专题内文章由多到少排序
     @Select("SELECT c.title,c.C_create_time,c.image " +

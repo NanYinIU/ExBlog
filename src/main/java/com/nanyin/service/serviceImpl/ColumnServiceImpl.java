@@ -2,7 +2,7 @@ package com.nanyin.service.serviceImpl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.nanyin.mapper.ColumMapper;
+import com.nanyin.mapper.ColumnMapper;
 import com.nanyin.model.Column;
 import com.nanyin.service.ColumnService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,21 +19,21 @@ import java.util.*;
 @Service
 public class ColumnServiceImpl implements ColumnService {
     @Autowired
-    ColumMapper columMapper;
+    ColumnMapper columnMapper;
     @Override
     public List<Column> findColumByPaperCount() {
-        return columMapper.findColumByPaperCount();
+        return columnMapper.findColumByPaperCount();
     }
 
     @Override
     public List<Column> findAllColumn() {
-        return columMapper.findAllColumn();
+        return columnMapper.findAllColumn();
     }
 
     @Override
     public Map<String,Object> findAllColumnSearch(String search,int pageNum) {
         PageHelper.startPage(pageNum,5);
-        List<Column> list = columMapper.findAllColumnSearch(search);
+        List<Column> list = columnMapper.findAllColumnSearch(search);
         PageInfo pageInfo = new PageInfo(list);
         Map<String,Object> map = new HashMap<>();
         map.put("pageInfo",pageInfo);
@@ -42,41 +42,41 @@ public class ColumnServiceImpl implements ColumnService {
 
     @Override
     public Set<String> findCoumnByUser(String name) {
-        return columMapper.findCoumnByUser(name);
+        return columnMapper.findCoumnByUser(name);
     }
 
     @Override
     public int findCountByTitle(String title, String name) {
-        return columMapper.findCountByTitle(title, name);
+        return columnMapper.findCountByTitle(title, name);
     }
 
     @Override
     public int insertColumnPaper(int clumnId, int paperId) {
-        return columMapper.insertColumnPaper(clumnId,paperId);
+        return columnMapper.insertColumnPaper(clumnId,paperId);
     }
 
     @Override
     public int findColumnId(String title) {
-        return columMapper.findColumnId(title);
+        return columnMapper.findColumnId(title);
     }
 
     @Override
     public Column findColumnByPaperId(int id) {
-        return columMapper.findColumnByPaperId(id);
+        return columnMapper.findColumnByPaperId(id);
     }
 
     @Override
     public int updateColumnByPaperId(int paperId, String columnName) {
-        int columnId = columMapper.findColumnId(columnName);
+        int columnId = columnMapper.findColumnId(columnName);
 //      根据paperId 查看存在不存在匹配的关系  先看存在不存在
 
-        Column column = columMapper.findColumnByPaperId(paperId);
+        Column column = columnMapper.findColumnByPaperId(paperId);
         if(column == null){
             // 是空的那就插入 columnName
-            return columMapper.insertColumnPaper(columnId,paperId);
+            return columnMapper.insertColumnPaper(columnId,paperId);
         }else{
             // 不为空才是修改
-            return columMapper.updateColumnByPaperId(paperId,columnId);
+            return columnMapper.updateColumnByPaperId(paperId,columnId);
         }
 
 
@@ -86,9 +86,9 @@ public class ColumnServiceImpl implements ColumnService {
     public Map<String, Object> allColumn(String page) {
         int pageNum = Integer.parseInt(page);
         int limit = 10 ;
-        List<Column> columns = columMapper.findAllColumnLimit((pageNum-1) * limit,limit);
+        List<Column> columns = columnMapper.findAllColumnLimit((pageNum-1) * limit,limit);
 
-        List<Column> columns1 = columMapper.findAllColumn();
+        List<Column> columns1 = columnMapper.findAllColumn();
         Map<String,Object> map = new HashMap<>();
         map.put("code",0);
         map.put("mes","");
@@ -104,22 +104,22 @@ public class ColumnServiceImpl implements ColumnService {
         column.setImage(image);
         column.setTitle(name);
         column.setC_create_time(timestamp);
-        return columMapper.insertColumn(column);
+        return columnMapper.insertColumn(column);
     }
 
     @Override
     public int updateInlet(String name, String image, String id) {
         int id1 = Integer.parseInt(id);
-        return columMapper.updateColumnById(name,image,id1);
+        return columnMapper.updateColumnById(name,image,id1);
     }
 
     @Override
     public int deleteColumnById(int id) {
-        return columMapper.deleteColumnById(id);
+        return columnMapper.deleteColumnById(id);
     }
 
     @Override
     public Column selectColumnById(int id) {
-        return columMapper.selectColumnById(id);
+        return columnMapper.selectColumnById(id);
     }
 }

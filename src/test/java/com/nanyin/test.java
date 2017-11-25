@@ -9,6 +9,7 @@ import java.nio.Buffer;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by NanYin on 2017-10-01 下午9:40.
@@ -35,6 +36,10 @@ public class test {
         outputStream.flush();
         outputStream.close();
         inputStream.close();
+    }
+    @Test
+    public void test3(){
+        System.out.println(UUID.randomUUID());
     }
 
 }

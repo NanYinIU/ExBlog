@@ -131,7 +131,19 @@ public class PaperServiceImpl implements PaperService {
             paperAndComments.add(paperAndCommentss);
 
         }
-        return paperAndComments;
+        if(paperAndComments.size() == 0){
+            PaperAndComments initPaperAndComment = new PaperAndComments();
+            initPaperAndComment.setLogin_name(name);
+            Users users = userService.findUsersByName(name);
+            initPaperAndComment.setHead(users.getHead());
+            initPaperAndComment.setTitle("266fb5d2-b97b-41dd-999e-1143c0963fd4"); // 神秘代码 没有文章的时候
+            initPaperAndComment.setCreate_time(new Timestamp(System.currentTimeMillis()));
+            paperAndComments.add(initPaperAndComment);
+            return paperAndComments;
+        }
+       else {
+            return paperAndComments;
+        }
     }
 
     @Override
