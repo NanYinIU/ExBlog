@@ -18,5 +18,8 @@ public class ErrorController {
     public String get500Page(){
         return "errorPage/500";
     }
-
+    @RequestMapping("/error/unAuthorized")
+    public String unAuthorizedPage(){
+        return "errorPage/unAuthorized";
+    }
 }

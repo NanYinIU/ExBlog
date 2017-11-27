@@ -5,6 +5,8 @@ import com.nanyin.model.Users;
 import com.nanyin.service.PermissionService;
 import com.nanyin.service.RoleService;
 import com.nanyin.service.UserService;
+import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -26,12 +28,22 @@ public class MyRaalm extends AuthorizingRealm {
     @Autowired
     PermissionService permissionService;
 
+    Logger logger = Logger.getLogger(this.getClass());
+
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        String username =(String) principalCollection.getPrimaryPrincipal();
+        Users users = (Users) SecurityUtils.getSubject().getPrincipal();
+
+//        String username1=(String) principalCollection.getPrimaryPrincipal();
+//        logger.info(username1);
+        String username = users.getLogin_name();
+
+        logger.info(username);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         simpleAuthorizationInfo.setStringPermissions(permissionService.findPermissionByName(username));
+        logger.info("permission"+permissionService.findPermissionByName(username));
         simpleAuthorizationInfo.setRoles(roleService.findRoleByName(username));
+        logger.info("roles"+roleService.findRoleByName(username));
         return simpleAuthorizationInfo;
     }
     /*

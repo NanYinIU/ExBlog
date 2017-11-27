@@ -2,6 +2,7 @@ package com.nanyin.mapper;
 
 import com.nanyin.model.Permission;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.Set;
@@ -14,8 +15,8 @@ import java.util.Set;
 @Mapper
 public interface PermissionMapper {
 
-    @Select("SELECT p.permisssion_name " +
+    @Select("SELECT permission_name " +
             "FROM social_blog.permission p,social_blog.user_role_permission urp,social_blog.users u " +
             "WHERE p.id = urp.permisssion_id AND urp.user_id = u.id AND u.login_name= #{name}")
-    Set<String> findPermissionByName(String name);
+    Set<String> findPermissionByName(@Param("name") String name);
 }

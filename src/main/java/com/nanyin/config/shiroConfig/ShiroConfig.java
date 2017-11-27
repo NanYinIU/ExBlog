@@ -26,7 +26,8 @@ public class ShiroConfig {
         bean.setSecurityManager(manager);
         //配置登录的url和登录成功的url
         bean.setLoginUrl("/user/login");
-        bean.setSuccessUrl("/home");
+//        bean.setSuccessUrl("/home");
+        bean.setUnauthorizedUrl("/error/unAuthorized");
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap=new LinkedHashMap<>();
         filterChainDefinitionMap.put("/user/*", "anon"); //表示可以匿名访问
@@ -35,6 +36,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/images/**", "anon");
         filterChainDefinitionMap.put("/editmd/**", "anon");
+        filterChainDefinitionMap.put("/column/columnPage", "roles[admin]");
+
         filterChainDefinitionMap.put("/*", "authc");//表示需要认证才可以访问
         filterChainDefinitionMap.put("/**", "authc");
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);

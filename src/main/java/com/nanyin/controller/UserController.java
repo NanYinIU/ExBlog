@@ -11,6 +11,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,13 +61,13 @@ public class UserController {
     public String logout(HttpServletRequest request){
         HttpSession session = request.getSession();
         session.removeAttribute("user");
-//        request.getSession().invalidate();
+        request.getSession().invalidate();
         return "login";
     }
 
     @Log(operationName = "用户登录" )
     @RequestMapping("/user/gotoIndex")
-    public String gotoIndex( String username, String password,HttpServletRequest request){
+    public String gotoIndex( String username, String password,HttpServletRequest request ,@RequestParam(value = "url",required = false) String url){
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username,password);
 
         org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
@@ -75,10 +76,9 @@ public class UserController {
         try {
             subject.login(usernamePasswordToken);
             session.setAttribute("user",username);
-            return "index";
+            return "redirect:/HomePage/1";
         }catch (Exception r){
             return "login";
-
         }
 
     }
