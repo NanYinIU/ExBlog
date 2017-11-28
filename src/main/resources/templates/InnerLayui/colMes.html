@@ -73,16 +73,14 @@
             var urlId = parent.id;
             form.on('submit(formDemo)',function (data) {
                 var newTag = data.field;
-                layer.alert(JSON.stringify(data.field), {
-                    title: '最终的提交信息'
-                });
+
                 $.ajax({
                     url:'/column/updateColumnName/'+urlId,    //请求的url地址
                     data:data.field,
                     dataType:"json",   //返回格式为json
                     type:"GET",   //请求方式
                     success:function (data) {
-                        if(data == 1){
+                        if( data  == 1){
                             layer.alert("提交成功")
                         }
                         else layer.alert("提交失败")

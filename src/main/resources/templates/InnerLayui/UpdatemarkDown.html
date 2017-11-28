@@ -60,7 +60,7 @@
                             $("#updateContent").bind('click', function(){
                                 var newContent = testEditor2.getMarkdown();
                                 var id = document.getElementById("paperId").value;
-                                alert(newContent+","+id);
+//                                alert(newContent+","+id);
                                 $.ajax({
                                     url:"/paper/updateContent/"+id,    //请求的url地址
                                     dataType:"json",   //返回格式为json

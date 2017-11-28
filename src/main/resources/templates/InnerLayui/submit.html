@@ -144,9 +144,9 @@
 
 				//监听提交
 				form.on('submit(demo1)', function(data) {
-					layer.alert(JSON.stringify(data.field), {
-						title: '最终的提交信息'
-					});
+//					layer.alert(JSON.stringify(data.field), {
+//						title: '最终的提交信息'
+//					});
 					var Final =JSON.stringify(data.field);
                     var user2 = document.getElementById("user2").value;
 					$.ajax({

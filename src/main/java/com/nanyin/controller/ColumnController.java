@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.nanyin.model.Column;
 import com.nanyin.service.ColumnService;
 import javafx.scene.effect.SepiaTone;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,8 @@ import java.util.*;
 public class ColumnController {
     @Autowired
     ColumnService columnService;
+
+    Logger logger = Logger.getLogger(this.getClass());
 
     @RequestMapping("/findColumByCount")
     public @ResponseBody
@@ -85,8 +88,10 @@ public class ColumnController {
 
     @RequestMapping("/updateColumnName/{id}")
     public @ResponseBody int updateColumnName(@PathVariable(name = "id") int paperId,@RequestParam("theme") String title){
-        return columnService.updateColumnByPaperId(paperId,title);
 
+           int i =    columnService.updateColumnByPaperId(paperId,title);
+        logger.info("返回值是："+i);
+        return i;
     }
 
     @RequestMapping("/addColumn")
