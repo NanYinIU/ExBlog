@@ -119,8 +119,16 @@
 			<artifactId>pagehelper</artifactId>
 			<version>4.1.0</version>
 		</dependency>
+		<!--thymeleaf 支持shiro标签-->
+        <!-- https://mvnrepository.com/artifact/com.github.theborakompanioni/thymeleaf-extras-shiro -->
+        <dependency>
+            <groupId>com.github.theborakompanioni</groupId>
+            <artifactId>thymeleaf-extras-shiro</artifactId>
+            <version>2.0.0</version>
+        </dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-core -->
+
+        <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-core -->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-core</artifactId>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 
 	<head>
 		<meta charset="utf-8"/>
@@ -54,9 +55,7 @@
                                         <span>{{login_name}}</span>
                                     </a>
                             </script>
-
                             <div id="content"></div>
-
                             <script type="text/javascript">
                                 var name = document.getElementById("name1").value;
                                 var dui ='';
@@ -75,7 +74,6 @@
                                 });
                                 })
                             </script>
-
 							<dl class="layui-nav-child">
 								<dd>
 									<a href="javascript:;"><i class="fa fa-user-circle" aria-hidden="true"></i> 个人信息</a>
@@ -87,6 +85,7 @@
 									<a href="/user/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> 注销</a>
 								</dd>
 							</dl>
+
 						</li>
 					</ul>
 					<ul class="layui-nav admin-header-item-mobile">

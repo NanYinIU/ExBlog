@@ -18,20 +18,18 @@ import java.util.List;
 @Mapper
 @Component
 public interface UserMapper {
-    /**
-     * 自己规定 查询 用 find ...
-     *          添加 用 insert ...
-     *          删除 用 delete ...
-     *          修改 用 update ...
-     *          */
 
     /**
      * 根据昵称查询基本信息
      * @param name
      * @return
      */
-    @Select("SELECT * FROM social_blog.users WHERE login_name=#{name}")
+    @Select("SELECT * FROM social_blog.users WHERE login_name=#{name} ")
     Users findUsersByName(String name);
+
+    @Select("SELECT * FROM social_blog.users WHERE login_name=#{name} LIMIT #{page},#{limit}")
+    Users findUsersByNameLimit(@Param("name") String name,@Param("page") int page,@Param("limit")  int limit );
+
 
     /**
      * 根据name查询paper表的author信息
@@ -67,6 +65,23 @@ public interface UserMapper {
             "</script>"
     })
     List<Users> findAllUsers(@Param("search")String search);
+
+    @Select({
+            "<script>",
+            "SELECT * FROM social_blog.users",
+            "ORDER BY id ASC",
+            "</script>"
+    })
+    List<Users> findAllUsersList();
+
+    @Select({
+            "<script>",
+            "SELECT * FROM social_blog.users",
+            "ORDER BY id ASC",
+            " LIMIT #{page},#{limit}",
+            "</script>"
+    })
+    List<Users> findAllUsersListLimit(@Param("page") int page,@Param("limit")  int limit );
 
     @Select({
             "<script>",

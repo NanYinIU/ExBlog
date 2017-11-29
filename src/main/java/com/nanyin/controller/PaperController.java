@@ -2,17 +2,14 @@ package com.nanyin.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.nanyin.config.AllAttriOfPaper;
 import com.nanyin.config.InsertPojo;
 import com.nanyin.config.PaperAndComments;
-import com.nanyin.model.Paper;
 import com.nanyin.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -46,7 +43,6 @@ public class PaperController {
     @RequestMapping("/PapersByTime")
     public @ResponseBody
     Map<String,Object> PapersByTime(){
-//        logger.info("格式"+ paperService.findAllPapersByTime().get("paper").toString());
         Map<String,Object> map = paperService.findAllPapersByTime();
         return map;
     }
@@ -64,10 +60,6 @@ public class PaperController {
     Map<String,Object> PapersByMark(){
         return paperService.findAllPapersByMark();
     }
-    @RequestMapping("/te")
-    public String te(){
-        return "test";
-    }
 
     @RequestMapping("/personalPage/{name}/{pageNum}")
     public @ResponseBody
@@ -77,17 +69,7 @@ public class PaperController {
             @RequestParam(value = "search", required = false) String search){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("PersonalIndex");
-        PageHelper.startPage(pageNum,10);
-
-        List<PaperAndComments> papers = paperService.findAllPaperByUser(name,search);
-
-        PageInfo<PaperAndComments> pageInfo = new PageInfo<>(papers);
-        int total = paperService.getTotal(name,search);
-        pageInfo.setTotal(total);
-        pageInfo.setFirstPage(0);
-        pageInfo.setLastPage((total/8)+1);
-        pageInfo.setPrePage(pageNum-1 >= 0 ? pageNum-1:0);
-        pageInfo.setNextPage(pageNum+1 > ((total/8)+1) ? ((total/8)+1):pageNum+1);
+        PageInfo<PaperAndComments> pageInfo = paperService.findAllPaperByUser(name,search,pageNum);
         modelAndView.addObject("pageInfo",pageInfo);
         return modelAndView;
     }
@@ -99,17 +81,7 @@ public class PaperController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("SearchIndex");
         PageHelper.startPage(pageNum,8);
-
-        List<PaperAndComments> papers = paperService.findAllPapers(search);
-
-        PageInfo pageInfo = new PageInfo(papers);
-
-        int total = paperService.getAllTotal(search);
-        pageInfo.setTotal(total);
-        pageInfo.setFirstPage(0);
-        pageInfo.setLastPage((total/8)+1);
-        pageInfo.setPrePage(pageNum-1 >= 0 ? pageNum-1:0);
-        pageInfo.setNextPage(pageNum+1 > ((total/8)+1) ? ((total/8)+1):pageNum+1);
+        PageInfo pageInfo = paperService.findAllPapers(search,pageNum);;
         modelAndView.addObject("pageInfo",pageInfo);
         return modelAndView;
     }
@@ -141,8 +113,6 @@ public class PaperController {
                 Map<String,Object> map = new HashMap<>();
 
                 map.put("page",paperService.findAllAttriOfPapaer(id));
-
-//                modelAndView.addObject("page",paperService);
                 modelAndView.addAllObjects(map);
                 return modelAndView;
     }

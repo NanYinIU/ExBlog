@@ -1,5 +1,6 @@
 package com.nanyin.service;
 
+import com.github.pagehelper.PageInfo;
 import com.nanyin.config.AllAttriOfPaper;
 import com.nanyin.config.PaperAndColumn;
 import com.nanyin.config.PaperAndComments;
@@ -23,13 +24,15 @@ public interface PaperService {
 
     int updateMarkByTitle(int mark,String id);
 
-    List<PaperAndComments> findAllPaperByUser(String name, String search);
+    PageInfo findAllPaperByUser(String name, String search, int pageNum);
 
     int getTotal(String search,String username);
 
     int getAllTotal(String search);
 
-    List findAllPapers(String search);
+    PageInfo findAllPapers(String search,int pageNum);
+
+    List  findAllPapers(String search);
 
     AllAttriOfPaper findAllAttriOfPapaer(int id);
 

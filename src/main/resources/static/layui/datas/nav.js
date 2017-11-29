@@ -38,16 +38,20 @@ var navs = [{
 	"href": "",
 	"spread": false,
 	"children": [{
-		"title": "授权",
+		"title": "角色授权",
 		"icon": "&#xe629;",
 		"href": "https://www.github.com/"
 	}, {
-		"title": "审查",
-		"icon": "&#xe60a;",
+		"title": "人员管理",
+		"icon": "&#xe6b2;",
 		"href": "http://www.qq.com/"
-	},{
-        "title": "专题管理",
+	}, {
+        "title": "文章审查",
         "icon": "&#xe60a;",
+        "href": "http://www.qq.com/"
+    },{
+        "title": "专题管理",
+        "icon": "&#xe641;",
         "href": "/column/columnPage"
     }, {
 		"title": "Druid监控",

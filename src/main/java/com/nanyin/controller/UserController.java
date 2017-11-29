@@ -1,7 +1,9 @@
 package com.nanyin.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.nanyin.config.common.ModifiPass;
 import com.nanyin.config.logConfig.Log;
+import com.nanyin.model.To.UserAndRoles;
 import com.nanyin.model.Users;
 import com.nanyin.service.UserDetailService;
 import com.nanyin.service.UserService;
@@ -25,6 +27,7 @@ import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -162,6 +165,25 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("InnerLayui/authorPage");
         modelAndView.addObject("url",url);
+        return modelAndView;
+    }
+    @RequestMapping("/user/userManage/{pageNum}")
+    public @ResponseBody Map<String,Object> userManage(@PathVariable("pageNum") int pageNum){
+        Map<String,Object> map = new HashMap<>();
+
+        List<UserAndRoles>  list = userService.userAndRole(pageNum);
+        map.put("data",list);
+        map.put("code",0);
+        map.put("msg","");
+        map.put("count",userService.findAllUsers().size());
+        return map;
+    }
+
+    @RequestMapping("/user/returnUserManage")
+    public ModelAndView returnUserManage(@RequestParam(value = "url",required = false) String url){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("InnerLayui/userManage");
+        modelAndView.addObject("",url);
         return modelAndView;
     }
 }

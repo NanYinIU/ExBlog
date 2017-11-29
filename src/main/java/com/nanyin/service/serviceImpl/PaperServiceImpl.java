@@ -1,5 +1,7 @@
 package com.nanyin.service.serviceImpl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.nanyin.config.AllAttriOfPaper;
 import com.nanyin.config.PaperAndColumn;
 import com.nanyin.config.PaperAndComments;
@@ -37,34 +39,41 @@ public class PaperServiceImpl implements PaperService {
     @Autowired
     ColumnService columnService;
     Logger logger = Logger.getLogger(this.getClass());
+
+//    赋值
+    private PaperAndComments setValue(Paper paper,Users users){
+        PaperAndComments paperAndComments = new PaperAndComments();
+        int count = commentsService.findCommentCountByTitle(paper.getId());
+        paperAndComments.setTitle(paper.getTitle());
+        paperAndComments.setContent(paper.getContent());
+        paperAndComments.setSegment(paper.getSgement());
+        paperAndComments.setCount(count);
+        paperAndComments.setCreate_time(paper.getCreate_time());
+        paperAndComments.setPaper_image(paper.getPaper_image());
+        paperAndComments.setMark(paper.getMark());
+        paperAndComments.setLogin_name(users.getLogin_name());
+        paperAndComments.setEmail(users.getEmail());
+        paperAndComments.setHead(users.getHead());
+        paperAndComments.setId(paper.getId());
+        return paperAndComments;
+    }
+    private List<PaperAndComments> paperAndCommentsList(List<Paper> papers){
+        List<PaperAndComments> paperAndComments = new ArrayList<>();
+        for (Paper paper: papers) {
+            int id = paper.getId();
+            Users users = paperMapper.findUserByPaperTitle(id);
+            PaperAndComments paperAndComment = setValue(paper,users);
+            paperAndComments.add(paperAndComment);
+        }
+        return paperAndComments;
+    }
+
     @Override
     public Map<String, Object> findAllPapersByTime() {
         Map<String,Object> map = new HashMap<>();
         List<Paper> papers = paperMapper.findAllPapersByTime();
-        List<PaperAndComments> paperAndComments = new ArrayList<>();
-        for(int i = 0 ; i < papers.size() ; i ++){
-          PaperAndComments paperAndComments1 = new PaperAndComments();
-          Paper paper = papers.get(i);
-          String title = paper.getTitle();
-          int id = paper.getId();
-          Users users1 = paperMapper.findUserByPaperTitle(id);
-          int count = commentsService.findCommentCountByTitle(id);
-          paperAndComments1.setTitle(title);
-          paperAndComments1.setContent(paper.getContent());
-          paperAndComments1.setSegment(paper.getSgement());
-          paperAndComments1.setCount(count);
-          paperAndComments1.setCreate_time(paper.getCreate_time());
-          paperAndComments1.setPaper_image(paper.getPaper_image());
-          paperAndComments1.setMark(paper.getMark());
-          paperAndComments1.setLogin_name(users1.getLogin_name());
-          paperAndComments1.setEmail(users1.getEmail());
-          paperAndComments1.setHead(users1.getHead());
-          paperAndComments1.setId(id);
-          paperAndComments.add(paperAndComments1);
-        }
+        List<PaperAndComments> paperAndComments = paperAndCommentsList(papers);
         map.put("paper",paperAndComments);
-
-
         return map;
     }
 
@@ -72,28 +81,7 @@ public class PaperServiceImpl implements PaperService {
     public Map<String, Object> findAllPapersByMark() {
         Map<String,Object> map = new HashMap<>();
         List<Paper> papers = paperMapper.findAllPapersByMark();
-        List<PaperAndComments> paperAndComments = new ArrayList<>();
-        for(int i = 0 ; i < papers.size() ; i ++){
-            PaperAndComments paperAndCommentss = new PaperAndComments();
-            Paper paper = papers.get(i);
-            int id = paper.getId();
-            String title = paper.getTitle();
-            Users users1 = paperMapper.findUserByPaperTitle(id);
-            int count = commentsService.findCommentCountByTitle(id);
-            paperAndCommentss.setTitle(title);
-            paperAndCommentss.setContent(paper.getContent());
-            paperAndCommentss.setCount(count);
-            paperAndCommentss.setCreate_time(paper.getCreate_time());
-            paperAndCommentss.setPaper_image(paper.getPaper_image());
-            paperAndCommentss.setMark(paper.getMark());
-            paperAndCommentss.setLogin_name(users1.getLogin_name());
-            paperAndCommentss.setEmail(users1.getEmail());
-            paperAndCommentss.setHead(users1.getHead());
-            paperAndCommentss.setId(id);
-            logger.info("id+"+paperAndCommentss.getId());
-            paperAndComments.add(paperAndCommentss);
-
-        }
+        List<PaperAndComments> paperAndComments = paperAndCommentsList(papers);
         map.put("paper",paperAndComments);
         return map;
 
@@ -105,44 +93,35 @@ public class PaperServiceImpl implements PaperService {
         return paperMapper.updateMarkByTitle(mark, id1);
     }
 
+    private PaperAndComments initPaperAndConmments(String name){
+        PaperAndComments initPaperAndComment = new PaperAndComments();
+        initPaperAndComment.setLogin_name(name);
+        Users users = userService.findUsersByName(name);
+        initPaperAndComment.setHead(users.getHead());
+        initPaperAndComment.setTitle("266fb5d2-b97b-41dd-999e-1143c0963fd4");
+        initPaperAndComment.setCreate_time(new Timestamp(System.currentTimeMillis()));
+        return initPaperAndComment;
+    }
+
+
 //    这里会有分页
     @Override
-    public List<PaperAndComments> findAllPaperByUser(String name,String search) {
+    public PageInfo<PaperAndComments> findAllPaperByUser(String name,String search,int pageNum) {
 
-        List<PaperAndComments> paperAndComments = new ArrayList<>();
         List<Paper> papers =  paperMapper.findAllPaperByUser(name,search);
-        for(int i = 0 ; i < papers.size() ; i ++){
-            PaperAndComments paperAndCommentss = new PaperAndComments();
-            Paper paper = papers.get(i);
-            String title = paper.getTitle();
-            int id = paper.getId();
-            Users users1 = paperMapper.findUserByPaperTitle(id);
-            int count = commentsService.findCommentCountByTitle(id);
-            paperAndCommentss.setTitle(title);
-            paperAndCommentss.setContent(paper.getContent());
-            paperAndCommentss.setCount(count);
-            paperAndCommentss.setCreate_time(paper.getCreate_time());
-            paperAndCommentss.setPaper_image(paper.getPaper_image());
-            paperAndCommentss.setMark(paper.getMark());
-            paperAndCommentss.setLogin_name(users1.getLogin_name());
-            paperAndCommentss.setEmail(users1.getEmail());
-            paperAndCommentss.setHead(users1.getHead());
-            paperAndCommentss.setId(paper.getId());
-            paperAndComments.add(paperAndCommentss);
+        List<PaperAndComments> paperAndComments = paperAndCommentsList(papers);
+        PageHelper.startPage(pageNum,10);
+        PageInfo<PaperAndComments> pageInfo = new PageInfo<>(paperAndComments);
 
-        }
         if(paperAndComments.size() == 0){
-            PaperAndComments initPaperAndComment = new PaperAndComments();
-            initPaperAndComment.setLogin_name(name);
-            Users users = userService.findUsersByName(name);
-            initPaperAndComment.setHead(users.getHead());
-            initPaperAndComment.setTitle("266fb5d2-b97b-41dd-999e-1143c0963fd4"); // 神秘代码 没有文章的时候
-            initPaperAndComment.setCreate_time(new Timestamp(System.currentTimeMillis()));
-            paperAndComments.add(initPaperAndComment);
-            return paperAndComments;
+         //初始化一个paperAndComments
+            PaperAndComments paperAndComment = initPaperAndConmments(name);
+            paperAndComments.add(paperAndComment);
+            PageInfo<PaperAndComments> pageInfo2 = new PageInfo<>(paperAndComments);
+            return pageInfo2;
         }
        else {
-            return paperAndComments;
+            return pageInfo;
         }
     }
 
@@ -157,51 +136,43 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
-    public List findAllPapers(String search) {
-        List<PaperAndComments> paperAndComments = new ArrayList<>();
-        List<Paper> papers =  paperMapper.findAllPapers(search);
-//        logger.info("papers:"+papers+"数量:"+papers.size());
-        for(int i = 0 ; i < papers.size() ; i ++){
-            PaperAndComments paperAndCommentss = new PaperAndComments();
-            Paper paper = papers.get(i);
-            String title = paper.getTitle();
-            int id = paper.getId();
-            Users users1 = paperMapper.findUserByPaperTitle(id);
-            int count = commentsService.findCommentCountByTitle(id);
-            paperAndCommentss.setTitle(title);
-            paperAndCommentss.setContent(paper.getContent());
-            paperAndCommentss.setCount(count);
-            paperAndCommentss.setSegment(paper.getSgement());
-//            logger.info("paper segment:"+ paper.getSgement());
-            paperAndCommentss.setCreate_time(paper.getCreate_time());
-            paperAndCommentss.setPaper_image(paper.getPaper_image());
-            paperAndCommentss.setMark(paper.getMark());
-                paperAndCommentss.setLogin_name(users1.getLogin_name());
-            paperAndCommentss.setEmail(users1.getEmail());
-            paperAndCommentss.setHead(users1.getHead());
-            paperAndCommentss.setId(paper.getId());
-            paperAndComments.add(paperAndCommentss);
+    public PageInfo findAllPapers(String search,int pageNum) {
 
-        }
-//        logger.info("paperAndComments 数量+"+paperAndComments.size()+paperAndComments);
+        List<Paper> papers =  paperMapper.findAllPapers(search);
+        List<PaperAndComments> paperAndComments = paperAndCommentsList(papers);
+        PageHelper.startPage(pageNum,8);
+        PageInfo pageInfo = new PageInfo(paperAndComments);
+        return pageInfo;
+    }
+
+    @Override
+    public List findAllPapers(String search) {
+        List<Paper> papers =  paperMapper.findAllPapers(search);
+        List<PaperAndComments> paperAndComments = paperAndCommentsList(papers);
         return paperAndComments;
+    }
+
+    private AllAttriOfPaper setValue(Users users,Paper paper,List<Comments> comments,String columns){
+        AllAttriOfPaper allAttriOfPaper = new AllAttriOfPaper();
+
+        allAttriOfPaper.setColumnTitle(columns);
+        allAttriOfPaper.setComments(comments);
+        allAttriOfPaper.setPaper(paper);
+        allAttriOfPaper.setCount(commentsService.findCommentCountById(paper.getId()));
+        allAttriOfPaper.setLogin_name(users.getLogin_name());
+        allAttriOfPaper.setHead(users.getHead());
+        allAttriOfPaper.setTags(paperMapper.findTagsById(paper.getId()));
+        return allAttriOfPaper;
     }
 
     @Override
     public AllAttriOfPaper findAllAttriOfPapaer(int id) {
-        AllAttriOfPaper allAttriOfPaper = new AllAttriOfPaper();
         Users users = paperMapper.findUserByPaperId(id);
         String columns = paperMapper.findColumnsById(id);
         List<Comments> comments = paperMapper.findCommentsById(id);
         Paper paper = paperMapper.findPaperById(id);
-        allAttriOfPaper.setColumnTitle(columns);
-        allAttriOfPaper.setComments(comments);
-        allAttriOfPaper.setPaper(paper);
-        allAttriOfPaper.setCount(commentsService.findCommentCountById(id));
-        allAttriOfPaper.setLogin_name(users.getLogin_name());
-        allAttriOfPaper.setHead(users.getHead());
-        allAttriOfPaper.setTags(paperMapper.findTagsById(id));
-        return allAttriOfPaper;
+
+       return setValue(users,paper,comments,columns);
     }
 
     @Override
@@ -222,8 +193,8 @@ public class PaperServiceImpl implements PaperService {
 
     @Override
     public Map<String,Object> findPaperByUser(String name,String pageNum) {
+        // 固定 limit 
         int limit = 10 ;
-        logger.info(pageNum);
         int pageNum1 = Integer.parseInt(pageNum);
         Map<String,Object> map = new HashMap<>();
         int count = paperMapper.findCountOfPaperByUser(name);
@@ -246,7 +217,6 @@ public class PaperServiceImpl implements PaperService {
             }
             li1.add(paperAndColumn);
         }
-//        logger.info(papers);
         map.put("code",0);
         map.put("mes","");
         map.put("count",count);
@@ -277,7 +247,7 @@ public class PaperServiceImpl implements PaperService {
         int author = userService.findAuthorByName(name);
         Timestamp createTime = new Timestamp(System.currentTimeMillis());
         int mark = 1 ;
-        String is_pass = "正在审核";
+        String is_pass = "审核通过";
         return paperMapper.insertPaper(title,content,createTime,author,segment,mark,is_pass);
     }
 

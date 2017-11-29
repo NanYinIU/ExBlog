@@ -8,8 +8,7 @@ import java.io.*;
 import java.nio.Buffer;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by NanYin on 2017-10-01 下午9:40.
@@ -39,7 +38,15 @@ public class test {
     }
     @Test
     public void test3(){
-        System.out.println(UUID.randomUUID());
+
+        Set<Integer> hashset = new HashSet<>();
+        hashset.add(1);hashset.add(3);hashset.add(4);hashset.add(3);hashset.add(6);hashset.add(7);
+        int id = 2 ;
+        Iterator iterator =  hashset.iterator();
+        while(iterator.hasNext()) {
+            id = (int) iterator.next();
+        }
+        System.out.println(id+1);
     }
 
 }

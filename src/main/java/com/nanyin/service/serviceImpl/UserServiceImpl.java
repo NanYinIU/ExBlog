@@ -1,16 +1,20 @@
 package com.nanyin.service.serviceImpl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.nanyin.config.AllParamOfUser;
 import com.nanyin.config.Author;
 import com.nanyin.mapper.UserMapper;
 import com.nanyin.model.Friend;
 import com.nanyin.model.Role;
+import com.nanyin.model.To.UserAndRoles;
 import com.nanyin.model.UserDetail;
 import com.nanyin.model.Users;
 import com.nanyin.service.PermissionService;
 import com.nanyin.service.RoleService;
 import com.nanyin.service.UserDetailService;
 import com.nanyin.service.UserService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +31,7 @@ import java.util.*;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
     @Autowired
     UserMapper userMapper;
     @Autowired
@@ -41,9 +46,18 @@ public class UserServiceImpl implements UserService {
     @Autowired
     RoleService roleService;
 
+    private static final int BE_USEING = 1 ;
+
+    private static final int OUT_OF_SERVICE = 0 ;
+
     @Override
     public Users findUsersByName(String name) {
         return userMapper.findUsersByName(name);
+    }
+
+    @Override
+    public Users findUsersByName(String name, int page, int pageNum) {
+        return userMapper.findUsersByNameLimit(name, page, pageNum);
     }
 
     @Override
@@ -180,6 +194,72 @@ public class UserServiceImpl implements UserService {
         map.put("code",0);
         map.put("mes","");
         return map;
+    }
+    /***
+     *
+     * @author NanYin 
+     * @date 17-11-29 下午2:28
+     * @param [users, roleName]  
+     * @return com.nanyin.model.To.UserAndRoles  
+     */  
+    private UserAndRoles setValue (Users users,String roleName){
+        UserAndRoles userAndRoles = new UserAndRoles();
+        userAndRoles.setUserId(users.getId());
+        userAndRoles.setUserName(users.getLogin_name());
+        userAndRoles.setCreateTIme(users.getCreate_time());
+        userAndRoles.setEmail(users.getEmail());
+        int statusNumber = users.getStatus();
+        if(statusNumber == OUT_OF_SERVICE ){
+            userAndRoles.setStatus("已停用");
+        }
+        if(statusNumber == BE_USEING)
+        {
+            userAndRoles.setStatus("正在使用");
+        }
+        userAndRoles.setRoleName(roleName);
+        return userAndRoles;
+    }
+    /***
+     *
+     * @author NanYin 
+     * @date 17-11-29 下午2:48  
+     * @param [pageNum, userName]
+     * @return com.github.pagehelper.PageInfo  
+     */  
+    @Override
+    public List<UserAndRoles> userAndRole(int pageNum) {
+        // 固定 limit
+        int limit = 10 ;
+        List<Users> users = findAllUsers((pageNum-1) * limit,limit);
+        return listSwap(users);
+    }
+
+    private List<UserAndRoles> listSwap(List<Users> users){
+        List<UserAndRoles> UserAndRolesList =new LinkedList<>();
+        for (Users u: users
+             ) {
+            String userName = u.getLogin_name();
+            Set<String> roleSet =  roleService.findRoleByName(userName);
+            String roleName = null;
+            Iterator iterator = roleSet.iterator();
+            while(iterator.hasNext())
+            {
+                roleName = (String) iterator.next();
+            }
+            UserAndRoles userAndRoles = setValue(u,roleName);
+            UserAndRolesList.add(userAndRoles);
+        }
+        return UserAndRolesList;
+    }
+
+    @Override
+    public List<Users> findAllUsers(int page, int limit) {
+        return userMapper.findAllUsersListLimit(page, limit);
+    }
+
+    @Override
+    public List<Users> findAllUsers() {
+        return userMapper.findAllUsersList();
     }
 
 

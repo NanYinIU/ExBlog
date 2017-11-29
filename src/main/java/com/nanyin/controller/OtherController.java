@@ -1,8 +1,6 @@
 package com.nanyin.controller;
 
 import com.nanyin.service.PaperService;
-import javafx.application.Application;
-import org.apache.catalina.core.ApplicationContext;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -110,5 +107,7 @@ public class OtherController {
         map.put("flag",flag);
         return map;
     }
+
+
 
 }
