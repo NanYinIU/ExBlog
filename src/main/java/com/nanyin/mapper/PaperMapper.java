@@ -1,9 +1,9 @@
 package com.nanyin.mapper;
 
-import com.nanyin.config.AllAttriOfPaper;
 import com.nanyin.model.*;
 import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -13,18 +13,21 @@ import java.util.List;
  * 包名： com.nanyin.mapper
  * 类描述：
  */
+@CacheConfig(cacheNames = "demo")
 @Mapper
 public interface PaperMapper {
 
 //    按最新时间排序
-    @Select("SELECT * FROM social_blog.paper ORDER BY create_time DESC LIMIT 0,5")
+    @Cacheable
+    @Select("SELECT * FROM social_blog.paper ORDER BY create_time DESC")
     List<Paper> findAllPapersByTime();
 
     @Select("SELECT * FROM social_blog.paper ORDER BY create_time DESC")
     List<Paper> findAllPapersByTimeNoLimit();
 
 //  按照热度排序
-    @Select("SELECT * FROM social_blog.paper p ORDER BY p.mark DESC limit 0,7")
+    @Cacheable
+    @Select("SELECT * FROM social_blog.paper p ORDER BY p.mark DESC ")
     List<Paper> findAllPapersByMark();
     // 根据文章title 查作者信息
     @Select("SELECT u.* FROM social_blog.users u , social_blog.paper p WHERE p.author = u.id AND p.id=#{id}")
