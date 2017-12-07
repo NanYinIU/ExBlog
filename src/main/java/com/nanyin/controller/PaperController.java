@@ -223,4 +223,47 @@ public class PaperController {
          return map;
     }
 
+    /**
+     *
+     * @return 所有文章的数据
+     */
+    @RequestMapping("/paper/adminPapersData/{pageNum}")
+    public @ResponseBody Map<String,Object> adminPapers(@PathVariable(value = "pageNum") int pageNum){
+        return paperService.findPapers(pageNum);
+    }
+
+    /**
+     * 返回admin文章审核页面
+     * @param url
+     * @return modelAndView
+     */
+    @RequestMapping("/paper/adminPapers")
+    public ModelAndView returnAdminPapers(String url){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("url",url);
+        modelAndView.setViewName("InnerLayui/Admin/pageReview");
+        return modelAndView;
+    }
+
+    /**
+     * 返回修改文章状态页面
+     * @param id
+     * @return
+     */
+    @RequestMapping("/paper/FixPaperStatues/{id}")
+    public ModelAndView returnFixPaperStatues(@PathVariable(value = "id") int id){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("paperId",id);
+        modelAndView.setViewName("InnerLayui/Admin/updatePageStatus");
+        return modelAndView;
+    }
+
+    @RequestMapping("/paper/updatePaperStatus/{id}")
+    public @ResponseBody int updatePaperStatus(
+            @RequestParam(value = "review") String review,
+            @PathVariable(value = "id") int id){
+        return paperService.updatePaperStatus(id, review);
+    }
+
+
 }

@@ -15,6 +15,7 @@ import com.nanyin.service.ColumnService;
 import com.nanyin.service.CommentsService;
 import com.nanyin.service.PaperService;
 import com.nanyin.service.UserService;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,23 @@ public class PaperServiceImpl implements PaperService {
         return paperAndComments;
     }
 
+    /**
+     * 完成所有文章的查询和分页功能
+     * @return map
+     */
+    @Override
+    public Map<String, Object> findPapers(int pageNum) {
+        int limit = 10 ;
+        Map<String,Object> map = new HashMap<>();
+        List<Paper> list = paperMapper.findPapers((pageNum-1) * limit,limit);
+        int count = list.size();
+        map.put("code",0);
+        map.put("mes","");
+        map.put("count",count);
+        map.put("data",list);
+        return map;
+    }
+
     @Override
     public Map<String, Object> findAllPapersByTime() {
         Map<String,Object> map = new HashMap<>();
@@ -104,7 +122,7 @@ public class PaperServiceImpl implements PaperService {
     }
 
 
-//    这里会有分页
+
     @Override
     public PageInfo<PaperAndComments> findAllPaperByUser(String name,String search,int pageNum) {
 
@@ -324,6 +342,11 @@ public class PaperServiceImpl implements PaperService {
         map.put("isPrePage",isPrePage);
         map.put("isNextPage",isNextPage);
         return map;
+    }
+
+    @Override
+    public int updatePaperStatus(int id, String review) {
+        return paperMapper.updataPaperStatus(id,review);
     }
 
 

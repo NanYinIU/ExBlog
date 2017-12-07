@@ -16,20 +16,32 @@ import java.util.List;
 @CacheConfig(cacheNames = "demo")
 @Mapper
 public interface PaperMapper {
+    /**
+     * 查询所有文章用于管理员的审查 物理分页
+     */
+    @Select("SELECT * FROM social_blog.paper LIMIT #{page},#{limit}")
+    List<Paper> findPapers(@Param("page") int page,@Param("limit") int limit);
 
-//    按最新时间排序
+    /**
+    * 按最新时间排序
+    */
     @Cacheable
-    @Select("SELECT * FROM social_blog.paper ORDER BY create_time DESC")
+    @Select("SELECT * FROM social_blog.paper WHERE is_pass = \"审核通过\" ORDER BY create_time DESC")
     List<Paper> findAllPapersByTime();
 
-    @Select("SELECT * FROM social_blog.paper ORDER BY create_time DESC")
+    @Select("SELECT * FROM social_blog.paper WHERE is_pass = \"审核通过\" ORDER BY create_time DESC")
     List<Paper> findAllPapersByTimeNoLimit();
 
-//  按照热度排序
+    /**
+    * 按照热度排序
+    */
     @Cacheable
-    @Select("SELECT * FROM social_blog.paper p ORDER BY p.mark DESC ")
+    @Select("SELECT * FROM  social_blog.paper p WHERE p.is_pass = \"审核通过\" ORDER BY p.mark DESC ")
     List<Paper> findAllPapersByMark();
-    // 根据文章title 查作者信息
+
+    /**
+     * 根据文章title 查作者信息
+     */
     @Select("SELECT u.* FROM social_blog.users u , social_blog.paper p WHERE p.author = u.id AND p.id=#{id}")
     Users findUserByPaperTitle(int id);
 
@@ -40,7 +52,7 @@ public interface PaperMapper {
     int updateMarkByTitle(@Param("mark") int mark, @Param("id")int id);
 
     @Select({"<script>",
-            "SELECT p.* FROM social_blog.paper p , social_blog.users s WHERE s.id = p .author AND s.login_name = #{name}",
+            "SELECT p.* FROM social_blog.paper p , social_blog.users s WHERE s.id = p .author AND s.login_name = #{name} AND p.is_pass = \"审核通过\"",
             "<if test=\"search!=null and search!=''\">",
             "AND  p.title LIKE concat(concat('%',#{search}),'%') ",
             "</if>",
@@ -50,7 +62,7 @@ public interface PaperMapper {
 
 
     @Select({"<script>",
-            "SELECT p.* FROM social_blog.paper p , social_blog.users s WHERE s.id = p .author",
+            "SELECT p.* FROM social_blog.paper p , social_blog.users s WHERE s.id = p .author AND  p.is_pass = \"审核通过\"",
             "<if test=\"search!=null and search!=''\">",
             "AND  p.title LIKE concat(concat('%',#{search}),'%') ",
             "</if>",
@@ -162,4 +174,7 @@ public interface PaperMapper {
      */
     @Select("SELECT id FROM social_blog.paper WHERE title=#{title} AND segment=#{segment} AND author = #{author}")
     int findPaperId(@Param("title") String title,@Param("segment") String segment,@Param("author") int author);
+
+    @Update("UPDATE social_blog.paper SET is_pass = #{is_pass} WHERE id = #{id}")
+    int updataPaperStatus(@Param("id") int id,@Param("is_pass") String is_pass);
 }

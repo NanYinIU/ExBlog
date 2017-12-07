@@ -6,6 +6,7 @@ import com.nanyin.config.PaperAndColumn;
 import com.nanyin.config.PaperAndComments;
 import com.nanyin.model.Paper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ import java.util.Map;
  */
 @Service
 public interface PaperService {
+
+    Map<String,Object> findPapers(int pageNum);
 
     Map<String,Object> findAllPapersByTime();
 
@@ -40,6 +43,7 @@ public interface PaperService {
 
     List<Paper> findPaperByUserName(String name,String search);
 
+    @Transactional
     int deletePaperByPaperId(int id);
 
     Map<String,Object> findPaperByUser(String name,String pageNum);
@@ -48,6 +52,7 @@ public interface PaperService {
 
     String findPaperTitleById(int id);
 
+    @Transactional
     int updatePaperContentById(String content,String id);
 
     int insertPaper(String title,String content,String segment,String name);
@@ -57,5 +62,7 @@ public interface PaperService {
     int findCountOfPaperByUser(String name);
 
     Map<String,Object> findPreAndNextPage(int paperId);
+
+    int updatePaperStatus(int id,String review);
 
 }
