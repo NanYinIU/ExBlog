@@ -19,7 +19,7 @@ import java.util.Map;
 @Service
 public interface PaperService {
 
-    Map<String,Object> findPapers(int pageNum);
+    Map<String,Object> findPapers(int pageNum,String search,String interval);
 
     Map<String,Object> findAllPapersByTime();
 

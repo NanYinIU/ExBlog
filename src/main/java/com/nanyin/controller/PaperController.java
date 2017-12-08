@@ -227,18 +227,21 @@ public class PaperController {
      *
      * @return 所有文章的数据
      */
-    @RequestMapping("/paper/adminPapersData/{pageNum}")
-    public @ResponseBody Map<String,Object> adminPapers(@PathVariable(value = "pageNum") int pageNum){
-        return paperService.findPapers(pageNum);
+    @RequestMapping(value = {"/paper/adminPapersData/{pageNum}","/paper/adminPapersData/{pageNum}/{timePick}"})
+    public @ResponseBody Map<String,Object> adminPapers(
+            @PathVariable(value = "pageNum") int pageNum,
+            @PathVariable(value = "timePick",required = false) String timePick,
+            @RequestParam(value = "title",required = false) String search){
+        logger.info("search"+search);
+        return paperService.findPapers(pageNum,search,timePick);
     }
 
     /**
      * 返回admin文章审核页面
-     * @param url
-     * @return modelAndView
+     *
      */
     @RequestMapping("/paper/adminPapers")
-    public ModelAndView returnAdminPapers(String url){
+    public ModelAndView returnAdminPapers(@RequestParam(value = "url",required = false) String url){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("url",url);
         modelAndView.setViewName("InnerLayui/Admin/pageReview");
@@ -258,6 +261,12 @@ public class PaperController {
         return modelAndView;
     }
 
+    /**
+     * 更改文章状态执行方法
+     * @param review 输入状态 string类型
+     * @param id 文章id
+     * @return
+     */
     @RequestMapping("/paper/updatePaperStatus/{id}")
     public @ResponseBody int updatePaperStatus(
             @RequestParam(value = "review") String review,

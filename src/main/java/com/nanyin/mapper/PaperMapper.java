@@ -16,11 +16,35 @@ import java.util.List;
 @CacheConfig(cacheNames = "demo")
 @Mapper
 public interface PaperMapper {
+
     /**
      * 查询所有文章用于管理员的审查 物理分页
+     * @param page 页数
+     * @param limit 每个项数
+     * @param search 查询内容
+     * @param startTime 现在时间
+     * @param endTime 前n天 比如现在时间 。。。 nowday的几天前就是endtime
+     * @return
      */
-    @Select("SELECT * FROM social_blog.paper LIMIT #{page},#{limit}")
-    List<Paper> findPapers(@Param("page") int page,@Param("limit") int limit);
+    @Select({"<script>",
+            "SELECT * FROM social_blog.paper p WHERE 1=1",
+
+            "<if test=\"search!=null and search!=''\">",
+            "AND p.title LIKE concat(concat('%',#{search}),'%')",
+            "</if>",
+
+            "<if test=\"endTime!=null\">",
+            "AND p.create_time > #{endTime}",
+            "</if>",
+
+
+            "LIMIT #{page},#{limit}",
+            "</script>"})
+    List<Paper> findPapers(@Param("page") int page,
+                           @Param("limit") int limit,
+                           @Param("search")String search,
+                           @Param("startTime") Timestamp startTime,
+                           @Param("endTime") Timestamp endTime);
 
     /**
     * 按最新时间排序

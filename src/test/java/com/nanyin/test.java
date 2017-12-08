@@ -8,6 +8,7 @@ import java.io.*;
 import java.nio.Buffer;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -20,6 +21,15 @@ public class test {
     public void test1(){
         System.out.println(System.currentTimeMillis());
         System.out.println(new Date());
+        Date date = new Date();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(calendar.DATE,2);
+        System.out.println(calendar.getTime());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String string = simpleDateFormat.format(date);
+        Timestamp timestamp = Timestamp.valueOf(string);
+        System.out.println(timestamp);
         System.out.println(new Timestamp(System.currentTimeMillis()));
     }
     @Test

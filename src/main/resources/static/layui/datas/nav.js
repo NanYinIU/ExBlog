@@ -48,7 +48,7 @@ var navs = [{
 	}, {
         "title": "文章审查",
         "icon": "&#xe60a;",
-        "href": "http://www.qq.com/"
+        "href": "/paper/adminPapers"
     },{
         "title": "专题管理",
         "icon": "&#xe641;",

@@ -26,10 +26,11 @@
                 <div class="layui-input-inline">
                     <select name="timePick">
                         <option value="">全部</option>
-                        <option value="0">一天内</option>
-                        <option value="1">两天内</option>
-                        <option value="2">三天内</option>
-                        <option value="3">一周内</option>
+                        <option value="1">一天内</option>
+                        <option value="2">两天内</option>
+                        <option value="3">三天内</option>
+                        <option value="7">一周内</option>
+                        <option value="30">一个月内</option>
                     </select>
                 </div>
 
@@ -66,8 +67,8 @@
     }else turl = nurl;
     var count = null;
     var currPage = null;
-    layui.use(['laypage', 'layer', 'table', 'element'], function(){
-
+    layui.use(['form','laypage', 'layer', 'table', 'element'], function(){
+        var form = layui.form,
           layer = layui.layer;//弹层
           table = layui.table; //表格
           element = layui.element;//元素操作
@@ -92,11 +93,30 @@
         $.ajax({
             url:turl,
             dataType:"json",   //返回格式为json
-            type:"GET" , //请求方式 get 或者post
+            type:"GET" ,
             success:function (data) {
                 page(data);
+                alert(turl)
             }
         });
+        // 定义field变量内容
+        var timePick;
+        var search ;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data) {
+
+            timePick = data.field.timePick;
+            search = data.field.search;
+            if(timePick != null){
+                url = '/paper/adminPapersData/1/'+timePick+'?title='+search;
+            }else{
+                url = '/paper/adminPapersData/1'+'?title='+search;
+            }
+            window.location.href = '/paper/adminPapers?url=' + url;
+            return false;
+        });
+
         function page(data) {
             count = data.count;
             currPage = data.pageNum;
@@ -113,13 +133,20 @@
                 , jump: function (obj, first) {
                     if (!first) {
                         var currentPage = obj.curr;//获取点击的页码
-//                        alert(obj.curr);
-                        url = '/paper/adminPapersData/' + currentPage;
+
+                        if(timePick != null){
+                            url = '/paper/adminPapersData/1/'+timePick+'?title='+search;
+                        }else{
+                            url = '/paper/adminPapersData/1'+'?title='+search;
+                        }
+
                         window.location.href = '/paper/adminPapers?url=' + url;
                     }
                 }
 
             });
+
+
 
 
 

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import sun.security.ec.SunEC;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -74,10 +75,37 @@ public class PaperServiceImpl implements PaperService {
      * @return map
      */
     @Override
-    public Map<String, Object> findPapers(int pageNum) {
+    public Map<String, Object> findPapers(int pageNum,String search,String interval) throws NumberFormatException {
         int limit = 10 ;
-        Map<String,Object> map = new HashMap<>();
-        List<Paper> list = paperMapper.findPapers((pageNum-1) * limit,limit);
+        // 时间间隔天数
+        int inter = 0;
+        logger.info("search:" +search);
+        List<Paper> list = null;
+        Map<String, Object> map = new HashMap<>();
+        if(interval != null && !"".equals(interval)) {
+            inter = Integer.parseInt(interval);
+            //获得当前时间
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            //转换成data类型进项时间的加减
+            Date nowDate = new Date();
+            try {
+                nowDate = now;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(nowDate);
+            calendar.add(calendar.DATE, -inter);
+            Date afterAdd = calendar.getTime();
+            // 转化为timestamps类型
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String afterAddString = simpleDateFormat.format(afterAdd);
+            Timestamp end = Timestamp.valueOf(afterAddString);
+            // 几天前的时间 end
+            list = paperMapper.findPapers((pageNum - 1) * limit, limit, search, now, end);
+        } else {
+            list = paperMapper.findPapers((pageNum - 1) * limit, limit, search, null, null);
+        }
         int count = list.size();
         map.put("code",0);
         map.put("mes","");
