@@ -186,4 +186,12 @@ public class UserController {
         modelAndView.addObject("",url);
         return modelAndView;
     }
+
+    @RequestMapping("/user/admin/CheckUserMesPage")
+    public @ResponseBody ModelAndView returnCheckUserMesPage(@RequestParam(value = "id",required = false) int id){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("user",userService.checkUserMes(id));
+        modelAndView.setViewName("InnerLayui/Admin/checkUserMes");
+        return modelAndView;
+    }
 }

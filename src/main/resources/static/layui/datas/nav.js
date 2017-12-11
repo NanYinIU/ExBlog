@@ -38,10 +38,6 @@ var navs = [{
 	"href": "",
 	"spread": false,
 	"children": [{
-		"title": "角色授权",
-		"icon": "&#xe629;",
-		"href": "https://www.github.com/"
-	}, {
 		"title": "人员管理",
 		"icon": "&#xe6b2;",
 		"href": "http://www.qq.com/"

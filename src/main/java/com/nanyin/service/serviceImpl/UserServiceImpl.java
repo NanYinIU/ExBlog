@@ -262,5 +262,25 @@ public class UserServiceImpl implements UserService {
         return userMapper.findAllUsersList();
     }
 
+    /**
+     * 确保只提取到非隐私信息
+     * @param users
+     * @return
+     */
+    private Users insurePrivacyMes(Users users){
+        Users privacy = new Users();
+        privacy.setId(users.getId());
+        privacy.setLogin_name(users.getLogin_name());
+        privacy.setEmail(users.getEmail());
+        privacy.setHead(users.getHead());
+        privacy.setStatus(users.getStatus());
+        return privacy;
+    }
+
+    @Override
+    public Users checkUserMes(int id) {
+        return insurePrivacyMes(userMapper.findUserById(id));
+    }
+
 
 }

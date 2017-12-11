@@ -46,4 +46,6 @@ public interface UserService {
     List<Users> findAllUsers(int page, int limit );
 
     List<Users> findAllUsers( );
+
+    Users checkUserMes(int id);
 }

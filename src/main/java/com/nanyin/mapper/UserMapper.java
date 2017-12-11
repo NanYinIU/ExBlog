@@ -95,4 +95,7 @@ public interface UserMapper {
     })
     List<Users> findAllUsersLimit(@Param("search") String search,@Param("page") int page,@Param("limit") int limit);
 
+    @Select("SELECT * FROM social_blog.users WHERE id = #{id}")
+    Users findUserById(@Param("id") int id);
+
 }
