@@ -96,7 +96,6 @@
             type:"GET" ,
             success:function (data) {
                 page(data);
-                alert(turl)
             }
         });
         // 定义field变量内容
@@ -135,9 +134,9 @@
                         var currentPage = obj.curr;//获取点击的页码
 
                         if(timePick != null){
-                            url = '/paper/adminPapersData/1/'+timePick+'?title='+search;
+                            url = '/paper/adminPapersData/'+currentPage+'/'+timePick+'?title='+search;
                         }else{
-                            url = '/paper/adminPapersData/1'+'?title='+search;
+                            url = '/paper/adminPapersData/'+currentPage+'?title='+search;
                         }
 
                         window.location.href = '/paper/adminPapers?url=' + url;
@@ -145,8 +144,6 @@
                 }
 
             });
-
-
 
 
 
