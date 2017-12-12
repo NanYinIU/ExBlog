@@ -1,5 +1,7 @@
 package com.nanyin.service.serviceImpl;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.nanyin.mapper.TagMapper;
 import com.nanyin.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,32 +35,35 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public int delectTag(int paper_id) {
-        return tagMapper.delectTag(paper_id);
+    public int delectTag(int paperId) {
+        return tagMapper.delectTag(paperId);
     }
 
     @Override
-    public int findHasTagByPaperId(int paper_id) {
-        return tagMapper.findHasTagByPaperId(paper_id);
+    public int findHasTagByPaperId(int paperId) {
+        return tagMapper.findHasTagByPaperId(paperId);
     }
 
     @Override
     public Map<String,Object> findTagNamesByPaperId(int id) {
-        List<Object> list = new LinkedList<>();
         Set<String> set =  tagMapper.findTagNamesByPaperId(id);
-        Iterator iterator = set.iterator();
-        while (iterator.hasNext()){
-            String tag = (String) iterator.next();
-            Map<String,String> objectMap = new HashMap<>();
-            objectMap.put("tags",tag);
-            list.add(objectMap);
-        }
-
-        Map<String,Object> map = new HashMap<>();
+         List<Map<String,String>> list = setToList(set);
+        Map<String,Object> map = Maps.newHashMap();
         map.put("data",list);
         map.put("code",0);
         map.put("mes","");
         return map;
+    }
+
+    private List<Map<String,String>> setToList(Set<String> set){
+        List<Map<String,String>> list = Lists.newLinkedList();
+        for (String tag: set
+             ) {
+            Map<String,String> objectMap = new HashMap<>();
+            objectMap.put("tags",tag);
+            list.add(objectMap);
+        }
+        return list;
     }
 
     @Override

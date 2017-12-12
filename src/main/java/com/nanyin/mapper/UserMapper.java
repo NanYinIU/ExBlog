@@ -55,6 +55,11 @@ public interface UserMapper {
     @Update("UPDATE social_blog.users SET password = #{newPassWord} WHERE login_name = #{userName} AND password = #{oldPassWord}")
     int updateUserPass(@Param("userName") String userName,@Param("newPassWord") String newPassWord,@Param("oldPassWord") String oldPassWord);
 
+    /**
+     * 查询所有用户 模糊查询 登录名
+     * @param search
+     * @return
+     */
     @Select({
             "<script>",
             "SELECT * FROM social_blog.users",
@@ -74,6 +79,12 @@ public interface UserMapper {
     })
     List<Users> findAllUsersList();
 
+    /**
+     * 分页查询所有用户
+     * @param page
+     * @param limit
+     * @return
+     */
     @Select({
             "<script>",
             "SELECT * FROM social_blog.users",
@@ -83,6 +94,13 @@ public interface UserMapper {
     })
     List<Users> findAllUsersListLimit(@Param("page") int page,@Param("limit")  int limit );
 
+    /**
+     * 分页查询所有用户 支持模糊查询用户登录名
+     * @param search
+     * @param page
+     * @param limit
+     * @return
+     */
     @Select({
             "<script>",
             "SELECT * FROM social_blog.users",
@@ -97,5 +115,6 @@ public interface UserMapper {
 
     @Select("SELECT * FROM social_blog.users WHERE id = #{id}")
     Users findUserById(@Param("id") int id);
+
 
 }

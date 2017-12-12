@@ -2,6 +2,9 @@ package com.nanyin.service.serviceImpl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Maps;
+import com.nanyin.config.common.Paging;
+import com.nanyin.config.common.TimeUtil;
 import com.nanyin.mapper.ColumnMapper;
 import com.nanyin.model.Column;
 import com.nanyin.service.ColumnService;
@@ -20,6 +23,7 @@ import java.util.*;
 public class ColumnServiceImpl implements ColumnService {
     @Autowired
     ColumnMapper columnMapper;
+
     @Override
     public List<Column> findColumByPaperCount() {
         return columnMapper.findColumByPaperCount();
@@ -35,7 +39,7 @@ public class ColumnServiceImpl implements ColumnService {
         PageHelper.startPage(pageNum,5);
         List<Column> list = columnMapper.findAllColumnSearch(search);
         PageInfo pageInfo = new PageInfo(list);
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = Maps.newHashMap();
         map.put("pageInfo",pageInfo);
         return map;
     }
@@ -85,11 +89,11 @@ public class ColumnServiceImpl implements ColumnService {
     @Override
     public Map<String, Object> allColumn(String page) {
         int pageNum = Integer.parseInt(page);
-        int limit = 10 ;
+        int limit = Paging.LIMIT.getValue();
         List<Column> columns = columnMapper.findAllColumnLimit((pageNum-1) * limit,limit);
 
         List<Column> columns1 = columnMapper.findAllColumn();
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = Maps.newHashMap();
         map.put("code",0);
         map.put("mes","");
         map.put("count",columns1.size());
@@ -99,7 +103,7 @@ public class ColumnServiceImpl implements ColumnService {
 
     @Override
     public int insertInlet(String name, String image) {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Timestamp timestamp = TimeUtil.setCurrentTime();
         Column column = new Column();
         column.setImage(image);
         column.setTitle(name);

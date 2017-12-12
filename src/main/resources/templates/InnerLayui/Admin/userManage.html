@@ -22,17 +22,6 @@
         <legend>人员管理控制</legend>
         <form class="layui-form" action="">
             <div class="layui-form-item">
-                <label class="layui-form-label">选择时间段</label>
-                <div class="layui-input-inline">
-                    <select name="timePick">
-                        <option value="">全部</option>
-                        <option value="1">一天内</option>
-                        <option value="2">两天内</option>
-                        <option value="3">三天内</option>
-                        <option value="7">一周内</option>
-                        <option value="30">一个月内</option>
-                    </select>
-                </div>
 
                 <label class="layui-form-label">用户名查询</label>
                 <div class="layui-input-inline">
@@ -45,7 +34,7 @@
             </div>
 
         </form>
-        <table id="pageList" class="layui-table" lay-filter="demo">
+        <table id="userList" class="layui-table" lay-filter="demo">
         </table>
     </fieldset>
 </div>
@@ -54,8 +43,7 @@
 
 <script type="text/html" id="barDemo">
     <div class="layui-btn-group">
-        <button class="layui-btn layui-btn-small" lay-event="edit">编辑</button>
-        <button class="layui-btn layui-btn-small" lay-event="view">查看作者信息</button>
+        <button class="layui-btn layui-btn-small" lay-event="edit">修改账号状态</button>
     </div>
 </script>
 <script>
@@ -75,7 +63,7 @@
           laypage = layui.laypage; //分页
         table.render({
             id:'tid',
-            elem:'#pageList',
+            elem:'#userList',
             width:1350,
 //            page:'true',
             url:turl,

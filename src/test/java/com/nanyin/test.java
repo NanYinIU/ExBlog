@@ -1,12 +1,11 @@
 package com.nanyin;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import com.nanyin.config.common.Paging;
 import org.junit.Test;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.*;
-import java.nio.Buffer;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -56,5 +55,22 @@ public class test {
         }
         System.out.println(id+1);
     }
+    @Test
+    public void test4(){
+        // guava mutimap
+        Multimap<String,String> multimap = ArrayListMultimap.create();
+        multimap.putAll("a",new ArrayList<>(Arrays.asList("12","56")));
+        System.out.println(multimap.asMap());
+        System.out.println(multimap.get("a"));
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("a",new ArrayList<>(Arrays.asList("12","56")));
+        System.out.println(map);
+    }
+    @Test
+    public void test5(){
+        System.out.println(Paging.LIMIT.getValue());
+    }
+
 
 }

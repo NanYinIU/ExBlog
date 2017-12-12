@@ -1,6 +1,8 @@
 package com.nanyin.controller;
 
+import com.google.common.collect.Maps;
 import com.nanyin.config.ExFriends;
+import com.nanyin.model.Friend;
 import com.nanyin.model.Users;
 import com.nanyin.service.FriendService;
 import com.nanyin.service.UserService;
@@ -27,6 +29,7 @@ import java.util.Map;
  */
 @Controller
 public class FriendController {
+
     @Autowired
     FriendService friendService;
     @Autowired
@@ -36,9 +39,14 @@ public class FriendController {
     @RequestMapping("/user/checkFriends")
     public @ResponseBody
     Map<String,Boolean> findFriends(@RequestParam("userId") String userId, @RequestParam("friendId") String friendId){
-        Map<String,Boolean> map = new HashMap<>();
+        Map<String,Boolean> map = Maps.newHashMap();
+        Friend friend = friendService.findFriendById(userId, friendId);
+        return checkHasFriends(friend,map);
+    }
+
+    private  Map<String,Boolean> checkHasFriends(Friend friend,Map<String,Boolean> map){
         boolean flag = false;
-        if(friendService.findFriendById(userId, friendId) != null){
+        if(friend != null){
             //有值 返回true
             flag = true;
             map.put("flag",flag);

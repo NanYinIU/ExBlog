@@ -2,6 +2,10 @@ package com.nanyin.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.nanyin.model.Column;
 import com.nanyin.service.ColumnService;
 import javafx.scene.effect.SepiaTone;
@@ -32,20 +36,20 @@ public class ColumnController {
 
     @RequestMapping("/findColumByCount")
     public @ResponseBody
-    Map<String,Object> findColumByPaperCount(){
+    Multimap<String,Column> findColumByPaperCount(){
         List<Column> list = columnService.findColumByPaperCount();
-        Map<String,Object> map = new HashMap<>();
-        map.put("colum",list);
-        return map;
+        Multimap<String,Column> multimap = HashMultimap.create();
+        multimap.putAll("colum",list);
+        return multimap;
     }
 
     @RequestMapping("/findAllColumn2")
     public @ResponseBody
-    Map<String,Object> findAllColumn2(){
+    Multimap<String,Column> findAllColumn2(){
         List<Column> list = columnService.findAllColumn();
-        Map<String ,Object> map = new HashMap<>();
-        map.put("list",list);
-        return map;
+        Multimap<String,Column> multimap = HashMultimap.create();
+        multimap.putAll("list",list);
+        return multimap;
     }
 
     @RequestMapping("/findAllColumn/{pageNum}")
@@ -62,25 +66,27 @@ public class ColumnController {
     }
 
     @RequestMapping("/PersonalColumn/{name}")
-    public @ResponseBody Map<String,Object> PersonalColumn(@PathVariable("name") String name){
+    public @ResponseBody Multimap<String,Map<String,Object>> personalColumn(@PathVariable("name") String name){
 //        column 的 title 集合
-        Map<String,Object> map = new HashMap<>();
-        List<Integer> countList = new ArrayList<>();
-        List<String> titleList = new ArrayList<>();
+        Multimap<String,Map<String,Object>> map = HashMultimap.create();
         Set<String> set = columnService.findCoumnByUser(name);
-        List List = new ArrayList<>();
-        Iterator iterator = set.iterator();
-        while (iterator.hasNext()){
-            Map<String,Object> map1 = new HashMap<>();
-            String title = (String) iterator.next();
-            int count = columnService.findCountByTitle(title,name);
-            map1.put("count",count);
-            map1.put("title",title);
-            List.add(map1);
-        }
-        map.put("columnList",List);
+        List<Map<String,Object>> list = Lists.newLinkedList();
+        loopSetOfCoumn(list,set,name);
+        map.putAll("columnList",list);
         return map;
     }
+
+    private void loopSetOfCoumn(List<Map<String,Object>> list,Set<String> set,String name){
+        for (String title: set
+             ) {
+            Map<String,Object> map = Maps.newHashMap();
+            int count = columnService.findCountByTitle(title,name);
+            map.put("count",count);
+            map.put("title",title);
+            list.add(map);
+        }
+    }
+
     @RequestMapping("/updateTheme")
     public String updateTheme(){
         return "InnerLayui/colMes";
@@ -88,16 +94,14 @@ public class ColumnController {
 
     @RequestMapping("/updateColumnName/{id}")
     public @ResponseBody int updateColumnName(@PathVariable(name = "id") int paperId,@RequestParam("theme") String title){
-
-           int i =    columnService.updateColumnByPaperId(paperId,title);
-        logger.info("返回值是："+i);
-        return i;
+        return columnService.updateColumnByPaperId(paperId,title);
     }
 
     @RequestMapping("/addColumn")
     public String addColumn(String url){
         return "InnerLayui/addColumn";
     }
+
     @RequestMapping("/columnPage")
     public ModelAndView columnPage(@RequestParam(value = "url",required = false) String url){
         ModelAndView modelAndView = new ModelAndView();
@@ -121,6 +125,7 @@ public class ColumnController {
     public @ResponseBody int deleteColumn(@PathVariable("id") int id){
         return columnService.deleteColumnById(id);
     }
+
     @RequestMapping("/editColumn/{id}")
     public ModelAndView editColumn(@PathVariable("id") int id){
         ModelAndView modelAndView = new ModelAndView();

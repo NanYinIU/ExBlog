@@ -1,6 +1,9 @@
 package com.nanyin.service.serviceImpl;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.nanyin.config.ShowComments;
+import com.nanyin.config.common.TimeUtil;
 import com.nanyin.mapper.CommentsMapper;
 import com.nanyin.model.Comments;
 import com.nanyin.service.CommentsService;
@@ -38,23 +41,29 @@ public class CommentsServiceImpl implements CommentsService {
         return commentsMapper.deleteCommentById(id);
     }
 
-    @Override
-    public Map<String,Object> findAllCommentsByPaperId(int id) {
-        Map<String,Object> map = new HashMap<>();
-
-        List<Comments> comments = commentsMapper.findAllCommentsByPaperId(id);
-
-        List<ShowComments> list = new LinkedList<>();
-        Iterator iterator = comments.iterator();
-        while(iterator.hasNext()){
-            Comments comment = (Comments) iterator.next();
+    /**
+     *
+     * @param list
+     * @return
+     */
+    private List<ShowComments> setValue(List<Comments> list){
+        List<ShowComments> showCommentsList = Lists.newLinkedList();
+        for (Comments comment : list) {
             ShowComments showComments = new ShowComments();
             showComments.setId(comment.getId());
             showComments.setContent(comment.getComments_content());
             showComments.setTime(comment.getComments_time());
             showComments.setTitle(paperService.findPaperTitleById(comment.getComments_paper()));
-            list.add(showComments);
+            showCommentsList.add(showComments);
         }
+        return showCommentsList;
+    }
+
+    @Override
+    public Map<String,Object> findAllCommentsByPaperId(int id) {
+        Map<String,Object> map = Maps.newHashMap();
+        List<Comments> comments = commentsMapper.findAllCommentsByPaperId(id);
+        List<ShowComments> list= setValue(comments);
         map.put("code",0);
         map.put("count",30);
         map.put("mes","");
@@ -66,7 +75,7 @@ public class CommentsServiceImpl implements CommentsService {
     public int insertComments(String content, String paperId) {
         int id = Integer.parseInt(paperId);
 
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Timestamp timestamp = TimeUtil.setCurrentTime();
         Comments comments = new Comments();
         comments.setComments_content(content);
         comments.setComments_paper(id);

@@ -2,11 +2,14 @@ package com.nanyin.service.serviceImpl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.nanyin.config.AllAttriOfPaper;
 import com.nanyin.config.PaperAndColumn;
 import com.nanyin.config.PaperAndComments;
+import com.nanyin.config.common.Paging;
+import com.nanyin.config.common.TimeUtil;
 import com.nanyin.mapper.PaperMapper;
-import com.nanyin.mapper.UserMapper;
 import com.nanyin.model.Column;
 import com.nanyin.model.Comments;
 import com.nanyin.model.Paper;
@@ -15,11 +18,9 @@ import com.nanyin.service.ColumnService;
 import com.nanyin.service.CommentsService;
 import com.nanyin.service.PaperService;
 import com.nanyin.service.UserService;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.security.ec.SunEC;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -40,7 +41,12 @@ public class PaperServiceImpl implements PaperService {
     UserService userService;
     @Autowired
     ColumnService columnService;
+
     Logger logger = Logger.getLogger(this.getClass());
+
+    private  static final String IS_PASS = "审核通过";
+
+    private static final int INIT_MARK = 1 ;
 
 //    赋值
     private PaperAndComments setValue(Paper paper,Users users){
@@ -76,7 +82,7 @@ public class PaperServiceImpl implements PaperService {
      */
     @Override
     public Map<String, Object> findPapers(int pageNum,String search,String interval) throws NumberFormatException {
-        int limit = 10 ;
+        int limit = Paging.LIMIT.getValue();
         // 时间间隔天数
         int inter = 0;
         logger.info("search:" +search);
@@ -139,16 +145,15 @@ public class PaperServiceImpl implements PaperService {
         return paperMapper.updateMarkByTitle(mark, id1);
     }
 
-    private PaperAndComments initPaperAndConmments(String name){
+    private PaperAndComments initPaperAndConmments(String name) {
         PaperAndComments initPaperAndComment = new PaperAndComments();
         initPaperAndComment.setLogin_name(name);
         Users users = userService.findUsersByName(name);
         initPaperAndComment.setHead(users.getHead());
         initPaperAndComment.setTitle("266fb5d2-b97b-41dd-999e-1143c0963fd4");
-        initPaperAndComment.setCreate_time(new Timestamp(System.currentTimeMillis()));
+        initPaperAndComment.setCreate_time(TimeUtil.setCurrentTime());
         return initPaperAndComment;
     }
-
 
 
     @Override
@@ -156,15 +161,14 @@ public class PaperServiceImpl implements PaperService {
 
         List<Paper> papers =  paperMapper.findAllPaperByUser(name,search);
         List<PaperAndComments> paperAndComments = paperAndCommentsList(papers);
-        PageHelper.startPage(pageNum,10);
+        PageHelper.startPage(pageNum,Paging.LIMIT.getValue());
         PageInfo<PaperAndComments> pageInfo = new PageInfo<>(paperAndComments);
 
         if(paperAndComments.size() == 0){
          //初始化一个paperAndComments
             PaperAndComments paperAndComment = initPaperAndConmments(name);
             paperAndComments.add(paperAndComment);
-            PageInfo<PaperAndComments> pageInfo2 = new PageInfo<>(paperAndComments);
-            return pageInfo2;
+            return new PageInfo<>(paperAndComments);
         }
        else {
             return pageInfo;
@@ -186,16 +190,14 @@ public class PaperServiceImpl implements PaperService {
 
         List<Paper> papers =  paperMapper.findAllPapers(search);
         List<PaperAndComments> paperAndComments = paperAndCommentsList(papers);
-        PageHelper.startPage(pageNum,8);
-        PageInfo pageInfo = new PageInfo(paperAndComments);
-        return pageInfo;
+        PageHelper.startPage(pageNum,Paging.LIMIT.getValue()-2);
+        return new PageInfo<>(paperAndComments);
     }
 
     @Override
     public List findAllPapers(String search) {
         List<Paper> papers =  paperMapper.findAllPapers(search);
-        List<PaperAndComments> paperAndComments = paperAndCommentsList(papers);
-        return paperAndComments;
+        return paperAndCommentsList(papers);
     }
 
     private AllAttriOfPaper setValue(Users users,Paper paper,List<Comments> comments,String columns){
@@ -237,36 +239,46 @@ public class PaperServiceImpl implements PaperService {
         return paperMapper.deletePaperByPaperId(id);
     }
 
+    private Boolean columnIsNull(Column column,PaperAndColumn paperAndColumn){
+        if(column == null){
+            paperAndColumn.setTheme("暂无");
+        }
+        else {
+            paperAndColumn.setTheme(column.getTitle());
+        }
+        return true;
+    }
+
+    private List<PaperAndColumn> setValueToPaperAndColumn(List<Paper> papers){
+        List<PaperAndColumn> li1 = Lists.newLinkedList();
+        for (Paper p:papers
+             ) {
+            Column column = columnService.findColumnByPaperId(p.getId());
+            PaperAndColumn paperAndColumn = new PaperAndColumn();
+            paperAndColumn.setPaperId(p.getId());
+            paperAndColumn.setCreateTime(p.getCreate_time());
+            paperAndColumn.setIs_pass(p.getIs_pass());
+            paperAndColumn.setPaperTitle(p.getTitle());
+            columnIsNull(column,paperAndColumn);
+        li1.add(paperAndColumn);
+        }
+        return li1;
+    }
+
+
     @Override
     public Map<String,Object> findPaperByUser(String name,String pageNum) {
-        // 固定 limit 
-        int limit = 10 ;
+        int limit = Paging.LIMIT.getValue() ;
         int pageNum1 = Integer.parseInt(pageNum);
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = Maps.newHashMap();
+
         int count = paperMapper.findCountOfPaperByUser(name);
         List<Paper> papers = paperMapper.findPaperByUser(name,(pageNum1-1) * limit,limit);
-        List<PaperAndColumn> li1 = new ArrayList<>();
-        Iterator iterator = papers.iterator();
-        while (iterator.hasNext()){
-            PaperAndColumn paperAndColumn = new PaperAndColumn();
-            Paper paper = (Paper) iterator.next();
-            paperAndColumn.setPaperId(paper.getId());
-            paperAndColumn.setCreateTime(paper.getCreate_time());
-            paperAndColumn.setIs_pass(paper.getIs_pass());
-            paperAndColumn.setPaperTitle(paper.getTitle());
-            Column column = columnService.findColumnByPaperId(paper.getId());
-            if(column == null){
-                paperAndColumn.setTheme("暂无");
-            }
-            else {
-                paperAndColumn.setTheme(column.getTitle());
-            }
-            li1.add(paperAndColumn);
-        }
+        List<PaperAndColumn> list = setValueToPaperAndColumn(papers);
         map.put("code",0);
         map.put("mes","");
         map.put("count",count);
-        map.put("data",li1);
+        map.put("data",list);
         return map;
     }
 
@@ -291,10 +303,8 @@ public class PaperServiceImpl implements PaperService {
     public int insertPaper(String title, String content, String segment, String name) {
 //        需要把name通过usermapper转为id插入
         int author = userService.findAuthorByName(name);
-        Timestamp createTime = new Timestamp(System.currentTimeMillis());
-        int mark = 1 ;
-        String is_pass = "审核通过";
-        return paperMapper.insertPaper(title,content,createTime,author,segment,mark,is_pass);
+        Timestamp createTime = TimeUtil.setCurrentTime();
+        return paperMapper.insertPaper(title,content,createTime,author,segment,INIT_MARK,IS_PASS);
     }
 
     @Override
@@ -319,7 +329,7 @@ public class PaperServiceImpl implements PaperService {
         List<Paper> paperList = paperMapper.findAllPapersByTimeNoLimit();
         Paper paper = paperMapper.findPaperById(paperId);
 
-        int currentPaperNum = 0 ;
+        int currentPaperNum = Paging.INIT.getValue() ;
 
         for (int i = 0 ; i < paperList.size() ; i ++){
             if ( paperList.get(i).getId() == paper.getId() ){

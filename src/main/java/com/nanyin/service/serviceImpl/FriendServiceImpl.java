@@ -1,8 +1,9 @@
 package com.nanyin.service.serviceImpl;
 
+import com.google.common.collect.Lists;
 import com.nanyin.config.ExFriends;
+import com.nanyin.config.common.Paging;
 import com.nanyin.mapper.FriendMapper;
-import com.nanyin.mapper.UserMapper;
 import com.nanyin.model.Friend;
 import com.nanyin.service.FriendService;
 import com.nanyin.service.PaperService;
@@ -10,8 +11,6 @@ import com.nanyin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -53,27 +52,35 @@ public class FriendServiceImpl implements FriendService {
         return friendMapper.deleteFriendRelation(userId,friendId);
     }
 
-    @Override
-    public List<ExFriends> findAllFriedns(String userName,int pageNum) {
-        int userId = getAuthorId(userName);
-        int limit=10;
-        List<Friend> friends = friendMapper.findAllFriend(userId,(pageNum-1) * limit,limit);
-        List<ExFriends> exFriendsList = new LinkedList<>();
-        Iterator iterator = friends.iterator();
-        while(iterator.hasNext()){
-            Friend friend = (Friend) iterator.next();
+    /**
+     *  friends -> exFriends
+     * @param friends
+     * @return
+     */
+    private List<ExFriends> setValue(List<Friend> friends){
+        List<ExFriends> exFriendsList = Lists.newLinkedList();
+        for (Friend friend:friends
+             ) {
             ExFriends exFriends = new ExFriends();
+            String friendName = userService.findUserNameById(friend.getFriend_id());
+
             exFriends.setId(friend.getId());
             exFriends.setFriendId(friend.getFriend_id());
-            String friendName = userService.findUserNameById(friend.getFriend_id());
             exFriends.setFriendName(friendName);
-
             exFriends.setEmail(userService.findUsersByName(friendName).getEmail());
             exFriends.setSex(userService.findUsersByName(friendName).getSex());
             exFriends.setPaperCount(paperService.findCountOfPaperByUser(friendName));
             exFriendsList.add(exFriends);
         }
         return exFriendsList;
+    }
+
+    @Override
+    public List<ExFriends> findAllFriedns(String userName,int pageNum) {
+        int userId = getAuthorId(userName);
+        int limit= Paging.LIMIT.getValue();
+        List<Friend> friends = friendMapper.findAllFriend(userId,(pageNum-1) * limit,limit);
+        return setValue(friends);
     }
 
     @Override

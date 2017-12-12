@@ -1,6 +1,9 @@
 package com.nanyin.service.serviceImpl;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.nanyin.config.PaperAndComments;
+import com.nanyin.config.common.Paging;
 import com.nanyin.mapper.FavesMapper;
 import com.nanyin.model.Faves;
 import com.nanyin.model.Paper;
@@ -28,6 +31,7 @@ public class FavesServiceImpl implements FavesService {
     FavesMapper favesMapper;
     @Autowired
     PaperService paperService;
+
     @Override
     public int insertFavesItem(String userName, String pageId) {
         int userId = userService.findAuthorByName(userName);
@@ -35,25 +39,34 @@ public class FavesServiceImpl implements FavesService {
         return favesMapper.insertFavesItem(userId,paperId);
     }
 
+    /**
+     * 验证faves是否为空
+     * @param faves
+     * @return
+     */
+    private Boolean favesIsNull(Faves faves){
+        if(faves == null){
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public Map<String, Boolean> checkIsFaves(String userName, String pageId) {
         int userId = userService.findAuthorByName(userName);
         int paperId = Integer.parseInt(pageId);
+        Map<String,Boolean> map = Maps.newHashMap();
         Faves faves = favesMapper.findFavesItem(userId,paperId);
-        boolean flag = false;
-        if (faves != null){
-            flag = true;
-        }
-        Map<String,Boolean> map = new HashMap<>();
+        boolean flag =favesIsNull(faves);
         map.put("flag",flag);
         return map;
     }
 
     @Override
     public Map<String, Object> findFaves(String userName, String search,int pageNum) {
-        int limit = 10 ;
+        int limit = Paging.LIMIT.getValue();
         int userId = userService.findAuthorByName(userName);
-        List<PaperAndComments> paperList = new LinkedList<>();
+        List<PaperAndComments> paperList = Lists.newLinkedList();
         List<Faves> faves = favesMapper.findAllFavesItem(userId,(pageNum-1) * limit,limit);
         List<PaperAndComments> papers = paperService.findAllPapers(search);
         for (PaperAndComments p : papers) {
@@ -64,7 +77,7 @@ public class FavesServiceImpl implements FavesService {
                 }
             }
         }
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = Maps.newHashMap();
         map.put("data",paperList);
         map.put("count",favesMapper.findAllFavesItemNoLimit(userId).size());
         map.put("code",0);
