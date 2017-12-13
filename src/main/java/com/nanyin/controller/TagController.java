@@ -1,5 +1,9 @@
 package com.nanyin.controller;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.nanyin.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,42 +23,43 @@ import java.util.logging.Logger;
 @Controller
 @RequestMapping("/tag")
 public class TagController {
-    Logger logger = Logger.getLogger(this.getClass().getName());
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Autowired
     TagService tagService;
 
     @RequestMapping("/PersonalTag/{name}")
-    public @ResponseBody Map<String,Object> PersonalTag(@PathVariable("name") String name){
+    public @ResponseBody
+    Multimap<String,Map<String,Object>> PersonalTag(@PathVariable("name") String name){
         Set<String> tagname = tagService.findTagNameByUser(name);
-
-        Map<String,Object> map = new HashMap<>();
-        List List = new ArrayList<>();
-
-        Iterator iterator = tagname.iterator();
-        while (iterator.hasNext()){
-            Map<String,Object> map1 = new HashMap<>();
-
-            String tag_name = (String) iterator.next();
-            logger.info(tag_name);
-            int count = tagService.findTagCountByTagName(name,tag_name);
-            map1.put("tag_name", tag_name);
-            map1.put("count",count);
-            List.add(map1);
-        }
-
-        map.put("tagList",List);
+        Multimap<String,Map<String,Object>> map = HashMultimap.create();
+        List<Map<String,Object>> list = Lists.newArrayList();
+        loopTagNameSet(name,tagname,list);
+        map.putAll("tagList",list);
         return map;
     }
+
+    private void loopTagNameSet(String name,Set<String> tagname,List<Map<String,Object>> list){
+        for (String s:tagname
+             ) {
+            Map<String,Object> map = Maps.newHashMap();
+            int count = tagService.findTagCountByTagName(name,s);
+            map.put("tag_name", s);
+            map.put("count",count);
+            list.add(map);
+        }
+    }
+
     @RequestMapping("/findAllTagsByName/{name}")
     public @ResponseBody Map<String,Object> findAllTagsByName(@PathVariable("name") String name){
             Set<String> list = tagService.findTagNameByUser(name);
-            logger.info("set:"+list);
-            Map<String ,Object> map = new HashMap<>();
+            Map<String ,Object> map = Maps.newHashMap();
             boolean flag = true ;
+
             if(list.size() == 0){
                 flag = false;
             }
+
             map.put("flag",flag);
             map.put("list",list);
             return map;
@@ -85,10 +90,7 @@ public class TagController {
     }
     @RequestMapping("/insertTags/{id}")
     public @ResponseBody int insertTags(@RequestParam("newTag") String name,@PathVariable("id") int id){
-        logger.info(name);
-        int insert = tagService.insertTagNameByPaperId(name, id);
-        logger.info("返回值:"+insert);
-        return insert;
+        return tagService.insertTagNameByPaperId(name, id);
     }
 
 }

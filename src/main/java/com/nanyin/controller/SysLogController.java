@@ -1,5 +1,8 @@
 package com.nanyin.controller;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.nanyin.model.SysLog;
 import com.nanyin.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +33,12 @@ public class SysLogController {
 
     @RequestMapping("/sysLog/findSysLog")
     public @ResponseBody
-    Map<String,Object> findSysLog(HttpServletRequest request){
+    Multimap<String,SysLog> findSysLog(HttpServletRequest request){
         HttpSession session = request.getSession();
         String userName = (String) session.getAttribute("user");
-        Map<String,Object> map = new HashMap<>();
+        Multimap<String,SysLog> map = HashMultimap.create();
         List<SysLog> list = sysLogService.findLogByUserName(userName);
-        map.put("list",list);
+        map.putAll("list",list);
         return map;
     }
 }

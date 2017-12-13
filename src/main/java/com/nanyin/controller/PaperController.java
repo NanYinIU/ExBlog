@@ -2,8 +2,12 @@ package com.nanyin.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.nanyin.config.InsertPojo;
 import com.nanyin.config.PaperAndComments;
+import com.nanyin.config.common.Paging;
 import com.nanyin.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,32 +36,36 @@ public class PaperController {
     TagService tagService;
     @Autowired
     ColumnService columnService;
-    @RequestMapping("/returnHome")
-    public ModelAndView returnHome(){
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
-        return modelAndView;
-    }
-//    限制在5 篇
+    /**
+     * 返回文章和评论的信息 按时间排序
+     * @return
+     */
     @RequestMapping("/PapersByTime")
     public @ResponseBody
-    Map<String,Object> PapersByTime(){
-        Map<String,Object> map = paperService.findAllPapersByTime();
-        return map;
+    Multimap<String, PaperAndComments>PapersByTime(){
+        return paperService.findAllPapersByTime();
     }
 
+    /**
+     * mark增加
+     * @param mark
+     * @param id
+     * @return
+     */
     @RequestMapping("/markAdd")
     public @ResponseBody int markAdd(String mark,String id){
-        System.out.println(mark);
         int marked = Integer.parseInt(mark);
         return paperService.updateMarkByTitle(marked+1, id);
     }
 
-//    同样限制在5 篇
+    /**
+     * 返回文章和评论信息 按热度排序
+     * @return
+     */
     @RequestMapping("/PapersByMark")
     public @ResponseBody
-    Map<String,Object> PapersByMark(){
+    Multimap<String, PaperAndComments> papersByMark(){
         return paperService.findAllPapersByMark();
     }
 
@@ -73,6 +81,18 @@ public class PaperController {
         modelAndView.addObject("pageInfo",pageInfo);
         return modelAndView;
     }
+
+    @RequestMapping("/manage/pageMes")
+    public ModelAndView pageManage(String url){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("InnerLayui/pageMes");
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("url",url);
+        modelAndView.addAllObjects(map);
+
+        return modelAndView;
+    }
+
     @RequestMapping("/HomePage/{pageNum}")
     public @ResponseBody
     ModelAndView  HomePage(
@@ -80,8 +100,8 @@ public class PaperController {
             @RequestParam(value = "search", required = false) String search){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("SearchIndex");
-        PageHelper.startPage(pageNum,8);
-        PageInfo pageInfo = paperService.findAllPapers(search,pageNum);;
+        PageHelper.startPage(pageNum, Paging.LIMIT.getValue()-2);
+        PageInfo pageInfo = paperService.findAllPapers(search,pageNum);
         modelAndView.addObject("pageInfo",pageInfo);
         return modelAndView;
     }
@@ -110,7 +130,7 @@ public class PaperController {
     ModelAndView page(@PathVariable("id") int id){
                 ModelAndView modelAndView = new ModelAndView();
                 modelAndView.setViewName("page");
-                Map<String,Object> map = new HashMap<>();
+                Map<String,Object> map = Maps.newHashMap();
 
                 map.put("page",paperService.findAllAttriOfPapaer(id));
                 modelAndView.addAllObjects(map);
@@ -140,9 +160,9 @@ public class PaperController {
             @PathVariable("pageNum")int pageNum,
             @RequestParam(value = "search", required = false) String search)
     {
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = Maps.newHashMap();
         List list =  paperService.findPaperByUserName(name,search);
-        PageHelper.startPage(pageNum,10);
+        PageHelper.startPage(pageNum,Paging.LIMIT.getValue());
         PageInfo pageInfo = new PageInfo(list);
         map.put("pageInfo",pageInfo);
         ModelAndView modelAndView = new ModelAndView();
@@ -151,22 +171,39 @@ public class PaperController {
         return modelAndView;
     }
 
+    /**
+     *
+     * @param id 文章的id
+     * @return
+     */
     @RequestMapping("/paper/delect/{id}")
     public @ResponseBody
     int deletePaperByPaperId(@PathVariable("id") int id){
-        int A = paperService.deletePaperByPaperId(id);
-        //这里手动把对应的tag删除
-        //先查对应的paperid里有没有tag
         int hasTag = tagService.findHasTagByPaperId(id);
+        checkPaperHasTag(hasTag,id);
+        return paperService.deletePaperByPaperId(id);
+    }
+
+    /**
+     * 检查文章中是否有tag 有就删除
+     * @param hasTag
+     * @param id
+     */
+    private void checkPaperHasTag(int hasTag,int id){
         if(hasTag!=0){
-            tagService.delectTag(id);
+            logger.info("文章里面有Tag 准备删除tag");
+            try{
+                tagService.delectTag(id);
+            }catch (Exception e){
+                logger.info("删除过程出错");
+            }
+            logger.info("删除文章的tag 成功");
         }
         else {
             logger.info("这个paper没有tag");
         }
-        logger.info("返回值："+A);
-        return A;
     }
+
 
     @RequestMapping("/paper/findPaperByName/{name}/{pageNum}")
     public @ResponseBody Map<String,Object> findPaperByName(
@@ -193,29 +230,41 @@ public class PaperController {
         String content = insertPojo.getMain1();
         String newTag = insertPojo.getNewTag();
         String segment = insertPojo.getSegment();
-        List<String> tags = new LinkedList<>();
+
+        List<String> tags = Lists.newLinkedList();
         List<String> tag = insertPojo.getTag();
 
-        if(tag!=null){
-            tags.addAll(tag);
-        }
-        tags.add(newTag);
+        addTags(tags,tag,newTag);
+
         String theme = insertPojo.getTheme();
         // 插入里一条paper的记录 自动生成一个id值
         int result = paperService.insertPaper(title,content,segment,user);
         // 根据信息查询paper的id
-        int paperid = paperService.findPaperId(title,segment,user);
+        int paperId = paperService.findPaperId(title,segment,user);
         // 插入tag和主题
         if(tags.size()!=0){
-            tagService.insertTagByUserId(tags,paperid);
+            tagService.insertTagByUserId(tags,paperId);
         }
         if(theme != null && !"".equals(theme)){
             int columnId = columnService.findColumnId(theme);
-            int result1 = columnService.insertColumnPaper(columnId,paperid);
+            int result1 = columnService.insertColumnPaper(columnId,paperId);
         }
 
         return result ;
     }
+
+    /**
+     * 根据条件添加tags
+     * @param tags
+     * @param tag
+     * @param newTag
+     */
+        private void addTags(List<String> tags,List<String> tag ,String newTag){
+            if(tag!=null){
+                tags.addAll(tag);
+            }
+            tags.add(newTag);
+        }
 
     @RequestMapping("/paper/PreAndNextPage")
     public @ResponseBody Map<String ,Object> findPreAndNextPage(@RequestParam("paperId") int paperId){

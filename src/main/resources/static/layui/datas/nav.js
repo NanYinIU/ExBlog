@@ -5,11 +5,11 @@ var navs = [{
 	"children": [{
 		"title": "文章管理",
 		"icon": "&#xe641;",
-		"href": "/cte"
+		"href": "/manage/pageMes"
 	},  {
         "title": "新建文章",
         "icon": "&#xe63c;",
-        "href": "/markDown"
+        "href": "/newPage"
     }]
 }, {
 	"title": "个人信息管理",

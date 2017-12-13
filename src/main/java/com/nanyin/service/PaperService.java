@@ -1,6 +1,7 @@
 package com.nanyin.service;
 
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Multimap;
 import com.nanyin.config.AllAttriOfPaper;
 import com.nanyin.config.PaperAndColumn;
 import com.nanyin.config.PaperAndComments;
@@ -21,9 +22,9 @@ public interface PaperService {
 
     Map<String,Object> findPapers(int pageNum,String search,String interval);
 
-    Map<String,Object> findAllPapersByTime();
+    Multimap<String, PaperAndComments> findAllPapersByTime();
 
-    Map<String,Object>  findAllPapersByMark();
+    Multimap<String, PaperAndComments>  findAllPapersByMark();
 
     int updateMarkByTitle(int mark,String id);
 

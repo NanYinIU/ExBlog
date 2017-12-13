@@ -2,6 +2,7 @@ package com.nanyin.controller;
 
 import com.google.common.collect.Maps;
 import com.nanyin.config.ExFriends;
+import com.nanyin.config.common.IsFriend;
 import com.nanyin.model.Friend;
 import com.nanyin.model.Users;
 import com.nanyin.service.FriendService;
@@ -73,7 +74,7 @@ public class FriendController {
         HttpSession session = request.getSession();
         String userName = (String) session.getAttribute("user");
         List<ExFriends> list = friendService.findAllFriedns(userName,pageNum);
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = Maps.newHashMap();
         int count = friendService.findCountOfFriend(userName);
         map.put("data",list);
         map.put("code",0);
@@ -97,6 +98,7 @@ public class FriendController {
      * @param friendId
      * @return
      */
+
     @RequestMapping("/user/checkFriendName")
     public @ResponseBody int checkFriendName(@RequestParam("userId") String userId, @RequestParam("friendId") String friendId){
         //需要两部分 昵称是否存在？ 是否已经成为好友？
@@ -104,14 +106,14 @@ public class FriendController {
             Users users = userService.findUsersByName(friendId);
 
             if(users == null){
-                return 3;
+                return IsFriend.NO_USERNAME.getValue();
             }else if (friendService.findFriendById(userId, friendId) != null){
-                return 2;
+                return IsFriend.NOT_FRIEND.getValue();
             }else {
-                return 1;
+                return IsFriend.IS_FRIEND.getValue();
             }
         }catch (Exception e){
-            return 0;
+            return IsFriend.HAS_EXCEPTION.getValue();
         }
     }
 

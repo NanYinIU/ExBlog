@@ -1,5 +1,6 @@
 package com.nanyin.controller;
 
+import com.google.common.collect.Maps;
 import com.nanyin.service.PaperService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,59 +26,74 @@ public class OtherController {
     PaperService paperService;
 
     Logger logger = Logger.getLogger(this.getClass());
-    @RequestMapping("/markDown")
-    public String markDown(@RequestParam(value = "content",required = false) String content){
+
+    /**
+     * 编辑页面
+     * @param content
+     * @return
+     */
+    @RequestMapping("/newPage")
+    public String markDown(
+            @RequestParam(value = "content",required = false) String content){
         return  "markDown";
     }
+
+    /**
+     * 返回管理页面
+     * @return
+     */
     @RequestMapping("/cit")
     public String cit(){
         return "Manage";
     }
+
+    /**
+     * 返回管理页面 默认主页
+     * @return
+     */
     @RequestMapping("/mainPage")
     public String main(){
         return "InnerLayui/main";
     }
 
-    @RequestMapping("/cte")
-    public ModelAndView cte(String url){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("InnerLayui/pageMes");
-        Map<String,Object> map = new HashMap<>();
-        map.put("url",url);
-        modelAndView.addAllObjects(map);
-
-        return modelAndView;
-    }
-    @RequestMapping("/M1")
-    public String M1(){
+    /**
+     * 返回新建文章的提交页面
+     * @return
+     */
+    @RequestMapping("/newPage/submit")
+    public String newPageSubmit(){
         return "InnerLayui/submit";
     }
 
-    @RequestMapping("/model")
-    public ModelAndView model(@RequestParam(value = "content",required = false) String content, HttpServletRequest request){
-        ModelAndView modelAndView = new ModelAndView();
-        logger.info("content ="+content);
-        Map<String,Object> map = new HashMap<>();
-        logger.info("map="+map);
-        modelAndView.setViewName("InnerLayui/submit");
-        modelAndView.addAllObjects(map);
-        modelAndView.addObject("content",content);
-        logger.info(modelAndView.getModelMap());
-        return modelAndView;
-    }
-    @RequestMapping("/newMD/{id}")
-    public ModelAndView newMD(@PathVariable("id") String id){
+    /**
+     * 返回修改文章内容页面
+     * @param id
+     * @return
+     */
+    @RequestMapping("/updatePageContent/{id}")
+    public ModelAndView updatePageContent(@PathVariable("id") String id){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("paper",paperService.findPaperById(id));
         modelAndView.setViewName("InnerLayui/UpdatemarkDown");
         return modelAndView;
     }
 
+    /**
+     * springmvc 图片上传
+     * @param userName
+     * @param file
+     * @param request
+     * @return
+     * @throws IOException
+     */
+
     @RequestMapping("/uploadImg")
-    public @ResponseBody Map<String,Object> uploadImg(String userName ,@RequestParam(value="file",required=false) MultipartFile file,
-                                  HttpServletRequest request) throws IOException{
+    public @ResponseBody Map<String,Object> uploadImg(
+                                    String userName ,
+                                    @RequestParam(value="file",required=false) MultipartFile file,
+                                    HttpServletRequest request) throws IOException{
         int flag = 1 ;
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = Maps.newHashMap();
         //物理路径
         String pathRoot = request.getSession().getServletContext().getRealPath("");
         logger.info("物理路径:"+pathRoot);
@@ -102,7 +118,6 @@ public class OtherController {
             }
 
         }
-        System.out.println(path);
         map.put("imagesPath",path);
         map.put("flag",flag);
         return map;

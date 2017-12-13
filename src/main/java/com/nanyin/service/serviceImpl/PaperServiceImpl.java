@@ -2,8 +2,10 @@ package com.nanyin.service.serviceImpl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.nanyin.config.AllAttriOfPaper;
 import com.nanyin.config.PaperAndColumn;
 import com.nanyin.config.PaperAndComments;
@@ -121,20 +123,20 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
-    public Map<String, Object> findAllPapersByTime() {
-        Map<String,Object> map = new HashMap<>();
+    public Multimap<String, PaperAndComments> findAllPapersByTime() {
+        Multimap<String, PaperAndComments> map = HashMultimap.create();
         List<Paper> papers = paperMapper.findAllPapersByTime();
         List<PaperAndComments> paperAndComments = paperAndCommentsList(papers);
-        map.put("paper",paperAndComments);
+        map.putAll("paper",paperAndComments);
         return map;
     }
 
     @Override
-    public Map<String, Object> findAllPapersByMark() {
-        Map<String,Object> map = new HashMap<>();
+    public Multimap<String, PaperAndComments>  findAllPapersByMark() {
+        Multimap<String, PaperAndComments> map = HashMultimap.create();
         List<Paper> papers = paperMapper.findAllPapersByMark();
         List<PaperAndComments> paperAndComments = paperAndCommentsList(papers);
-        map.put("paper",paperAndComments);
+        map.putAll("paper",paperAndComments);
         return map;
 
     }

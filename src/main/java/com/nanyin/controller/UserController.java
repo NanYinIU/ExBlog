@@ -1,6 +1,7 @@
 package com.nanyin.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Maps;
 import com.nanyin.config.common.ModifiPass;
 import com.nanyin.config.logConfig.Log;
 import com.nanyin.model.To.UserAndRoles;
@@ -40,7 +41,9 @@ import java.util.Map;
 public class UserController {
 
     private static final int SUCCESS_FOR_NOW = 1 ;
-    Logger logger = Logger.getLogger(this.getClass().getName());
+
+    private Logger logger = Logger.getLogger(this.getClass().getName());
+
     @Autowired
     ModifiPass modifiPass;
     @Autowired
@@ -91,27 +94,27 @@ public class UserController {
     @RequestMapping("/userMes/{name}")
     public @ResponseBody Users userMes(
             @PathVariable("name") String name){
-        Users users = userService.findUsersByName(name);
-
-        return users;
+        return userService.findUsersByName(name);
     }
+
     @RequestMapping("/user/detailPage2/{name}")
     public @ResponseBody Map<String,Object> getDetail2(@PathVariable("name") String name){
         Map<String,Object> map = new HashMap<>();
         map.put("user",userService.getUserParam(name));
         return map;
     }
+
     @RequestMapping("/user/detailPage")
     public @ResponseBody
     ModelAndView getDetail(HttpServletRequest request){
         HttpSession session = request.getSession();
         String name = (String) session.getAttribute("user");
-        logger.info("在session中获得username:"+name);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("InnerLayui/userDetail");
         modelAndView.addObject("user",userService.getUserParam(name));
         return modelAndView;
     }
+
     @RequestMapping("/user/updateDetail")
     public @ResponseBody int updateUserDetail(@RequestParam("imgMes") String imgMes,
                                               @RequestParam("userName") String userName,
@@ -135,9 +138,8 @@ public class UserController {
                               @RequestParam("newPassword1")String newPassword1,HttpServletRequest request){
         HttpSession session = request.getSession();
         String userName = (String) session.getAttribute("user");
-        logger.info("newPass:"+newPassword);
+
         if(modifiPass.checkOldPassWordIsRight(userName,oldPassword) != SUCCESS_FOR_NOW){
-//  4
                 return modifiPass.checkOldPassWordIsRight(userName,oldPassword);
         }
         else if(modifiPass.checkNewPassIsNotNull(newPassword,newPassword1) != SUCCESS_FOR_NOW ){
@@ -147,7 +149,6 @@ public class UserController {
             return modifiPass.checkIsEquals(newPassword, newPassword1);
         }
         else {
-            // 1
             return userService.updateUserPass(userName,newPassword,oldPassword);
         }
     }
@@ -169,7 +170,7 @@ public class UserController {
     }
     @RequestMapping("/user/userManage/{pageNum}")
     public @ResponseBody Map<String,Object> userManage(@PathVariable("pageNum") int pageNum){
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = Maps.newHashMap();
 
         List<UserAndRoles>  list = userService.userAndRole(pageNum);
         map.put("data",list);
