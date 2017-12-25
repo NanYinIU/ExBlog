@@ -8,7 +8,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.nanyin.model.Column;
 import com.nanyin.service.ColumnService;
-import javafx.scene.effect.SepiaTone;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,20 +35,20 @@ public class ColumnController {
 
     @RequestMapping("/findColumByCount")
     public @ResponseBody
-    Multimap<String,Column> findColumByPaperCount(){
+    Map<String, List<Column>> findColumByPaperCount(){
         List<Column> list = columnService.findColumByPaperCount();
-        Multimap<String,Column> multimap = HashMultimap.create();
-        multimap.putAll("colum",list);
-        return multimap;
+        Map<String, List<Column>> map = Maps.newHashMap();
+        map.put("colum",list);
+        return map;
     }
 
     @RequestMapping("/findAllColumn2")
     public @ResponseBody
-    Multimap<String,Column> findAllColumn2(){
+    Map<String, List<Column>> findAllColumn2(){
         List<Column> list = columnService.findAllColumn();
-        Multimap<String,Column> multimap = HashMultimap.create();
-        multimap.putAll("list",list);
-        return multimap;
+        Map<String, List<Column>> map = Maps.newHashMap();
+        map.put("list",list);
+        return map;
     }
 
     @RequestMapping("/findAllColumn/{pageNum}")
@@ -66,13 +65,13 @@ public class ColumnController {
     }
 
     @RequestMapping("/PersonalColumn/{name}")
-    public @ResponseBody Multimap<String,Map<String,Object>> personalColumn(@PathVariable("name") String name){
+    public @ResponseBody Map<String, List<Map<String,Object>>> personalColumn(@PathVariable("name") String name){
 //        column 的 title 集合
-        Multimap<String,Map<String,Object>> map = HashMultimap.create();
+        Map<String, List<Map<String,Object>>> map = Maps.newHashMap();
         Set<String> set = columnService.findCoumnByUser(name);
         List<Map<String,Object>> list = Lists.newLinkedList();
         loopSetOfCoumn(list,set,name);
-        map.putAll("columnList",list);
+        map.put("columnList",list);
         return map;
     }
 

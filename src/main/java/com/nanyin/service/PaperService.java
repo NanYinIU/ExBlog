@@ -22,9 +22,9 @@ public interface PaperService {
 
     Map<String,Object> findPapers(int pageNum,String search,String interval);
 
-    Multimap<String, PaperAndComments> findAllPapersByTime();
+    Map<String,List<PaperAndComments>> findAllPapersByTime();
 
-    Multimap<String, PaperAndComments>  findAllPapersByMark();
+    Map<String, List<PaperAndComments>>  findAllPapersByMark();
 
     int updateMarkByTitle(int mark,String id);
 

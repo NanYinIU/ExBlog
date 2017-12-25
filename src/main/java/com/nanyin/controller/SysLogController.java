@@ -33,12 +33,12 @@ public class SysLogController {
 
     @RequestMapping("/sysLog/findSysLog")
     public @ResponseBody
-    Multimap<String,SysLog> findSysLog(HttpServletRequest request){
+    Map<String,List<SysLog>> findSysLog(HttpServletRequest request){
         HttpSession session = request.getSession();
         String userName = (String) session.getAttribute("user");
-        Multimap<String,SysLog> map = HashMultimap.create();
+        Map<String,List<SysLog>>map = Maps.newHashMap();
         List<SysLog> list = sysLogService.findLogByUserName(userName);
-        map.putAll("list",list);
+        map.put("list",list);
         return map;
     }
 }

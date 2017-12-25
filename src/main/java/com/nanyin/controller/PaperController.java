@@ -43,7 +43,7 @@ public class PaperController {
      */
     @RequestMapping("/PapersByTime")
     public @ResponseBody
-    Multimap<String, PaperAndComments>PapersByTime(){
+    Map<String,List<PaperAndComments>>PapersByTime(){
         return paperService.findAllPapersByTime();
     }
 
@@ -65,7 +65,7 @@ public class PaperController {
      */
     @RequestMapping("/PapersByMark")
     public @ResponseBody
-    Multimap<String, PaperAndComments> papersByMark(){
+    Map<String,List<PaperAndComments>> papersByMark(){
         return paperService.findAllPapersByMark();
     }
 

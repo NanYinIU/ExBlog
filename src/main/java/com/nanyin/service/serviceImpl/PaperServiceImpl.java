@@ -123,20 +123,20 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
-    public Multimap<String, PaperAndComments> findAllPapersByTime() {
-        Multimap<String, PaperAndComments> map = HashMultimap.create();
+    public  Map<String,List<PaperAndComments>> findAllPapersByTime() {
+        Map<String,List<PaperAndComments>> map = Maps.newHashMap();
         List<Paper> papers = paperMapper.findAllPapersByTime();
         List<PaperAndComments> paperAndComments = paperAndCommentsList(papers);
-        map.putAll("paper",paperAndComments);
+        map.put("paper",paperAndComments);
         return map;
     }
 
     @Override
-    public Multimap<String, PaperAndComments>  findAllPapersByMark() {
-        Multimap<String, PaperAndComments> map = HashMultimap.create();
+    public  Map<String,List<PaperAndComments>> findAllPapersByMark() {
+        Map<String,List<PaperAndComments>> map = Maps.newHashMap();
         List<Paper> papers = paperMapper.findAllPapersByMark();
         List<PaperAndComments> paperAndComments = paperAndCommentsList(papers);
-        map.putAll("paper",paperAndComments);
+        map.put("paper",paperAndComments);
         return map;
 
     }
