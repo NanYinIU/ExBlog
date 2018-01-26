@@ -3,7 +3,10 @@ package com.nanyin;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.nanyin.config.common.Paging;
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.junit.Test;
+import sun.security.provider.MD5;
 
 import java.io.*;
 import java.sql.Timestamp;
@@ -68,8 +71,9 @@ public class test {
         System.out.println(map);
     }
     @Test
-    public void test5(){
-        System.out.println(Paging.LIMIT.getValue());
+    public void test5() {
+        System.out.println(new Md5Hash("123", null,1024));
+        System.out.println();
     }
 
 

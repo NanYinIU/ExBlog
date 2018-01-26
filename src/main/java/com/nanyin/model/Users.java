@@ -2,6 +2,7 @@ package com.nanyin.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -9,7 +10,7 @@ import java.sql.Timestamp;
  * 包名： com.nanyin.model
  * 类描述：user 实体类
  */
-public class Users {
+public class Users implements Serializable{
     private int id;
     private String login_name;
     private String password;

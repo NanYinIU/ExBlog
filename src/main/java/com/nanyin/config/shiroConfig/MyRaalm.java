@@ -8,6 +8,8 @@ import com.nanyin.service.UserService;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -56,8 +58,26 @@ public class MyRaalm extends AuthorizingRealm {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String name = token.getUsername();
         Users user = userService.findUsersByName(name);
-        String password = user.getPassword();
+//        if(user.getStatus()==0){
+//            logger.info("该用户帐号以冻结");
+//        }else{
+//            logger.info("用户正常登录");
+//        }
 
+        String password = user.getPassword();
+        //password 使用md5加载
         return new SimpleAuthenticationInfo(user,password,this.getClass().getName());
+    }
+
+    /**
+     * 使用md5算法加密
+     * @param credentialsMatcher
+     */
+    @Override
+    public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
+        HashedCredentialsMatcher md5CredentialsMatcher = new HashedCredentialsMatcher();
+        md5CredentialsMatcher.setHashAlgorithmName(ShiroUtil.hashAlgorithmName);
+        md5CredentialsMatcher.setHashIterations(ShiroUtil.hashIterations);
+        super.setCredentialsMatcher(md5CredentialsMatcher);
     }
 }

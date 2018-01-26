@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
 import com.nanyin.config.common.ModifiPass;
 import com.nanyin.config.logConfig.Log;
+import com.nanyin.config.shiroConfig.ShiroUtil;
 import com.nanyin.model.To.UserAndRoles;
 import com.nanyin.model.Users;
 import com.nanyin.service.UserDetailService;
@@ -52,6 +53,11 @@ public class UserController {
     UserDetailService userDetailService;
     @Autowired
     PaperController paperController;
+//     主页名称
+//    @RequestMapping("/index")
+//    public String index(){
+//        return "redirect:/user/login";
+//    }
 
     @RequestMapping("/user/login")
     public String login(){
@@ -65,25 +71,36 @@ public class UserController {
 
     @RequestMapping("/user/logout")
     public String logout(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        session.removeAttribute("user");
+        request.getSession().removeAttribute("user");
         request.getSession().invalidate();
-        return "login";
+        return "redirect:/user/login";
     }
 
     @Log(operationName = "用户登录" )
     @RequestMapping("/user/gotoIndex")
-    public String gotoIndex( String username, String password,HttpServletRequest request ,@RequestParam(value = "url",required = false) String url){
-        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username,password);
+    public String gotoIndex(@RequestParam("username") String username
+            ,@RequestParam("password") String password
+            ,@RequestParam(value = "rememberMe",required = false)String rememberMe
+            ,HttpServletRequest request
+            ,@RequestParam(value = "url",required = false) String url){
 
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username,password);
         org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
         HttpSession session = request.getSession();
-
+        //设置rememberMe
+        if("on".equals(rememberMe)){
+            usernamePasswordToken.setRememberMe(true);
+            logger.info("开启 rememberMe 功能");
+        }else{
+            usernamePasswordToken.setRememberMe(false);
+            logger.info("未开启 rememberMe 功能");
+        }
         try {
             subject.login(usernamePasswordToken);
             session.setAttribute("user",username);
             return "redirect:/HomePage/1";
         }catch (Exception r){
+            r.printStackTrace();
             return "login";
         }
 
