@@ -352,33 +352,41 @@ public class PaperServiceImpl implements PaperService {
         int prePaperNum = currentPaperNum - 1;
         int nextPaperNum = currentPaperNum + 1;
         String prePaperTitle;
+        String segment;
         int prePaperId;
         if(prePaperNum < 0){
             prePaperTitle="已经到头了";
             prePaperId = -1 ;
+            segment="";
             isPrePage = true ;
         }else {
             prePaperTitle = "上一篇："+paperList.get(prePaperNum).getTitle();
             prePaperId = paperList.get(prePaperNum).getId();
+            segment = paperList.get(prePaperNum).getSgement();
         }
         Paper prePaper = new Paper();
         prePaper.setId(prePaperId);
         prePaper.setTitle(prePaperTitle);
+        prePaper.setSgement(segment);
+
         // 下一页
         String nextPaperTitle;
+        String nextSegment;
         int nextPaperId;
         if(nextPaperNum >= paperList.size()){
             nextPaperTitle = "已经到末尾了";
             nextPaperId = -2;
+            nextSegment = "";
             isNextPage = true;
         }else {
             nextPaperTitle = "下一篇："+paperList.get(nextPaperNum).getTitle();
+            nextSegment=paperList.get(nextPaperNum).getSgement();
             nextPaperId = paperList.get(nextPaperNum).getId();
         }
         Paper nextPaper = new Paper();
         nextPaper.setId(nextPaperId);
         nextPaper.setTitle(nextPaperTitle);
-
+        nextPaper.setSgement(nextSegment);
 
         Map<String,Object> map = new HashMap<>();
 
@@ -392,6 +400,15 @@ public class PaperServiceImpl implements PaperService {
     @Override
     public int updatePaperStatus(int id, String review) {
         return paperMapper.updataPaperStatus(id,review);
+    }
+
+    @Override
+    public List<Paper> searchPreAndNextPage(int id) {
+        List<Paper> list = paperMapper.findAllPapersByTimeNoLimit();
+
+        //得到前一个页面和后一个页面
+
+        return null;
     }
 
 

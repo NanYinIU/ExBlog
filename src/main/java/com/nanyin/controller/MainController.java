@@ -21,4 +21,9 @@ public class MainController {
     public String maincontent(){
         return "/main/content";
     }
+
+    @RequestMapping("/main/page")
+    public String mainPage(){
+        return "/main/page";
+    }
 }

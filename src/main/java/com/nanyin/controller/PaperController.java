@@ -8,6 +8,7 @@ import com.google.common.collect.Multimap;
 import com.nanyin.config.InsertPojo;
 import com.nanyin.config.PaperAndComments;
 import com.nanyin.config.common.Paging;
+import com.nanyin.model.Paper;
 import com.nanyin.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -129,7 +130,7 @@ public class PaperController {
     public @ResponseBody
     ModelAndView page(@PathVariable("id") int id){
                 ModelAndView modelAndView = new ModelAndView();
-                modelAndView.setViewName("page");
+                modelAndView.setViewName("/main/page");
                 Map<String,Object> map = Maps.newHashMap();
 
                 map.put("page",paperService.findAllAttriOfPapaer(id));
@@ -266,8 +267,13 @@ public class PaperController {
             tags.add(newTag);
         }
 
-    @RequestMapping("/paper/PreAndNextPage")
-    public @ResponseBody Map<String ,Object> findPreAndNextPage(@RequestParam("paperId") int paperId){
+    /**
+     * 得到前一篇和下一片的内容
+     * @param paperId
+     * @return
+     */
+    @RequestMapping("/paper/PreAndNextPage/{paperId}")
+    public @ResponseBody Map<String ,Object> findPreAndNextPage(@PathVariable("paperId") int paperId){
          Map<String,Object> map = paperService.findPreAndNextPage(paperId);
          return map;
     }
@@ -322,6 +328,8 @@ public class PaperController {
             @PathVariable(value = "id") int id){
         return paperService.updatePaperStatus(id, review);
     }
+
+
 
 
 }

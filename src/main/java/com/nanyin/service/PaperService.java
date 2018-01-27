@@ -68,4 +68,6 @@ public interface PaperService {
 
     int updatePaperStatus(int id,String review);
 
+    List<Paper> searchPreAndNextPage(int id);
+
 }
