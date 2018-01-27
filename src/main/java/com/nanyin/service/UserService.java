@@ -25,6 +25,8 @@ public interface UserService {
 
     Users findUsersByName(String name);
 
+    Users findUsersById(int id);
+
     Users findUsersByName(String name,int page,int pageNum);
 
     int findAuthorByName(String name);

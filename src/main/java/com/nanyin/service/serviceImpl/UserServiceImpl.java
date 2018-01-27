@@ -60,6 +60,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Users findUsersById(int id) {
+        return userMapper.findUserById(id);
+    }
+
+    @Override
     public Users findUsersByName(String name, int page, int pageNum) {
         return userMapper.findUsersByNameLimit(name, page, pageNum);
     }

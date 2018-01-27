@@ -14,6 +14,7 @@ import java.util.Set;
 @Service
 public interface TagService {
 
+    Set<String> findAllTagName();
 
     Set<String> findTagNameByUser(String name);
 

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Index</title>
+<link href="/main/css/bootstrap.css" rel='stylesheet' type='text/css' />
+<script src="/main/js/jquery.min.js"></script>
+<link href="/main/css/style.css" rel="stylesheet" type="text/css" media="all" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<script type="text/javascript" src="/main/js/bootstrap.js"></script>
+
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'/>
+<link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'/>
+<script src="/main/js/responsiveslides.min.js"></script>
+	<script>
+		$(function () {
+		  $("#slider").responsiveSlides({
+			auto: true,
+			nav: true,
+			speed: 500,
+			namespace: "callbacks",
+			pager: true,
+		  });
+		});
+	</script>
+	<script type="text/javascript" src="/main/js/move-top.js"></script>
+	<script src="/assets/js/template-web.js"></script>
+	<script type="text/javascript" src="/main/js/easing.js"></script>
+<!--/script-->
+<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".scroll").click(function(event){
+					event.preventDefault();
+					$('html,body').animate({scrollTop:$(this.hash).offset().top},900);
+				});
+			});
+</script>
+</head>
+<body>
+	<!-- header-section-starts-here -->
+		<div class="header">
+		<div class="header-bottom">
+			<div class="navigation">
+				<nav class="navbar navbar-default" role="navigation">
+		    <div class="wrap">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+
+				</div>
+				<!--/.navbar-header-->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					 <li class="active"><a href="index.html">SOCIAL BLOG</a></li>
+						<li><a href=""><h4>博客专栏</h4></a></li>
+				    <li>
+						<a href="#" data-toggle="dropdown"><h4>个人主页</h4></a>
+					  </li>
+					<li><a href=""><h4>博客管理</h4></a></li>
+					<li><a href=""><h4>文章库</h4></a></li>
+                    <li th:if="${session.user == null}"><a href="" ><h4>登录</h4></a></li>
+                    <li th:if="${session.user != null}"><a href=""><h4>登出</h4></a></li>
+					<div class="clearfix"></div>
+				</ul>
+				<div class="search">
+					<!-- start search-->
+				    <div class="search-box">
+					    <div id="sb-search" class="sb-search">
+							<form>
+								<input class="sb-search-input" placeholder="Enter your search term..." type="search" name="search" id="search"/>
+								<input class="sb-search-submit" type="submit" value=""/>
+								<span class="sb-icon-search"> </span>
+							</form>
+						</div>
+				    </div>
+					<!-- search-scripts -->
+					<script src="/main/js/classie.js"></script>
+					<script src="/main/js/uisearch.js"></script>
+						<script>
+							new UISearch( document.getElementById( 'sb-search' ) );
+						</script>
+					<!-- //search-scripts -->
+					</div>
+					<div class="clearfix"></div>
+			</div>
+			</div>
+				</nav>
+			</div>
+
+		</div>
+
+	<!-- header-section-ends-here -->
+	<div class="wrap">
+
+	</div>
+
+	<!-- content-section-starts-here -->
+	<div class="main-body">
+		<div class="wrap">
+			<div class="col-md-8 content-left">
+				<!--content 开始-->
+				<!--<iframe id="mainIframe" src="/main/content" scrolling="no" marginheight="0px" height="2300px" width="100%" marginwidth="0px" border="0px" frameborder="no" allowTransparency="true" allowfullscreen ></iframe>-->
+                <div th:include="/main/content :: indexContent"></div>
+                <!--content结束-->
+            </div>
+
+			<div class="col-md-4 side-bar">
+			<div class="first_half">
+				<div class="newsletter">
+					<h1 class="side-title-head">登录状态</h1>
+					<!--<p class="sign">登录可评论文章和管理博客内容</p>-->
+
+
+                    <a th:if="${session.user != null}"><a href="#" class="logo"><img id="img" src="/images/avatar.jpg" th:width="80px" height="80px" /></a></a>
+                    <!--<a th:if="${session.user == null}"><a href="/user/login" class="logo"><img src="/images/unlogin.jpg" th:width="80px" height="80px" alt="" /></a></a>-->
+
+                    <a th:if="${session.user == null}">&nbsp;未登录</a>
+                    <a th:if="${session.user != null}">
+                        <b class="sign" th:text="${session.user}"></b> 正在登录</a>
+                <input type="hidden" th:value="${session.user}" id="userId" />
+                    <script>
+                        $(document).ready(function () {
+                            var user = document.getElementById("userId").value;
+                            $.ajax({
+                                type: "post",
+                                dataType: "json",
+                                url: '/userMes/' + user,
+                                timeout: 20000,
+                                cache: false,
+                                success: function (data) {
+                                    document.getElementById("img").src = data.head;
+                                }
+                            })
+                        })
+                    </script>
+				</div>
+				<div class="list_vertical">
+		        <section class="accordation_menu">
+						</section>
+					 </div>
+					 </div>
+					 <div class="secound_half">
+						 <!--标签栏 全部标签 限量20-->
+					 <div class="tags">
+
+						<header>
+							<h3 class="title-head">Tags</h3>
+						</header>
+						 <script type="text/javascript">
+                             var h1 ='';
+                             $(document).ready(function () {
+                                 var url = '/tag/tags';
+                                 $.ajax( {
+                                     type : "post",
+                                     dataType:"json",
+                                     url : url,
+                                     timeout : 20000,
+                                     cache : false,
+                                     success : function(data) {
+//                alert(JSON.stringify(data.column[0]));
+                                         h1 = template('tags', data);
+                                         document.getElementById('tagContent').innerHTML = h1;
+                                     }
+
+                                 });
+                             })
+                             function randomy() {
+                                 return Math
+                                     .random();
+                             }
+						 </script>
+
+
+							<script type="text/html" id="tags">
+								{{each tags value i}}
+								<a id="tagName" class="tag{{i}}" th:href="@{/home}" >{{value}} </a>
+								{{/each}}
+
+							</script>
+
+						 <p id="tagContent"></p>
+
+					 </div>
+
+
+					 <div class="popular-news">
+						<header>
+							<h3 class="title-popular">精品文章</h3>
+						</header>
+						 <!-- 侧边栏热门文章 art-templete 开始-->
+						 <script type="text/html" id="post_list">
+							 <div class="popular-grid">
+								 <a href="single.html"><img src="{{paper_image}}" alt="" /></a>
+								 <a class="title" href="single.html">{{title}}</a>
+								 <p href="single.html">{{segment}}</p>
+								 <p>{{create_time}} <a class="span_link" href="#"><span class="glyphicon glyphicon-comment"></span>{{count}} </a><a class="span_link" href="#"><span class="glyphicon glyphicon-thumbs-up"></span>{{mark}}</a></p>
+							 </div>
+						 </script>
+						 <script type="text/javascript">
+                             var html3 ='';
+                             $(document).ready(function () {
+                                 url = '/PapersByMark';
+                                 $.ajax( {
+                                     type : "post",
+                                     dataType:"json",
+                                     url : url,
+                                     timeout : 20000,
+                                     cache : false,
+                                     success : function(data) {
+//                alert(JSON.stringify(data.column[0]));
+                                         var i;
+                                         var j;
+                                         for(i in data.paper){
+                                             html3 = template('post_list', data.paper[i])+html3;
+                                         }
+                                         document.getElementById('content4').innerHTML = html3;
+                                     }
+
+                                 });
+                             })
+						 </script>
+						<div class="popular-grids">
+							<div id="content4"></div>
+						</div>
+						 <!-- 侧边栏热门文章 art-templete 结束-->
+					</div>
+					</div>
+					<div class="clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+	<!-- content-section-ends-here -->
+
+	<!-- footer-section-starts-here -->
+	<div class="footer">
+		<div class="footer-top">
+			<div class="wrap">
+				<div class="col-md-4 col-xs-6 col-sm-4 footer-grid">
+					<h4 class="footer-head">关于我们</h4>
+					<p>github地址:xxxx-xxxx-xxxx-xxxx-xxxx-xxxx</p>
+                    <p>项目地址:xxxx-xxxx-xxxx-xxxx-xxxx-xxxx</p>
+                    <p>使用框架结构:xxxx-xxxx-xxxx-xxxx-xxxx-xxxx</p>
+                    <p>通用教程和资料:xxxx-xxxx-xxxx-xxxx-xxxx-xxxx</p>
+				</div>
+				<div class="col-md-4 col-xs-8 col-sm-2 footer-grid">
+					<h4 class="footer-head">分类</h4>
+					<ul class="cat">
+						<li><a href="business.html">主页</a></li>
+						<li><a href="technology.html">博客专栏</a></li>
+						<li><a href="entertainment.html">个人主页</a></li>
+						<li><a href="sports.html">博客管理</a></li>
+						<li><a href="shortcodes.html">所有文章</a></li>
+					</ul>
+				</div>
+
+				<div class="col-md-4 col-xs-8 footer-grid">
+					<h4 class="footer-head">联系我们</h4>
+					<address>
+						<ul class="location">
+							<li><span class="glyphicon glyphicon-map-marker"></span></li>
+							<li>天津理工大学 计算机科学与技术</li>
+							<div class="clearfix"></div>
+						</ul>
+						<ul class="location">
+							<li><span class="glyphicon glyphicon-earphone"></span></li>
+							<li>151-226-36xxx</li>
+							<div class="clearfix"></div>
+						</ul>
+						<ul class="location">
+							<li><span class="glyphicon glyphicon-envelope"></span></li>
+							<li><a href="mailto:info@example.com">1977713379@qq.com</a></li>
+							<div class="clearfix"></div>
+						</ul>
+					</address>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+
+	</div>
+	<!-- footer-section-ends-here -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+				/*
+				var defaults = {
+				wrapID: 'toTop', // fading element id
+				wrapHoverID: 'toTopHover', // fading element hover id
+				scrollSpeed: 1200,
+				easingType: 'linear'
+				};
+				*/
+		$().UItoTop({ easingType: 'easeOutQuart' });
+});
+</script>
+<a href="#to-top" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+<!----></div>
+</body>
+</html>

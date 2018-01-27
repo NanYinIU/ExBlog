@@ -71,8 +71,12 @@ public class UserController {
 
     @RequestMapping("/user/logout")
     public String logout(HttpServletRequest request){
-        request.getSession().removeAttribute("user");
-        request.getSession().invalidate();
+        try{
+            request.getSession().removeAttribute("user");
+            request.getSession().invalidate();
+        }catch (Exception e){
+
+        }
         return "redirect:/user/login";
     }
 

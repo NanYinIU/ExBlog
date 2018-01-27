@@ -113,6 +113,11 @@ public interface UserMapper {
     })
     List<Users> findAllUsersLimit(@Param("search") String search,@Param("page") int page,@Param("limit") int limit);
 
+    /**
+     * 根据用户id查用户
+     * @param id
+     * @return
+     */
     @Select("SELECT * FROM social_blog.users WHERE id = #{id}")
     Users findUserById(@Param("id") int id);
 

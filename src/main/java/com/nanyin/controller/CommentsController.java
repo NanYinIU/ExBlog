@@ -37,5 +37,9 @@ public class CommentsController {
         return commentsService.insertComments(comment,id);
     }
 
+    @RequestMapping("/comments/commentsWithPaperAndUserMes")
+    public @ResponseBody Map<String,Object> commentsWithPaperAndUserMes(){
+        return commentsService.findAllCommentsOrderByTime();
+    }
 
 }

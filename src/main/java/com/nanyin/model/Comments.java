@@ -11,7 +11,7 @@ import java.sql.Timestamp;
  */
 public class Comments {
     private int id;
-    private String email;
+    private int comments_user;
     private String comments_content;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp comments_time;
@@ -25,12 +25,12 @@ public class Comments {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public int getComments_user() {
+        return comments_user;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setComments_user(int comments_user) {
+        this.comments_user = comments_user;
     }
 
     public String getComments_content() {

@@ -51,6 +51,8 @@ public interface PaperService {
 
     Paper findPaperById(String id);
 
+    Paper findPaperById(int id);
+
     String findPaperTitleById(int id);
 
     @Transactional

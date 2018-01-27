@@ -14,6 +14,9 @@ import java.util.Set;
 @Mapper
 public interface TagMapper {
 
+    @Select("SELECT tag_name FROM social_blog.tag LIMIT 0,20")
+    Set<String> findAllTagName();
+
     @Select("SELECT t.tag_name " +
             "FROM social_blog.tag t,social_blog.paper p ,social_blog.users u " +
             "WHERE t.paper_id = p.id AND u.id  = p.author AND u.login_name = #{name}")

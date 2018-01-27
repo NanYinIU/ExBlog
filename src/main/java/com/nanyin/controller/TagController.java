@@ -28,6 +28,13 @@ public class TagController {
     @Autowired
     TagService tagService;
 
+    @RequestMapping("/tags")
+    public @ResponseBody Map<String,Set<String>> AllTags(){
+        Map<String,Set<String>> map = Maps.newHashMap();
+        map.put("tags",tagService.findAllTagName());
+        return map;
+    }
+
     @RequestMapping("/PersonalTag/{name}")
     public @ResponseBody
     Multimap<String,Map<String,Object>> PersonalTag(@PathVariable("name") String name){

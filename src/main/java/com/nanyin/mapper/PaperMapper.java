@@ -49,8 +49,8 @@ public interface PaperMapper {
     /**
     * 按最新时间排序
     */
-    @Cacheable
-    @Select("SELECT * FROM social_blog.paper WHERE is_pass = \"审核通过\" ORDER BY create_time DESC")
+
+    @Select("SELECT * FROM social_blog.paper WHERE is_pass = \"审核通过\" ORDER BY create_time DESC LIMIT 0,5 ")
     List<Paper> findAllPapersByTime();
 
     @Select("SELECT * FROM social_blog.paper WHERE is_pass = \"审核通过\" ORDER BY create_time DESC")
@@ -60,7 +60,7 @@ public interface PaperMapper {
     * 按照热度排序
     */
     @Cacheable
-    @Select("SELECT * FROM  social_blog.paper p WHERE p.is_pass = \"审核通过\" ORDER BY p.mark DESC ")
+    @Select("SELECT * FROM  social_blog.paper p WHERE p.is_pass = \"审核通过\"  ORDER BY p.mark DESC LIMIT 0,5")
     List<Paper> findAllPapersByMark();
 
     /**
@@ -201,4 +201,5 @@ public interface PaperMapper {
 
     @Update("UPDATE social_blog.paper SET is_pass = #{is_pass} WHERE id = #{id}")
     int updataPaperStatus(@Param("id") int id,@Param("is_pass") String is_pass);
+
 }

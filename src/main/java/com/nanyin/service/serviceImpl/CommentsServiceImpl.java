@@ -6,8 +6,12 @@ import com.nanyin.config.ShowComments;
 import com.nanyin.config.common.TimeUtil;
 import com.nanyin.mapper.CommentsMapper;
 import com.nanyin.model.Comments;
+import com.nanyin.model.Ex.CommentsWithPaperMes;
+import com.nanyin.model.Paper;
+import com.nanyin.model.Users;
 import com.nanyin.service.CommentsService;
 import com.nanyin.service.PaperService;
+import com.nanyin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +30,9 @@ public class CommentsServiceImpl implements CommentsService {
     CommentsMapper commentsMapper;
     @Autowired
     PaperService paperService;
+
+    @Autowired
+    UserService userService;
     @Override
     public int findCommentCountByTitle(int title) {
         return commentsMapper.findCommentCountByTitle(title);
@@ -81,5 +88,38 @@ public class CommentsServiceImpl implements CommentsService {
         comments.setComments_paper(id);
         comments.setComments_time(timestamp);
         return commentsMapper.insertComments(comments);
+    }
+
+    @Override
+    public Map<String, Object> findAllCommentsOrderByTime() {
+        Map<String,Object> map = Maps.newHashMap();
+//      这里应该统一控制页面
+        List<Comments> list = commentsMapper.findAllCommentsOrderByTime(0,5);
+        List<CommentsWithPaperMes> commentsWithPaperMesList = setCommentsWithPaperAndUserMes(list);
+        map.put("comments",commentsWithPaperMesList);
+        return map;
+    }
+
+    private List<CommentsWithPaperMes> setCommentsWithPaperAndUserMes(List<Comments> list){
+        List<CommentsWithPaperMes> commentsWithPaperMesList = Lists.newLinkedList();
+        for (Comments comments: list
+             ) {
+            CommentsWithPaperMes commentsWithPaperMes = new CommentsWithPaperMes();
+
+           Paper paper = paperService.findPaperById(comments.getComments_paper());
+
+            Users users = userService.findUsersById(comments.getComments_user());
+
+            commentsWithPaperMes.setComment_id(comments.getId());
+            commentsWithPaperMes.setComments_content(comments.getComments_content());
+            commentsWithPaperMes.setComments_time(comments.getComments_time());
+            commentsWithPaperMes.setComments_user_id(users.getId());
+            commentsWithPaperMes.setComments_user_name(users.getLogin_name());
+            commentsWithPaperMes.setPaper_id(paper.getId());
+            commentsWithPaperMes.setPaper_image(paper.getPaper_image());
+            commentsWithPaperMes.setTitle(paper.getTitle());
+            commentsWithPaperMesList.add(commentsWithPaperMes);
+        }
+        return commentsWithPaperMesList;
     }
 }

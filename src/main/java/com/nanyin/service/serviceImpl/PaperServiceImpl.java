@@ -291,6 +291,11 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
+    public Paper findPaperById(int id) {
+        return paperMapper.findPaperById(id);
+    }
+
+    @Override
     public String findPaperTitleById(int id) {
         return paperMapper.findPaperTitleById(id);
     }

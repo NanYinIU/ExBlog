@@ -18,8 +18,11 @@ public interface CommentsService {
 
     int deleteCommentById(int id);
 
+
+
     Map<String,Object> findAllCommentsByPaperId(int id);
 
     int insertComments(String content,String paperId);
 
+    Map<String,Object> findAllCommentsOrderByTime();
 }

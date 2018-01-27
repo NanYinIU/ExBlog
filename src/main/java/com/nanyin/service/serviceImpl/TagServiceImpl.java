@@ -20,6 +20,11 @@ public class TagServiceImpl implements TagService {
     TagMapper tagMapper;
 
     @Override
+    public Set<String> findAllTagName() {
+        return tagMapper.findAllTagName();
+    }
+
+    @Override
     public Set<String> findTagNameByUser(String name) {
         return tagMapper.findTagNameByUser(name);
     }

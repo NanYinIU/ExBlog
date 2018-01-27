@@ -43,4 +43,11 @@ public interface CommentsMapper {
     @Insert("INSERT INTO social_blog.comments(comments_content,comments_time,comments_paper)" +
             "VALUES(#{comments.comments_content},#{comments.comments_time},#{comments.comments_paper})")
     int insertComments(@Param("comments") Comments comments);
+
+    /**
+     * 首页评论控制 limit 5
+     * @return
+     */
+    @Select("SELECT * FROM social_blog.comments ORDER BY comments_time LIMIT #{pageNum},#{limit}")
+    List<Comments> findAllCommentsOrderByTime(@Param("pageNum") int pageNum,@Param("limit") int limit);
 }
