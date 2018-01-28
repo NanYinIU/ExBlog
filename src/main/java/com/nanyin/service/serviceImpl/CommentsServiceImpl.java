@@ -79,13 +79,13 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
-    public int insertComments(String content, String paperId) {
-        int id = Integer.parseInt(paperId);
+    public int insertComments(String content, int paperId,String userName) {
 
         Timestamp timestamp = TimeUtil.setCurrentTime();
         Comments comments = new Comments();
         comments.setComments_content(content);
-        comments.setComments_paper(id);
+        comments.setComments_paper(paperId);
+        comments.setComments_user(userService.findAuthorByName(userName));
         comments.setComments_time(timestamp);
         return commentsMapper.insertComments(comments);
     }

@@ -17,13 +17,11 @@ import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 
+import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
@@ -63,6 +61,12 @@ public class UserController {
     public String login(){
         return "login";
     }
+    @RequestMapping("/user/reLogin")
+    public ModelAndView reLogin(@RequestParam(value = "url",required = false) String url){
+        ModelAndView modelAndView = new ModelAndView("login");
+        modelAndView.addObject("url",url);
+        return modelAndView;
+    }
 
     @RequestMapping("/user/signUp")
     public String signUp(){
@@ -71,13 +75,10 @@ public class UserController {
 
     @RequestMapping("/user/logout")
     public String logout(HttpServletRequest request){
-        try{
-            request.getSession().removeAttribute("user");
-            request.getSession().invalidate();
-        }catch (Exception e){
-
-        }
+        org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
+        subject.logout();
         return "redirect:/user/login";
+
     }
 
     @Log(operationName = "用户登录" )
@@ -91,6 +92,13 @@ public class UserController {
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username,password);
         org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
         HttpSession session = request.getSession();
+        String reDirectUrl ;
+        if(url == null || "".equals(url)){
+            reDirectUrl="/HomePage/1";
+        }else{
+            reDirectUrl=url;
+        }
+        logger.info("url"+reDirectUrl+"url"+(url==null));
         //设置rememberMe
         if("on".equals(rememberMe)){
             usernamePasswordToken.setRememberMe(true);
@@ -102,15 +110,13 @@ public class UserController {
         try {
             subject.login(usernamePasswordToken);
             session.setAttribute("user",username);
-            return "redirect:/HomePage/1";
+            return "redirect:"+reDirectUrl;
         }catch (Exception r){
             r.printStackTrace();
             return "login";
         }
 
     }
-
-
 
     @RequestMapping("/userMes/{name}")
     public @ResponseBody Users userMes(

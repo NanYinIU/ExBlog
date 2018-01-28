@@ -35,6 +35,11 @@ public class ShiroConfig {
         bean.setUnauthorizedUrl("/error/unAuthorized");
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap=new LinkedHashMap<>();
+        filterChainDefinitionMap.put("/comments/**", "anon"); //表示可以匿名访问
+        filterChainDefinitionMap.put("/column/**", "anon"); //表示可以匿名访问
+        filterChainDefinitionMap.put("/main/**", "anon"); //表示可以匿名访问
+        filterChainDefinitionMap.put("/paper/**", "anon"); //表示可以匿名访问
+        filterChainDefinitionMap.put("/tag/**", "anon"); //表示可以匿名访问
         filterChainDefinitionMap.put("/user/*", "anon"); //表示可以匿名访问
         filterChainDefinitionMap.put("/home", "anon");
         filterChainDefinitionMap.put("/assets/**", "anon");

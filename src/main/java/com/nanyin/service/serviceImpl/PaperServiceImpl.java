@@ -207,6 +207,13 @@ public class PaperServiceImpl implements PaperService {
 
         allAttriOfPaper.setColumnTitle(columns);
         allAttriOfPaper.setComments(comments);
+        List<Users> list = Lists.newLinkedList();
+        for (Comments c: comments
+             ) {
+            Users users1 =userService.findUsersById(c.getComments_user()) ;
+            list.add(users1);
+        }
+        allAttriOfPaper.setComments_UserMes(list);
         allAttriOfPaper.setPaper(paper);
         allAttriOfPaper.setCount(commentsService.findCommentCountById(paper.getId()));
         allAttriOfPaper.setLogin_name(users.getLogin_name());

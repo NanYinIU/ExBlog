@@ -415,13 +415,12 @@
                             {
                                 return str.replace(/(^\s*)|(\s*$)/g, "");
                             }
-
 							function submitBTN() {
 
                                     $.ajax({
                                         type: "post",
                                         dataType: "json",
-                                        url: '/comments/insertComments',
+                                        url: '/comments/insertComment',
                                         data: $('#form').serializeArray(),
                                         timeout: 20000,
                                         cache: false,

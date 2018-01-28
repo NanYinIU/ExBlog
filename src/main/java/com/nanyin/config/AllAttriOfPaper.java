@@ -3,6 +3,8 @@ package com.nanyin.config;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nanyin.model.Comments;
 import com.nanyin.model.Paper;
+import com.nanyin.model.Users;
+import org.apache.catalina.User;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -35,6 +37,15 @@ public class AllAttriOfPaper {
 //    private String comments_content;
 //    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 //    private Timestamp comments_time;
+    private List<Users> comments_UserMes;
+
+    public List<Users> getComments_UserMes() {
+        return comments_UserMes;
+    }
+
+    public void setComments_UserMes(List<Users> comments_UserMes) {
+        this.comments_UserMes = comments_UserMes;
+    }
 
     private List<Comments> comments ;
     private List<String> tags;

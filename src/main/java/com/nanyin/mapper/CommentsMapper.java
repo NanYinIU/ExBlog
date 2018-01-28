@@ -40,8 +40,8 @@ public interface CommentsMapper {
             "WHERE comments_paper=#{id}")
     List<Comments> findAllCommentsByPaperId(int id);
 
-    @Insert("INSERT INTO social_blog.comments(comments_content,comments_time,comments_paper)" +
-            "VALUES(#{comments.comments_content},#{comments.comments_time},#{comments.comments_paper})")
+    @Insert("INSERT INTO social_blog.comments(comments_content,comments_time,comments_paper,comments_user)" +
+            "VALUES(#{comments.comments_content},#{comments.comments_time},#{comments.comments_paper},#{comments.comments_user})")
     int insertComments(@Param("comments") Comments comments);
 
     /**
@@ -50,4 +50,6 @@ public interface CommentsMapper {
      */
     @Select("SELECT * FROM social_blog.comments ORDER BY comments_time LIMIT #{pageNum},#{limit}")
     List<Comments> findAllCommentsOrderByTime(@Param("pageNum") int pageNum,@Param("limit") int limit);
+
+
 }

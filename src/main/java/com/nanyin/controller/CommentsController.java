@@ -32,10 +32,13 @@ public class CommentsController {
     public @ResponseBody Map<String,Object> commentsByPaperId(@PathVariable("id") int id){
         return commentsService.findAllCommentsByPaperId(id);
     }
-    @RequestMapping("/comments/insertComments")
-    public @ResponseBody int insertComments(@RequestParam("comment") String comment, @RequestParam("id") String id){
-        return commentsService.insertComments(comment,id);
+
+    @RequestMapping("/comments/insertComment")
+    public @ResponseBody int insertComment(@RequestParam("userName") String userName,@RequestParam("pageId") int pageId,@RequestParam("text") String text){
+        return commentsService.insertComments(text,pageId,userName);
     }
+
+
 
     @RequestMapping("/comments/commentsWithPaperAndUserMes")
     public @ResponseBody Map<String,Object> commentsWithPaperAndUserMes(){

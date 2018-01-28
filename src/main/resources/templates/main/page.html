@@ -81,7 +81,7 @@
 					<li><a href=""><h4>博客管理</h4></a></li>
 					<li><a href=""><h4>文章库</h4></a></li>
                     <li th:if="${session.user == null}"><a href="" ><h4>登录</h4></a></li>
-                    <li th:if="${session.user != null}"><a href=""><h4>登出</h4></a></li>
+                    <li th:if="${session.user != null}"><a href="/user/logout"><h4>登出</h4></a></li>
 					<div class="clearfix"></div>
 				</ul>
 				<div class="search">
@@ -191,8 +191,13 @@
                 <!--收藏js-->
                 <script>
                     function addItem() {
+                        var urlPath = window.location.pathname;
                         var pageId = document.getElementById("paperId").value;
                         var userName = document.getElementById("userId").value;
+                        if(userName.length == 0){
+                            // alert("请先登录！");
+                            location.href = '/user/reLogin?url='+urlPath;
+                        }else {
                         $.ajax( {
                             type : "post",
                             data:{userName:userName,pageId:pageId},
@@ -227,6 +232,7 @@
                             }
 
                         });
+                        }
 
 
                     };
@@ -281,33 +287,70 @@
 
                         <div class="response">
                             <h4>留言</h4>
-                            <div class="media response-info">
+                            <div id="ju" class="media response-info" th:each="comment,pageStat :${page.comments}">
+                                <div th:if="pageStat.size != 0">
                                 <div class="media-left response-text-left">
                                     <a href="#">
-                                        <img class="media-object" src="images/c3.jpg" alt=""/>
+                                        <img width="45" height="45" class="media-object" th:src="${page.comments_UserMes[pageStat.index].head}" alt=""/>
                                     </a>
-                                    <h5><a href="#">Username</a></h5>
+                                    <h5><a href="#" th:text="${page.comments_UserMes[pageStat.index].login_name}" ></a></h5>
                                 </div>
                                 <div class="media-body response-text-right">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,There are many variations of passages of Lorem Ipsum available,
-                                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    <p th:text="${comment.comments_content}"></p>
                                     <ul>
-                                        <li>June 21, 2015</li>
+                                        <li th:text="${comment.comments_time}">June 21, 2015</li>
                                     </ul>
                                 </div>
                                 <div class="clearfix"> </div>
+                                </div>
                             </div>
+                            <div th:if="${page.count} == 0">
+                                <p> :( 暂无留言 ):</p>
+                            </div>
+
 
                         </div>
                         <div class="coment-form">
                             <h4>Leave your comment</h4>
-                            <form>
-                                <textarea onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Your Comment...';}" required="">Your Comment...</textarea>
-                                <input type="submit" value="Submit Comment" >
-                            </form>
+                                <textarea id="comment" placeholder="Your Comment..." ></textarea>
+                                <input type="submit" onclick="submitBTN()" value="Submit Comment" />
                         </div>
                         <div class="clearfix"></div>
+                        <script>
+                            var pageId = document.getElementById("paperId").value;
+                            var userName = document.getElementById("userId").value;
+                            var urlPath2 = window.location.pathname;
 
+                            function Trim(str)
+                            {
+                                return str.replace(/(^\s*)|(\s*$)/g, "");
+                            }
+                            function submitBTN() {
+                                var text = document.getElementById('comment').value;
+                                // alert(text)
+                                if(userName.length == 0){
+                                    // alert(userName);
+                                    location.href = '/user/reLogin?url='+urlPath2;
+                                }else {
+                                    $.ajax({
+                                        type: "post",
+                                        dataType: "json",
+                                        url: '/comments/insertComment',
+                                        data: {userName: userName, pageId: pageId, text: text},
+                                        timeout: 20000,
+                                        cache: false,
+                                        success: function (data) {
+                                            if (data === 1) {
+                                                window.location.reload();
+                                                location.href = "/paper/" + pageId ;
+                                            }
+
+
+                                        }
+                                    })
+                                }
+                            }
+                        </script>
                         <!--评论区 结束-->
                         <div class="clearfix"></div>
                     </div>
@@ -340,6 +383,9 @@
                             </div>
                         </div>
                     </script>
+                    <div th:if="${session.user} == null">
+                        <input type="submit" id="addFocal2"  value="登录后添加关注" onclick="add()"></input>
+                    </div>
                     <script type="text/javascript">
                         var friend ='';
                         $(document).ready(function () {
@@ -370,6 +416,7 @@
                             // 取消关注
                             var ByFocal = document.getElementById("ByFocal").value;
                             var userId = document.getElementById("userId").value;
+
                             $.ajax( {
                                 type : "post",
                                 data:{userId:userId,friendId:ByFocal},
@@ -398,6 +445,11 @@
                             //添加关注
                             var ByFocal = document.getElementById("ByFocal").value;
                             var userId = document.getElementById("userId").value;
+                            var urlPath = window.location.pathname;
+                            if(userId.length == 0){
+                                // layer.alert("请先登录！");
+                                location.href = '/user/reLogin?url='+urlPath;
+							}else{
                             $.ajax( {
                                 type : "post",
                                 data:{userId:userId,friendId:ByFocal},
@@ -418,6 +470,7 @@
                                 }
 
                             });
+                            }
 
                         }
 
@@ -492,7 +545,7 @@
 						 <script type="text/javascript">
                              var html3 ='';
                              $(document).ready(function () {
-                                 url = '/PapersByMark';
+                                 url = '/paper/PapersByMark';
                                  $.ajax( {
                                      type : "post",
                                      dataType:"json",

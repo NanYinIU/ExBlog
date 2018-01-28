@@ -42,7 +42,7 @@ public class PaperController {
      * 返回文章和评论的信息 按时间排序
      * @return
      */
-    @RequestMapping("/PapersByTime")
+    @RequestMapping("/paper/PapersByTime")
     public @ResponseBody
     Map<String,List<PaperAndComments>>PapersByTime(){
         return paperService.findAllPapersByTime();
@@ -64,7 +64,7 @@ public class PaperController {
      * 返回文章和评论信息 按热度排序
      * @return
      */
-    @RequestMapping("/PapersByMark")
+    @RequestMapping("/paper/PapersByMark")
     public @ResponseBody
     Map<String,List<PaperAndComments>> papersByMark(){
         return paperService.findAllPapersByMark();
@@ -126,7 +126,7 @@ public class PaperController {
     }
 
 
-    @RequestMapping("/page/{id}")
+    @RequestMapping("/paper/{id}")
     public @ResponseBody
     ModelAndView page(@PathVariable("id") int id){
                 ModelAndView modelAndView = new ModelAndView();
