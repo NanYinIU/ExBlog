@@ -26,4 +26,9 @@ public class MainController {
     public String mainPage(){
         return "/main/page";
     }
+
+    @RequestMapping("/main/pageList")
+    public String pageList(){
+        return "/main/pageList";
+    }
 }

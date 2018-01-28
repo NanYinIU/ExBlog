@@ -70,4 +70,6 @@ public interface PaperService {
 
     List<Paper> searchPreAndNextPage(int id);
 
+
+
 }

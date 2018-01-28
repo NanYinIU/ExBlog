@@ -94,17 +94,28 @@ public class PaperController {
         return modelAndView;
     }
 
-    @RequestMapping("/HomePage/{pageNum}")
+    @RequestMapping("/main/pageList/{pageNum}")
     public @ResponseBody
     ModelAndView  HomePage(
             @PathVariable(value = "pageNum") int pageNum,
             @RequestParam(value = "search", required = false) String search){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("SearchIndex");
+        modelAndView.setViewName("/main/pageList");
         PageHelper.startPage(pageNum, Paging.LIMIT.getValue()-2);
         PageInfo pageInfo = paperService.findAllPapers(search,pageNum);
         modelAndView.addObject("pageInfo",pageInfo);
         return modelAndView;
+    }
+    @RequestMapping("/paper/test/{pageNum}")
+    public @ResponseBody
+    PageInfo pageTest(
+            @PathVariable(value = "pageNum") int pageNum,
+            @RequestParam(value = "search", required = false) String search){
+        Map<String,Object> map = Maps.newHashMap();
+        PageHelper.startPage(pageNum, Paging.LIMIT.getValue()-2);
+        PageInfo pageInfo = paperService.findAllPapers(search,pageNum);
+        map.put("pageInfo",pageInfo);
+        return pageInfo;
     }
 
 

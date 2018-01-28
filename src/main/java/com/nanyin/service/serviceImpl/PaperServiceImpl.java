@@ -193,7 +193,7 @@ public class PaperServiceImpl implements PaperService {
         List<Paper> papers =  paperMapper.findAllPapers(search);
         List<PaperAndComments> paperAndComments = paperAndCommentsList(papers);
         PageHelper.startPage(pageNum,Paging.LIMIT.getValue()-2);
-        return new PageInfo<>(paperAndComments);
+        return new PageInfo<>(papers);
     }
 
     @Override
