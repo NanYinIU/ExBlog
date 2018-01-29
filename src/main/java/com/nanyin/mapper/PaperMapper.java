@@ -28,16 +28,12 @@ public interface PaperMapper {
      */
     @Select({"<script>",
             "SELECT * FROM social_blog.paper p WHERE 1=1",
-
             "<if test=\"search!=null and search!=''\">",
             "AND p.title LIKE concat(concat('%',#{search}),'%')",
             "</if>",
-
             "<if test=\"endTime!=null\">",
             "AND p.create_time > #{endTime}",
             "</if>",
-
-
             "LIMIT #{page},#{limit}",
             "</script>"})
     List<Paper> findPapers(@Param("page") int page,
@@ -46,6 +42,19 @@ public interface PaperMapper {
                            @Param("startTime") Timestamp startTime,
                            @Param("endTime") Timestamp endTime);
 
+    /**
+     * 一个月内热门文章
+     * @param endTime
+     * @return
+     */
+    @Select({"<script>",
+            "SELECT * FROM social_blog.paper p WHERE 1=1",
+            "<if test=\"endTime!=null\">",
+            "AND p.create_time > #{endTime}",
+            "</if>",
+            " ORDER BY p.mark DESC",
+            "</script>"})
+    List<Paper> findPaperInMonth(@Param("endTime") Timestamp endTime);
     /**
     * 按最新时间排序
     */
@@ -59,7 +68,6 @@ public interface PaperMapper {
     /**
     * 按照热度排序
     */
-    @Cacheable
     @Select("SELECT * FROM  social_blog.paper p WHERE p.is_pass = \"审核通过\"  ORDER BY p.mark DESC LIMIT 0,5")
     List<Paper> findAllPapersByMark();
 

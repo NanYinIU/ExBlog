@@ -1,6 +1,7 @@
 package com.nanyin.service;
 
 
+import com.github.pagehelper.PageInfo;
 import com.nanyin.model.Column;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,7 +21,7 @@ public interface ColumnService {
 
     List<Column> findAllColumn();
 
-    Map<String,Object> findAllColumnSearch(String search,int pageNum);
+    PageInfo<Column> findAllColumnSearch(String search, int pageNum);
 
     Set<String> findCoumnByUser(String name);
 

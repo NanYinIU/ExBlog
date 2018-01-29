@@ -1,9 +1,11 @@
 package com.nanyin.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import com.nanyin.model.Paper;
 import com.nanyin.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -57,6 +60,8 @@ public class TagController {
         }
     }
 
+
+
     @RequestMapping("/findAllTagsByName/{name}")
     public @ResponseBody Map<String,Object> findAllTagsByName(@PathVariable("name") String name){
             Set<String> list = tagService.findTagNameByUser(name);
@@ -100,4 +105,21 @@ public class TagController {
         return tagService.insertTagNameByPaperId(name, id);
     }
 
+    @RequestMapping("/returnTagPage")
+    public @ResponseBody ModelAndView returnTagPage(@RequestParam("tagName") String tagName){
+        ModelAndView modelAndView = new ModelAndView("/main/tagList");
+        modelAndView.addObject("tagName",tagName);
+        return modelAndView;
+
+    }
+    /**
+     * 根据tagname查找文章 并进行分页
+     * @param tagName
+     * @param pageNum
+     * @return
+     */
+    @RequestMapping("/tagPages/{pageNum}")
+    public @ResponseBody PageInfo<Paper> tagPages(@RequestParam("tagName") String tagName, @PathVariable("pageNum") int pageNum){
+        return tagService.tagPage(tagName,pageNum);
+    }
 }

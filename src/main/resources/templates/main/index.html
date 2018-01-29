@@ -56,13 +56,13 @@
 				<!--/.navbar-header-->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					 <li class="active"><a href="index.html">SOCIAL BLOG</a></li>
+					 <li class="active"><a href="/main/index">SOCIAL BLOG</a></li>
 						<li><a href=""><h4>博客专栏</h4></a></li>
 				    <li>
 						<a href="#" data-toggle="dropdown"><h4>个人主页</h4></a>
 					  </li>
 					<li><a href=""><h4>博客管理</h4></a></li>
-					<li><a href=""><h4>文章库</h4></a></li>
+					<li><a href="/main/pageList"><h4>文章库</h4></a></li>
                     <li th:if="${session.user == null}"><a href="" ><h4>登录</h4></a></li>
                     <li th:if="${session.user != null}"><a href=""><h4>登出</h4></a></li>
 					<div class="clearfix"></div>
@@ -178,7 +178,7 @@
 
 							<script type="text/html" id="tags">
 								{{each tags value i}}
-								<a id="tagName" class="tag{{i}}" th:href="@{/home}" >{{value}} </a>
+								<a id="tagName" class="tag{{i}}" href="/tag/returnTagPage?tagName={{value}}" >{{value}} </a>
 								{{/each}}
 
 							</script>
@@ -195,8 +195,8 @@
 						 <!-- 侧边栏热门文章 art-templete 开始-->
 						 <script type="text/html" id="post_list">
 							 <div class="popular-grid">
-								 <a href="single.html"><img src="{{paper_image}}" alt="" /></a>
-								 <a class="title" href="single.html">{{title}}</a>
+								 <a href="/paper/{{id}}"><img src="{{paper_image}}" alt="" /></a>
+								 <a class="title" href="/paper/{{id}}">{{title}}</a>
 								 <p href="single.html">{{segment}}</p>
 								 <p>{{create_time}} <a class="span_link" href="#"><span class="glyphicon glyphicon-comment"></span>{{count}} </a><a class="span_link" href="#"><span class="glyphicon glyphicon-thumbs-up"></span>{{mark}}</a></p>
 							 </div>

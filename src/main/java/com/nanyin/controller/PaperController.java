@@ -340,7 +340,23 @@ public class PaperController {
         return paperService.updatePaperStatus(id, review);
     }
 
+    /**
+     * 获得一月内热门文章的json
+     * @return
+     */
+    @RequestMapping("/paper/hotPapersInMonth")
+    public @ResponseBody PageInfo<Paper> hotPapersInMonth(){
+        PageInfo pageInfo = paperService.findPaperInMonth();
 
+        List<Paper> list = pageInfo.getList();
+        List<Paper> list2 = Lists.newLinkedList();
+        for (Paper p: list
+             ) {
+            list2.add(0,p);
+        }
+        pageInfo.setList(list2);
+        return pageInfo;
+    }
 
 
 }

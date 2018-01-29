@@ -42,27 +42,20 @@ public class ColumnController {
         return map;
     }
 
-    @RequestMapping("/findAllColumn2")
-    public @ResponseBody
-    Map<String, List<Column>> findAllColumn2(){
-        List<Column> list = columnService.findAllColumn();
-        Map<String, List<Column>> map = Maps.newHashMap();
-        map.put("list",list);
-        return map;
-    }
-
+    /**
+     * 查询所有主题
+     * @param search
+     * @param pageNum
+     * @return
+     */
     @RequestMapping("/findAllColumn/{pageNum}")
     public @ResponseBody
-    ModelAndView findAllColumn( @RequestParam(value = "search", required = false) String search,
+    PageInfo findAllColumn( @RequestParam(value = "search", required = false) String search,
                                 @PathVariable("pageNum") int pageNum){
-        Map<String,Object> map = columnService.findAllColumnSearch(search, pageNum);
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("ColumnIndex");
-
-        modelAndView.addAllObjects(map);
-        return modelAndView;
+        PageInfo pageInfo = columnService.findAllColumnSearch(search, pageNum);
+        return pageInfo;
     }
+
 
     @RequestMapping("/PersonalColumn/{name}")
     public @ResponseBody Map<String, List<Map<String,Object>>> personalColumn(@PathVariable("name") String name){

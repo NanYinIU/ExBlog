@@ -31,4 +31,11 @@ public class MainController {
     public String pageList(){
         return "/main/pageList";
     }
+
+    @RequestMapping("/main/columnList")
+    public String columnList(){
+        return "/main/columnList";
+    }
+
+
 }

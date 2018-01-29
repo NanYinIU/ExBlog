@@ -1,5 +1,7 @@
 package com.nanyin.service;
 
+import com.github.pagehelper.PageInfo;
+import com.nanyin.model.Paper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,4 +61,6 @@ public interface TagService {
      * @return
      */
     int insertTagNameByPaperId(String name,int id);
+
+    PageInfo<Paper> tagPage(String tagName,int pageNum);
 }

@@ -1,8 +1,12 @@
 package com.nanyin.service.serviceImpl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.nanyin.mapper.TagMapper;
+import com.nanyin.model.Paper;
+import com.nanyin.service.PaperService;
 import com.nanyin.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +22,9 @@ import java.util.*;
 public class TagServiceImpl implements TagService {
     @Autowired
     TagMapper tagMapper;
+
+    @Autowired
+    PaperService paperService;
 
     @Override
     public Set<String> findAllTagName() {
@@ -84,5 +91,13 @@ public class TagServiceImpl implements TagService {
     @Override
     public int insertTagNameByPaperId(String name, int id) {
         return tagMapper.insertTagNameByPaperId(name,id);
+    }
+
+    @Override
+    public PageInfo<Paper> tagPage(String tagName, int pageNum) {
+        PageHelper.startPage(pageNum,10);
+        List<Paper> papers = tagMapper.findPaperByTagName(tagName);
+        PageInfo<Paper> pageInfo = new PageInfo<>(papers);
+        return pageInfo;
     }
 }

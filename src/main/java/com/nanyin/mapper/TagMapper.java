@@ -1,5 +1,6 @@
 package com.nanyin.mapper;
 
+import com.nanyin.model.Paper;
 import com.nanyin.model.Tag;
 import org.apache.ibatis.annotations.*;
 
@@ -84,4 +85,7 @@ public interface TagMapper {
      */
     @Insert("INSERT INTO social_blog.tag(tag_name,paper_id) VALUES(#{tag_name},#{paper_id})")
     int insertTagNameByPaperId(@Param("tag_name") String tagName,@Param("paper_id") int id);
+
+    @Select("SELECT * FROM social_blog.paper p,social_blog.tag  t WHERE t.paper_id = p.id AND t.tag_name=#{tag_name}")
+    List<Paper> findPaperByTagName(@Param("tag_name") String tagName);
 }

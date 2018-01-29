@@ -409,13 +409,31 @@ public class PaperServiceImpl implements PaperService {
         return paperMapper.updataPaperStatus(id,review);
     }
 
+
+
     @Override
-    public List<Paper> searchPreAndNextPage(int id) {
-        List<Paper> list = paperMapper.findAllPapersByTimeNoLimit();
-
-        //得到前一个页面和后一个页面
-
-        return null;
+    public PageInfo<Paper> findPaperInMonth() {
+        PageHelper.startPage(1,Paging.LIMIT.getValue()-5);
+        //获得当前时间
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        //转换成data类型进项时间的加减
+        Date nowDate = new Date();
+        try {
+            nowDate = now;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(nowDate);
+        //获得30天之前的日期
+        calendar.add(calendar.DATE, -30);
+        Date afterAdd = calendar.getTime();
+        // 转化为timestamps类型
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String afterAddString = simpleDateFormat.format(afterAdd);
+        Timestamp end = Timestamp.valueOf(afterAddString);
+        List<Paper> list = paperMapper.findPaperInMonth(end);
+        return new PageInfo<>(list);
     }
 
 

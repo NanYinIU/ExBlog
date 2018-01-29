@@ -35,13 +35,11 @@ public class ColumnServiceImpl implements ColumnService {
     }
 
     @Override
-    public Map<String,Object> findAllColumnSearch(String search,int pageNum) {
+    public PageInfo<Column> findAllColumnSearch(String search,int pageNum) {
         PageHelper.startPage(pageNum,5);
         List<Column> list = columnMapper.findAllColumnSearch(search);
         PageInfo pageInfo = new PageInfo(list);
-        Map<String,Object> map = Maps.newHashMap();
-        map.put("pageInfo",pageInfo);
-        return map;
+        return pageInfo;
     }
 
     @Override
