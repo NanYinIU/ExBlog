@@ -1,10 +1,12 @@
 package com.nanyin.service.serviceImpl;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.nanyin.config.ExFriends;
 import com.nanyin.config.common.Paging;
 import com.nanyin.mapper.FriendMapper;
 import com.nanyin.model.Friend;
+import com.nanyin.model.Users;
 import com.nanyin.service.FriendService;
 import com.nanyin.service.PaperService;
 import com.nanyin.service.UserService;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by NanYin on 2017-11-10 上午9:12.
@@ -87,5 +90,14 @@ public class FriendServiceImpl implements FriendService {
     public int findCountOfFriend(String userName) {
         int userId = getAuthorId(userName);
         return friendMapper.findCountOfFriend(userId);
+    }
+
+    @Override
+    public Map<String, Object> friendsWithUserId(String userName) {
+        Map<String,Object> map = Maps.newHashMap();
+        int userId = userService.findAuthorByName(userName);
+        List<Users> list = friendMapper.findFriendsWithUserId(userId,0,Paging.LIMIT.getValue()-5);
+        map.put("list",list);
+        return map;
     }
 }

@@ -42,7 +42,7 @@ public interface PaperService {
 
     List<Paper> findPaperInColumn(String column);
 
-    List<Paper> findPaperByUserName(String name,String search);
+    PageInfo<Paper> findPaperByUserName(String name,int pageNum,String search);
 
     @Transactional
     int deletePaperByPaperId(int id);

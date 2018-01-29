@@ -141,7 +141,7 @@ public interface PaperMapper {
             "<if test=\"search!=null and search!=''\">",
             "AND  p.title LIKE concat(concat('%',#{search}),'%') ",
             "</if>",
-            "ORDER BY  p.create_time DESC",
+            "ORDER BY p.create_time DESC",
             "</script>"
     })
     List<Paper> findPaperByUserName(@Param("name") String name,@Param("search") String search);
@@ -209,5 +209,6 @@ public interface PaperMapper {
 
     @Update("UPDATE social_blog.paper SET is_pass = #{is_pass} WHERE id = #{id}")
     int updataPaperStatus(@Param("id") int id,@Param("is_pass") String is_pass);
+
 
 }

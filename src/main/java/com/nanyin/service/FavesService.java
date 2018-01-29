@@ -1,8 +1,10 @@
 package com.nanyin.service;
 
+import com.nanyin.model.Paper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,5 +22,7 @@ public interface FavesService {
     Map<String,Object> findFaves(String userName,String search,int pageNum);
 
     int deleteFaverItem(String userName,int paperId);
+
+    Map<String,List> findFavesItem(String userName);
 
 }

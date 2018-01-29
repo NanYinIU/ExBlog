@@ -1,6 +1,8 @@
 package com.nanyin.mapper;
 
 import com.nanyin.model.Friend;
+import com.nanyin.model.Users;
+import org.apache.catalina.User;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -28,5 +30,7 @@ public interface FriendMapper {
     @Select("SELECT COUNT(*) FROM social_blog.friends WHERE user_id=#{userId}")
     int findCountOfFriend(@Param("userId") int userId);
 
-
+    @Select("SELECT u.* FROM social_blog.users u,social_blog.friends f " +
+            "WHERE f.friend_id = u.id AND f.user_id=#{userId} LIMIT #{PageNum},#{pageSize}")
+    List<Users> findFriendsWithUserId(@Param("userId") int userId, @Param("PageNum")int PageNum, @Param("pageSize")int pageSize);
 }

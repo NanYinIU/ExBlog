@@ -45,4 +45,9 @@ public class CommentsController {
         return commentsService.findAllCommentsOrderByTime();
     }
 
+    @RequestMapping("/comments/PersonalComments")
+    public @ResponseBody Map<String,Object> PersonalComments(@RequestParam("userName") String userName){
+        return commentsService.findCommentsByUserId(userName);
+    }
+
 }

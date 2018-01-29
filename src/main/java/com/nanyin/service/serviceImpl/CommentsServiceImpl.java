@@ -3,6 +3,7 @@ package com.nanyin.service.serviceImpl;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.nanyin.config.ShowComments;
+import com.nanyin.config.common.Paging;
 import com.nanyin.config.common.TimeUtil;
 import com.nanyin.mapper.CommentsMapper;
 import com.nanyin.model.Comments;
@@ -94,9 +95,19 @@ public class CommentsServiceImpl implements CommentsService {
     public Map<String, Object> findAllCommentsOrderByTime() {
         Map<String,Object> map = Maps.newHashMap();
 //      这里应该统一控制页面
-        List<Comments> list = commentsMapper.findAllCommentsOrderByTime(0,5);
+        List<Comments> list = commentsMapper.findAllCommentsOrderByTime(0, Paging.LIMIT.getValue()-5);
         List<CommentsWithPaperMes> commentsWithPaperMesList = setCommentsWithPaperAndUserMes(list);
         map.put("comments",commentsWithPaperMesList);
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> findCommentsByUserId(String userName) {
+        int userId = userService.findAuthorByName(userName);
+        List<Comments> list = commentsMapper.findCommentsByUserId(userId,0,Paging.LIMIT.getValue());
+        List<CommentsWithPaperMes> commentsWithPaperMesList = setCommentsWithPaperAndUserMes(list);
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("list",commentsWithPaperMesList);
         return map;
     }
 

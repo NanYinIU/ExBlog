@@ -2,9 +2,11 @@ package com.nanyin.service;
 
 import com.nanyin.config.ExFriends;
 import com.nanyin.model.Friend;
+import com.nanyin.model.Users;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by NanYin on 2017-11-10 上午9:12.
@@ -22,4 +24,6 @@ public interface FriendService {
     List<ExFriends> findAllFriedns(String userName,int pageNum);
 
     int findCountOfFriend (String userName);
+
+    Map<String,Object> friendsWithUserId(String userName);
 }

@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,5 +53,9 @@ public class FavesController {
         return favesService.deleteFaverItem(userName, pageId);
     }
 
+    @RequestMapping("/faves/FavesPaper")
+    public @ResponseBody Map<String,List> FavesPaper(@RequestParam("userName") String userName){
+        return favesService.findFavesItem(userName);
+    }
 
 }

@@ -7,6 +7,7 @@ import com.nanyin.config.common.Paging;
 import com.nanyin.config.common.TimeUtil;
 import com.nanyin.mapper.ColumnMapper;
 import com.nanyin.model.Column;
+import com.nanyin.model.Paper;
 import com.nanyin.service.ColumnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -123,5 +124,17 @@ public class ColumnServiceImpl implements ColumnService {
     @Override
     public Column selectColumnById(int id) {
         return columnMapper.selectColumnById(id);
+    }
+
+    @Override
+    public PageInfo<Paper> findPapersWithColumnId(int id,int pageNum) {
+        PageHelper.startPage(pageNum,Paging.LIMIT.getValue());
+        PageInfo<Paper> pageInfo = new PageInfo<>(columnMapper.findPapersWithColumnId(id));
+        return pageInfo;
+    }
+
+    @Override
+    public String getColumnTitle(int id) {
+        return columnMapper.findColumnTitleById(id);
     }
 }

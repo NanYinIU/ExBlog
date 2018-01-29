@@ -3,6 +3,7 @@ package com.nanyin.service;
 
 import com.github.pagehelper.PageInfo;
 import com.nanyin.model.Column;
+import com.nanyin.model.Paper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -62,4 +63,7 @@ public interface ColumnService {
 
     Column selectColumnById(int id);
 
+    PageInfo<Paper> findPapersWithColumnId(int id,int pageNum);
+
+    String getColumnTitle(int id);
 }

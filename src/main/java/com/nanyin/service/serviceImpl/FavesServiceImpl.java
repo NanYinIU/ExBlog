@@ -93,5 +93,13 @@ public class FavesServiceImpl implements FavesService {
         return favesMapper.deleteFaverItem(userId,paperId);
     }
 
+    @Override
+    public Map<String,List> findFavesItem(String userName) {
+        int userId = userService.findAuthorByName(userName);
+        Map<String,List> map = Maps.newHashMap();
+        map.put("list",favesMapper.findFavesPaperItem(userId,0,Paging.LIMIT.getValue()));
+        return map;
+    }
+
 
 }

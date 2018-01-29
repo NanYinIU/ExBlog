@@ -237,9 +237,17 @@ public class PaperServiceImpl implements PaperService {
         return paperMapper.findPaperInColumn(column);
     }
 
+    /**
+     * 查找个人文章
+     * @param name
+     * @param search
+     * @return
+     */
     @Override
-    public List<Paper> findPaperByUserName(String name,String search) {
-        return paperMapper.findPaperByUserName(name,search);
+    public PageInfo<Paper> findPaperByUserName(String name,int pageNum,String search) {
+        PageHelper.startPage(pageNum,Paging.LIMIT.getValue());
+        PageInfo<Paper> pageInfo = new PageInfo<>(paperMapper.findPaperByUserName(name,search));
+        return pageInfo;
     }
 
     @Override

@@ -165,23 +165,7 @@ public class PaperController {
         return modelAndView;
     }
 
-    @RequestMapping("/PersonalManager/{name}/{pageNum}")
-    public @ResponseBody
-    ModelAndView PersonalManager(
-            @PathVariable("name") String name,
-            @PathVariable("pageNum")int pageNum,
-            @RequestParam(value = "search", required = false) String search)
-    {
-        Map<String,Object> map = Maps.newHashMap();
-        List list =  paperService.findPaperByUserName(name,search);
-        PageHelper.startPage(pageNum,Paging.LIMIT.getValue());
-        PageInfo pageInfo = new PageInfo(list);
-        map.put("pageInfo",pageInfo);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("PersonalManager");
-        modelAndView.addAllObjects(map);
-        return modelAndView;
-    }
+
 
     /**
      *
@@ -356,6 +340,20 @@ public class PaperController {
         }
         pageInfo.setList(list2);
         return pageInfo;
+    }
+
+    /**
+     * 个人页面所有文章
+     * @param pageNum
+     * @param search
+     * @param name
+     * @return
+     */
+    @RequestMapping("/paper/personalPaperList/{name}/{pageNum}")
+    public @ResponseBody PageInfo<Paper> personalPaperList(@PathVariable("pageNum") int pageNum
+            ,@RequestParam(value = "search",required = false) String search
+            ,@PathVariable("name")String name){
+        return paperService.findPaperByUserName(name,pageNum,search);
     }
 
 

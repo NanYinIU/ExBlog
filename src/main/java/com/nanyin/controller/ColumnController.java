@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.nanyin.model.Column;
+import com.nanyin.model.Paper;
 import com.nanyin.service.ColumnService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,6 +130,18 @@ public class ColumnController {
     @RequestMapping("/updateInlet/{id}")
     public @ResponseBody int updateInlet(@RequestParam("sTitle") String name,@RequestParam("imgMes")String image,@PathVariable("id") String id){
         return columnService.updateInlet(name, image, id);
+    }
+
+    @RequestMapping("/paperListWithColumnId/{pageNum}")
+    public @ResponseBody PageInfo<Paper> paperListWithColumnId(@PathVariable(value = "pageNum") int pageNum,@RequestParam("id") int id){
+        return columnService.findPapersWithColumnId(id,pageNum);
+    }
+
+    @RequestMapping("/getColumnTitle")
+    public @ResponseBody Map<String,String> getColumnTitle(@RequestParam("id") int id){
+        Map<String,String> map = Maps.newHashMap();
+        map.put("title",columnService.getColumnTitle(id));
+        return map;
     }
 
 }

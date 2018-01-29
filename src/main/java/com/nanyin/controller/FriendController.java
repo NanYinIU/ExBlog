@@ -117,5 +117,10 @@ public class FriendController {
         }
     }
 
+    @RequestMapping("/user/FrientsWithUserId")
+    public @ResponseBody Map<String,Object> FrientsWithUserId(@RequestParam("userName") String userName){
+        return friendService.friendsWithUserId(userName);
+    }
+
 }
 

@@ -1,6 +1,7 @@
 package com.nanyin.mapper;
 
 import com.nanyin.model.Column;
+import com.nanyin.model.Paper;
 import org.apache.ibatis.annotations.*;
 
 import javax.swing.border.TitledBorder;
@@ -113,4 +114,19 @@ public interface ColumnMapper {
 
     @Select("SELECT * FROM social_blog.`Column` WHERE id=#{id}")
     Column selectColumnById(int id);
+
+    /**
+     * 查找相同主题下的文章
+     * @param id
+     * @return
+     */
+    @Select({"<script>",
+            "SELECT p.* FROM social_blog.paper p, social_blog.`Column` c,social_blog.Column_paper cp WHERE c.id=cp.Column_id and p.id = cp.paper_id ",
+            "AND c.id=#{id} ",
+            "</script>"}
+            )
+    List<Paper> findPapersWithColumnId(@Param("id") int id);
+
+    @Select("SELECT title FROM social_blog.`Column` WHERE id=#{id}")
+    String findColumnTitleById(int id);
 }

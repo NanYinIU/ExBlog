@@ -51,5 +51,15 @@ public interface CommentsMapper {
     @Select("SELECT * FROM social_blog.comments ORDER BY comments_time LIMIT #{pageNum},#{limit}")
     List<Comments> findAllCommentsOrderByTime(@Param("pageNum") int pageNum,@Param("limit") int limit);
 
-
+    /**
+     * 根据user查询近期的所有评论
+     * @param userId
+     * @return
+     */
+    @Select("SELECT * " +
+            "FROM social_blog.comments " +
+            "WHERE comments_user = #{userId} ORDER BY comments_time DESC LIMIT #{pageNum},#{pageSize}")
+    List<Comments> findCommentsByUserId(@Param("userId") int userId,
+                                        @Param("pageNum") int pageNum,
+                                        @Param("pageSize") int pageSize);
 }

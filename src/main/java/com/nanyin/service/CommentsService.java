@@ -1,6 +1,7 @@
 package com.nanyin.service;
 
 import com.nanyin.model.Comments;
+import ognl.ObjectElementsAccessor;
 
 import java.util.List;
 import java.util.Map;
@@ -19,10 +20,11 @@ public interface CommentsService {
     int deleteCommentById(int id);
 
 
-
     Map<String,Object> findAllCommentsByPaperId(int id);
 
     int insertComments(String content,int paperId,String userName);
 
     Map<String,Object> findAllCommentsOrderByTime();
+
+    Map<String, Object> findCommentsByUserId(String userName);
 }

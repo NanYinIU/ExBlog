@@ -1,6 +1,7 @@
 package com.nanyin.mapper;
 
 import com.nanyin.model.Faves;
+import com.nanyin.model.Paper;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -28,5 +29,9 @@ public interface FavesMapper {
     @Delete("DELETE FROM social_blog.faves WHERE user_id=#{userId} AND paper_id=#{paperId}")
     int deleteFaverItem(@Param("userId") int userId, @Param("paperId")int paperId);
 
-
+    @Select("SELECT p.* FROM social_blog.faves f,social_blog.paper p " +
+            "WHERE f.paper_id = p.id AND f.user_id = #{userId} LIMIT #{pageNum},#{pageSize}")
+    List<Paper> findFavesPaperItem(@Param("userId") int userId,
+                              @Param("pageNum") int pageNum,
+                              @Param("pageSize") int pageSize);
 }
