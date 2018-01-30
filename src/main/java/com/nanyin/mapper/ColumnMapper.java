@@ -18,7 +18,7 @@ import java.util.Set;
 public interface ColumnMapper {
 
     // 专题内文章由多到少排序
-    @Select("SELECT c.title,c.C_create_time,c.image " +
+    @Select("SELECT c.id, c.title,c.C_create_time,c.image " +
             "FROM social_blog.`Column` c,social_blog.Column_paper cp " +
             "WHERE c.id = cp.Column_id " +
             "GROUP BY c.title,c.C_create_time,c.image " +

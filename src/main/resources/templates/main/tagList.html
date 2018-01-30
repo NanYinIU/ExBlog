@@ -25,7 +25,7 @@
 		});
 	</script>
 	<script type="text/javascript" src="/main/js/move-top.js"></script>
-	<script src="/assets/js/template-web.js"></script>
+	<script src="/main/js/template-web.js"></script>
 	<script type="text/javascript" src="/main/js/easing.js"></script>
 <!--/script-->
 <script type="text/javascript">
@@ -40,60 +40,7 @@
 <body>
 	<!-- header-section-starts-here -->
 	<input type="hidden" th:value="${tagName}" id="tag"/>
-		<div class="header">
-		<div class="header-bottom">
-			<div class="navigation">
-				<nav class="navbar navbar-default" role="navigation">
-		    <div class="wrap">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-
-				</div>
-				<!--/.navbar-header-->
-				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					 <li class="active"><a href="index.html">SOCIAL BLOG</a></li>
-						<li><a href=""><h4>博客专栏</h4></a></li>
-				    <li>
-						<a href="#" data-toggle="dropdown"><h4>个人主页</h4></a>
-					  </li>
-					<li><a href=""><h4>博客管理</h4></a></li>
-					<li><a href="/main/pageList"><h4>文章库</h4></a></li>
-                    <li th:if="${session.user == null}"><a href="" ><h4>登录</h4></a></li>
-                    <li th:if="${session.user != null}"><a href=""><h4>登出</h4></a></li>
-					<div class="clearfix"></div>
-				</ul>
-				<div class="search">
-					<!-- start search-->
-				    <div class="search-box">
-					    <div id="sb-search" class="sb-search">
-							<form>
-								<input class="sb-search-input" placeholder="Enter your search term..." type="search" name="search" id="search"/>
-								<input class="sb-search-submit" type="submit" value=""/>
-								<span class="sb-icon-search"> </span>
-							</form>
-						</div>
-				    </div>
-					<!-- search-scripts -->
-					<script src="/main/js/classie.js"></script>
-					<script src="/main/js/uisearch.js"></script>
-						<script>
-							new UISearch( document.getElementById( 'sb-search' ) );
-						</script>
-					<!-- //search-scripts -->
-					</div>
-					<div class="clearfix"></div>
-			</div>
-			</div>
-				</nav>
-			</div>
-
-		</div>
+    <div th:include="/main/index :: navbar"></div>
 
 	<!-- header-section-ends-here -->
 	<div class="wrap">
@@ -122,12 +69,12 @@
 							<div class="article-right">
 								<div class="article-title">
 									<p>{{create_time}}</p>
-									<a class="title" href="single.html" >{{title}} </a>
+									<a class="title" href="/paper/{{id}}" >{{title}} </a>
 									<p >{{sgement}}</p>
 								</div>
 							</div>
 							<div class="article-left">
-								<a href="single.html"><img src="{{paper_image}}" height="120px" width="180px"  alt="" /></a>
+								<a href="/paper/{{id}}"><img src="{{paper_image}}" height="120px" width="180px"  alt="" /></a>
 								<div class="clearfix"></div>
 							</div>
 							<div class="clearfix"></div>
@@ -146,7 +93,6 @@
 
                         var url;
                         function init(url,list) {
-                            // alert(url)
                             $.ajax({
                                 type: "post",
                                 dataType: "json",
@@ -230,7 +176,7 @@
                                                         <a href="/paper/{{id}}"><img src="{{paper_image}}" alt="" /></a>
                                                     </div>
                                                     <div class="post-text">
-                                                        <a class="pp-title" href=/paper/{{id}}"> {{title}}</a>
+                                                        <a class="pp-title" href="/paper/{{id}}"> {{title}}</a>
                                                         <p>{{create_time}} <a class="span_link" href="#"> &nbsp;&nbsp;&nbsp;观看数:<span class="glyphicon glyphicon-eye-open"></span>{{mark}} </a></p>
                                                     </div>
                                                     <div class="clearfix"></div>
@@ -273,10 +219,10 @@
                                             <script type="text/html" id="column">
                                                 <div class="popular-post-grid">
                                                     <div class="post-img">
-                                                        <a href="single.html"><img src="{{image}}" width="100" style="height: 80px" alt="" /></a>
+                                                        <a href="/main/columnItem/{{id}}"><img src="{{image}}" width="100" style="height: 80px" alt="" /></a>
                                                     </div>
                                                     <div class="post-text">
-                                                        <a class="pp-title" href="single.html"> {{title}}</a>
+                                                        <a class="pp-title" href="/main/columnItem/{{id}}"> {{title}}</a>
                                                         <p>{{c_create_time}}"></p>
                                                     </div>
                                                     <div class="clearfix"></div>
@@ -322,16 +268,16 @@
                                             <script type="text/html" id="comment">
                                                 <div class="media response-info">
                                                     <div class="media-left response-text-left">
-                                                        <a href="#">
+                                                        <a href="/paper/{{paper_id}}">
                                                             <img class="media-object" src="{{paper_image}}" height="50" style="width: 80px" alt="" />
                                                         </a>
-                                                        <h5><a href="#">{{title}}</a></h5>
+                                                        <h5><a href="/paper/{{paper_id}}">{{title}}</a></h5>
                                                     </div>
                                                     <div class="media-right response-text-right">
                                                         <p>{{comments_user_name}} Ref: {{comments_content}}</p>
                                                         <ul>
                                                             <li>{{comments_time}}</li>
-                                                            <li><a href="single.html">Reply</a></li>
+                                                            <li><a href="/paper/{{paper_id}}">Reply</a></li>
                                                         </ul>
                                                     </div>
                                                     <div class="clearfix"> </div>
@@ -409,7 +355,7 @@
 
 							<script type="text/html" id="tags">
 								{{each tags value i}}
-								<a id="tagName" class="tag{{i}}" href="/tag/returnTagPage?tagName={{value}}" >{{value}} </a>
+								<a id="tagName" class="tag{{i}}" href="/tag/returnTagPage/{{value}}" >{{value}} </a>
 								{{/each}}
 
 							</script>
@@ -469,52 +415,7 @@
 	<!-- content-section-ends-here -->
 
 	<!-- footer-section-starts-here -->
-	<div class="footer">
-		<div class="footer-top">
-			<div class="wrap">
-				<div class="col-md-4 col-xs-6 col-sm-4 footer-grid">
-					<h4 class="footer-head">关于我们</h4>
-					<p>github地址:xxxx-xxxx-xxxx-xxxx-xxxx-xxxx</p>
-                    <p>项目地址:xxxx-xxxx-xxxx-xxxx-xxxx-xxxx</p>
-                    <p>使用框架结构:xxxx-xxxx-xxxx-xxxx-xxxx-xxxx</p>
-                    <p>通用教程和资料:xxxx-xxxx-xxxx-xxxx-xxxx-xxxx</p>
-				</div>
-				<div class="col-md-4 col-xs-8 col-sm-2 footer-grid">
-					<h4 class="footer-head">分类</h4>
-					<ul class="cat">
-						<li><a href="business.html">主页</a></li>
-						<li><a href="technology.html">博客专栏</a></li>
-						<li><a href="entertainment.html">个人主页</a></li>
-						<li><a href="sports.html">博客管理</a></li>
-						<li><a href="shortcodes.html">所有文章</a></li>
-					</ul>
-				</div>
-
-				<div class="col-md-4 col-xs-8 footer-grid">
-					<h4 class="footer-head">联系我们</h4>
-					<address>
-						<ul class="location">
-							<li><span class="glyphicon glyphicon-map-marker"></span></li>
-							<li>天津理工大学 计算机科学与技术</li>
-							<div class="clearfix"></div>
-						</ul>
-						<ul class="location">
-							<li><span class="glyphicon glyphicon-earphone"></span></li>
-							<li>151-226-36xxx</li>
-							<div class="clearfix"></div>
-						</ul>
-						<ul class="location">
-							<li><span class="glyphicon glyphicon-envelope"></span></li>
-							<li><a href="mailto:info@example.com">1977713379@qq.com</a></li>
-							<div class="clearfix"></div>
-						</ul>
-					</address>
-				</div>
-				<div class="clearfix"></div>
-			</div>
-		</div>
-
-	</div>
+    <div th:include="/main/index :: footer-section"></div>
 	<!-- footer-section-ends-here -->
 	<script type="text/javascript">
 		$(document).ready(function() {

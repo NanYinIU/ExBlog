@@ -146,6 +146,10 @@ public class PaperServiceImpl implements PaperService {
         int id1 = Integer.parseInt(id);
         return paperMapper.updateMarkByTitle(mark, id1);
     }
+    @Override
+    public int updateMarkByTitle(int mark ,int id) {
+        return paperMapper.updateMarkByTitle(mark, id);
+    }
 
     private PaperAndComments initPaperAndConmments(String name) {
         PaperAndComments initPaperAndComment = new PaperAndComments();

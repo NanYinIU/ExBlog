@@ -28,6 +28,8 @@ public interface PaperService {
 
     int updateMarkByTitle(int mark,String id);
 
+    int updateMarkByTitle(int mark,int id);
+
     PageInfo findAllPaperByUser(String name, String search, int pageNum);
 
     int getTotal(String search,String username);

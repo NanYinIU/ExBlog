@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import com.nanyin.config.AllAttriOfPaper;
 import com.nanyin.config.InsertPojo;
 import com.nanyin.config.PaperAndComments;
 import com.nanyin.config.common.Paging;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 /**
@@ -143,8 +145,13 @@ public class PaperController {
                 ModelAndView modelAndView = new ModelAndView();
                 modelAndView.setViewName("/main/page");
                 Map<String,Object> map = Maps.newHashMap();
+                //根据id进行mark的增加
+                Paper paper = paperService.findPaperById(id);
+                try{
+                    map.put("page",paperService.findAllAttriOfPapaer(id));
+                }catch (Exception e){
 
-                map.put("page",paperService.findAllAttriOfPapaer(id));
+                }
                 modelAndView.addAllObjects(map);
                 return modelAndView;
     }
