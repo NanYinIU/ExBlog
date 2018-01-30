@@ -40,6 +40,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/main/**", "anon"); //表示可以匿名访问
         filterChainDefinitionMap.put("/paper/**", "anon"); //表示可以匿名访问
         filterChainDefinitionMap.put("/tag/**", "anon"); //表示可以匿名访问
+        filterChainDefinitionMap.put("/faves/FavesPaper", "anon"); //表示可以匿名访问
+
         filterChainDefinitionMap.put("/user/*", "anon"); //表示可以匿名访问
         filterChainDefinitionMap.put("/home", "anon");
         filterChainDefinitionMap.put("/assets/**", "anon");

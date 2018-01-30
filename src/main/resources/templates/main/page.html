@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Index</title>
+<title>具体文章</title>
 <link href="/main/css/bootstrap.css" rel='stylesheet' type='text/css' />
 <script src="/main/js/jquery.min.js"></script>
 <link href="/main/css/style.css" rel="stylesheet" type="text/css" media="all" />
@@ -120,7 +120,8 @@
 	<div class="main-body">
 		<div class="wrap">
 			<ol class="breadcrumb">
-				<li><a href="index.html">文章列表</a></li>
+				<li><a href="/main/index">主页</a></li>
+				<li><a href="/main/pageList">文章库</a></li>
 				<li class="active" th:text="${page.paper.title}"></li>
 			</ol>
 
@@ -176,18 +177,8 @@
                     <!-- 显示代码 -->
 				</div>
                 <input id="markNum" type="hidden" th:value="${page.paper.mark}">
-                <button id="zan" class="btn btn-primary btn-block" type="submit" th:text="'赞一个 < '+${page.paper.mark}+' >'" ></button>
                 <button id="shoucang" onclick="addItem()" class="btn btn-primary btn-block" type="submit" th:text="添加到我的收藏" ></button>
-                <!--点赞js-->
-                <script >
-                        var title = document.getElementById("paperTitle").innerHTML;
-                        var pageId = document.getElementById("paperId").value;
-                        var mark = document.getElementById("markNum").value;
-                        function markNum() {
-                            
-                        }
 
-                </script>
                 <!--收藏js-->
                 <script>
                     function addItem() {
@@ -510,10 +501,7 @@
 
                                  });
                              })
-                             function randomy() {
-                                 return Math
-                                     .random();
-                             }
+
 						 </script>
 
 

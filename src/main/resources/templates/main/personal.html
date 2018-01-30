@@ -97,7 +97,11 @@
 
 	<!-- header-section-ends-here -->
 	<div class="wrap">
-
+		<ol class="breadcrumb">
+			<li><a href="/main/index">主页</a></li>
+			<li class="active">个人主页</li>
+			<li class="active" id="breadName" th:text="${userName}"></li>
+		</ol>
 	</div>
 
 	<!-- content-section-starts-here -->
@@ -209,7 +213,7 @@
                             </header>
 
                             <!--  开始-->
-                            <script type="text/html" id="comment">
+                            <script type="text/html" id="Pcomment">
                                 <div class="s-grid-small">
                                     <div class="sc-image">
                                         <a href=""><img src="{{paper_image}}" alt="" /></a>
@@ -226,7 +230,7 @@
 
                             </script>
                             <script type="text/javascript">
-                                var comment ='';
+                                var Pcomment ='';
                                 var userName = document.getElementById("userName").value;
                                 $(document).ready(function () {
                                     var url = '/comments/PersonalComments?userName='+userName;
@@ -241,15 +245,15 @@
                                             var i;
                                             var j;
                                             for(i in data.list){
-                                                comment = template('comment', data.list[i])+comment;
+                                                Pcomment = template('Pcomment', data.list[i])+Pcomment;
                                             }
-                                            document.getElementById('commentsContent').innerHTML = comment;
+                                            document.getElementById('PcommentsContent').innerHTML = Pcomment;
                                         }
 
                                     });
                                 })
                             </script>
-                            <div id="commentsContent"></div>
+                            <div id="PcommentsContent"></div>
                             <!-- 结束-->
                         </div>
                     </div>
@@ -282,7 +286,7 @@
 
                             </script>
                             <script type="text/javascript">
-                                h ='';
+                                var fr ='';
                                 $(document).ready(function () {
                                     var url = '/user/FrientsWithUserId?userName='+userName;
                                     $.ajax( {
@@ -295,9 +299,9 @@
                                             var i;
                                             var j;
                                             for(i in data.list){
-                                                h = template('friend', data.list[i])+h;
+                                                fr = template('friend', data.list[i])+fr;
                                             }
-                                            document.getElementById('friendContent').innerHTML = h;
+                                            document.getElementById('friendContent').innerHTML = fr;
                                         }
 
                                     });
@@ -323,11 +327,206 @@
 
 			<div class="col-md-4 side-bar">
 			<div class="first_half">
+				<div class="newsletter">
+					<h1 class="side-title-head">基本信息</h1>
+					<p class="sign">关于作者的基本信息</p>
+                    <script type="text/html" id="ps">
+                        <img id="img" src="{{head}}" th:width="80px" height="80px" />
+                        <p>昵称: <a>{{login_name}}</a></p>
+                        <p>邮箱: <a>{{email}}</a></p>
+                        <p>性别: <a>{{sex}}</a></p>
+                        帐号现在状态:
+                        {{if status == 0}}
+                        <a>帐号已被冻结</a>
+                        {{/if}}
+                        <a>正常状态</a>
+                    </script>
+					<script>
+                        var ps ='';
+                        $(document).ready(function () {
+                            var userName = document.getElementById("userName").value;
+                            url = '/user/personalMes';
+                            $.ajax( {
+                                type : "post",
+                                dataType:"json",
+                                data:{userName:userName},
+                                url : url,
+                                timeout : 20000,
+                                cache : false,
+                                success : function(data) {
+                                    var i;
+                                    ps = template('ps', data);
+                                    document.getElementById('personalContent').innerHTML = ps;
+                                }
 
+                            });
+                        })
+					</script>
+                    <div id="personalContent"></div>
+				</div>
+                <!--右侧 三重合label ajax数据显示 开始-->
+                <div class="list_vertical">
+                    <section class="accordation_menu">
+                        <div>
+                            <input id="label-1" name="lida" type="radio" checked/>
+                            <label for="label-1" id="item1"><i class="ferme"> </i>一月内热文排行<i class="icon-plus-sign i-right1"></i><i class="icon-minus-sign i-right2"></i></label>
+                            <div class="content" id="a1">
+                                <div class="scrollbar" id="style-2">
+                                    <div class="force-overflow">
+                                        <div class="popular-post-grids">
+                                            <script type="text/html" id="hotPaper">
+                                                <div class="popular-post-grid">
+                                                    <div class="post-img">
+                                                        <a href="/paper/{{id}}"><img src="{{paper_image}}" alt="" /></a>
+                                                    </div>
+                                                    <div class="post-text">
+                                                        <a class="pp-title" href=/paper/{{id}}"> {{title}}</a>
+                                                        <p>{{create_time}} <a class="span_link" href="#"> &nbsp;&nbsp;&nbsp;观看数:<span class="glyphicon glyphicon-eye-open"></span>{{mark}} </a></p>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </script>
+                                            <script type="text/javascript">
+                                                var h1 ='';
+                                                $(document).ready(function () {
+                                                    var url = '/paper/hotPapersInMonth';
+                                                    $.ajax( {
+                                                        type : "post",
+                                                        dataType:"json",
+                                                        url : url,
+                                                        timeout : 20000,
+                                                        cache : false,
+                                                        success : function(data) {
+                                                            var i;
+                                                            for(i in data.list){
+                                                                h1 = template('hotPaper', data.list[i])+h1;
+                                                            }
+                                                            document.getElementById('hotPaperInMonth').innerHTML = h1;
+                                                        }
+
+                                                    });
+                                                })
+                                            </script>
+                                            <div id="hotPaperInMonth"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <input id="label-2" name="lida" type="radio"/>
+                            <label for="label-2" id="item2"><i class="icon-leaf" id="i2"></i>热门主题<i class="icon-plus-sign i-right1"></i><i class="icon-minus-sign i-right2"></i></label>
+                            <div class="content" id="a2">
+                                <div class="scrollbar" id="style-2">
+                                    <div class="force-overflow">
+                                        <div class="popular-post-grids">
+                                            <script type="text/html" id="column">
+                                                <div class="popular-post-grid">
+                                                    <div class="post-img">
+                                                        <a href="single.html"><img src="{{image}}" width="100" style="height: 80px" alt="" /></a>
+                                                    </div>
+                                                    <div class="post-text">
+                                                        <a class="pp-title" href="single.html"> {{title}}</a>
+                                                        <p>{{c_create_time}}"></p>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </script>
+                                            <script type="text/javascript">
+                                                h ='';
+                                                $(document).ready(function () {
+                                                    var url = '/column/findColumByCount';
+                                                    $.ajax( {
+                                                        type : "post",
+                                                        dataType:"json",
+                                                        url : url,
+                                                        timeout : 20000,
+                                                        cache : false,
+                                                        success : function(data) {
+
+                                                            // alert(data.colum[1].c_create_time)
+                                                            var i;
+                                                            var j;
+                                                            for(i in data.colum){
+                                                                h = template('column', data.colum[i])+h;
+                                                            }
+                                                            document.getElementById('themeContent').innerHTML = h;
+                                                        }
+
+                                                    });
+                                                })
+                                            </script>
+                                            <div id="themeContent"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <input id="label-3" name="lida" type="radio"/>
+                            <label for="label-3" id="item3"><i class="icon-trophy" id="i3"></i>旧文新评<i class="icon-plus-sign i-right1"></i><i class="icon-minus-sign i-right2"></i></label>
+                            <div class="content" id="a3">
+                                <div class="scrollbar" id="style-2">
+                                    <div class="force-overflow">
+                                        <div class="response">
+                                            <script type="text/html" id="comment">
+                                                <div class="media response-info">
+                                                    <div class="media-left response-text-left">
+                                                        <a href="#">
+                                                            <img class="media-object" src="{{paper_image}}" height="50" style="width: 80px" alt="" />
+                                                        </a>
+                                                        <h5><a href="#">{{title}}</a></h5>
+                                                    </div>
+                                                    <div class="media-right response-text-right">
+                                                        <p>{{comments_user_name}} Ref: {{comments_content}}</p>
+                                                        <ul>
+                                                            <li>{{comments_time}}</li>
+                                                            <li><a href="single.html">Reply</a></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="clearfix"> </div>
+                                                </div>
+                                            </script>
+                                            <script type="text/javascript">
+                                                var comment ='';
+                                                $(document).ready(function () {
+                                                    var url = '/comments/commentsWithPaperAndUserMes';
+                                                    $.ajax( {
+                                                        type : "post",
+                                                        dataType:"json",
+                                                        url : url,
+                                                        timeout : 20000,
+                                                        cache : false,
+                                                        success : function(data) {
+
+                                                            // alert(data.colum[1].c_create_time)
+                                                            var i;
+                                                            var j;
+                                                            for(i in data.comments){
+                                                                comment = template('comment', data.comments[i])+comment;
+                                                            }
+                                                            document.getElementById('commentsContent').innerHTML = comment;
+                                                        }
+
+                                                    });
+                                                })
+                                            </script>
+                                            <div id="commentsContent"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+
+                </div>
+                <!--右侧 三重合label ajax数据显示 结束 在div class=first_half里面-->
 				<div class="list_vertical">
 		            <section class="accordation_menu"></section>
                 </div>
-					 </div>
+			</div>
 					 <div class="secound_half">
 						 <!--标签栏 全部标签 限量20-->
 					 <div class="tags">

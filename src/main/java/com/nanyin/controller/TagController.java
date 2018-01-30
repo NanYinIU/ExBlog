@@ -105,8 +105,8 @@ public class TagController {
         return tagService.insertTagNameByPaperId(name, id);
     }
 
-    @RequestMapping("/returnTagPage")
-    public @ResponseBody ModelAndView returnTagPage(@RequestParam("tagName") String tagName){
+    @RequestMapping("/returnTagPage/{tagName}")
+    public @ResponseBody ModelAndView returnTagPage(@PathVariable("tagName") String tagName){
         ModelAndView modelAndView = new ModelAndView("/main/tagList");
         modelAndView.addObject("tagName",tagName);
         return modelAndView;

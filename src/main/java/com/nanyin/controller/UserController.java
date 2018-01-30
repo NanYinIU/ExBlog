@@ -222,4 +222,9 @@ public class UserController {
         modelAndView.setViewName("InnerLayui/Admin/checkUserMes");
         return modelAndView;
     }
+
+    @RequestMapping("/user/personalMes")
+    public @ResponseBody Users personalMes(@RequestParam("userName") String userName){
+        return userService.findUsersByName(userName);
+    }
 }

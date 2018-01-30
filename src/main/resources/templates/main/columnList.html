@@ -96,7 +96,10 @@
 
 	<!-- header-section-ends-here -->
 	<div class="wrap">
-
+		<ol class="breadcrumb">
+			<li><a href="/main/index">主页</a></li>
+			<li><a href="/main/columnList">专栏</a></li>
+		</ol>
 	</div>
 
 	<!-- content-section-starts-here -->
@@ -117,11 +120,11 @@
 							<div class="article-right">
 								<div class="article-title">
 									<p>{{c_create_time}}</p>
-									<a class="title" href="/paper/{{id}}" >{{title}} </a>
+									<a class="title" href="/main/columnItem/{{id}}" >{{title}} </a>
 								</div>
 							</div>
 							<div class="article-left">
-								<a href="/paper/{{id}}"><img src="{{image}}"  height="200px"  alt="" /></a>
+								<a href="/main/columnItem/{{id}}"><img src="{{image}}"  height="200px"  alt="" /></a>
 								<div class="clearfix"></div>
 							</div>
 							<div class="clearfix"></div>
