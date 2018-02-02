@@ -50,17 +50,6 @@ public class PaperController {
         return paperService.findAllPapersByTime();
     }
 
-    /**
-     * mark增加
-     * @param mark
-     * @param id
-     * @return
-     */
-    @RequestMapping("/markAdd")
-    public @ResponseBody int markAdd(String mark,String id){
-        int marked = Integer.parseInt(mark);
-        return paperService.updateMarkByTitle(marked+1, id);
-    }
 
     /**
      * 返回文章和评论信息 按热度排序
@@ -72,19 +61,11 @@ public class PaperController {
         return paperService.findAllPapersByMark();
     }
 
-    @RequestMapping("/personalPage/{name}/{pageNum}")
-    public @ResponseBody
-    ModelAndView  personalPage(
-            @PathVariable(value = "pageNum") int pageNum,
-            @PathVariable(value = "name") String name,
-            @RequestParam(value = "search", required = false) String search){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("PersonalIndex");
-        PageInfo<PaperAndComments> pageInfo = paperService.findAllPaperByUser(name,search,pageNum);
-        modelAndView.addObject("pageInfo",pageInfo);
-        return modelAndView;
-    }
-
+    /**
+     * 后台管理页面
+     * @param url
+     * @return
+     */
     @RequestMapping("/manage/pageMes")
     public ModelAndView pageManage(String url){
         ModelAndView modelAndView = new ModelAndView();
@@ -92,22 +73,34 @@ public class PaperController {
         Map<String,Object> map = Maps.newHashMap();
         map.put("url",url);
         modelAndView.addAllObjects(map);
-
         return modelAndView;
     }
 
-    @RequestMapping("/main/pageList/{pageNum}")
-    public @ResponseBody
-    ModelAndView  HomePage(
-            @PathVariable(value = "pageNum") int pageNum,
-            @RequestParam(value = "search", required = false) String search){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/main/pageList");
-        PageHelper.startPage(pageNum, Paging.LIMIT.getValue()-2);
-        PageInfo pageInfo = paperService.findAllPapers(search,pageNum);
-        modelAndView.addObject("pageInfo",pageInfo);
-        return modelAndView;
-    }
+//    /**
+//     * 前台显示所有页面
+//     * @param pageNum
+//     * @param search
+//     * @return
+//     */
+//    @RequestMapping("/main/pageList/{pageNum}")
+//    public @ResponseBody
+//    ModelAndView  HomePage(
+//            @PathVariable(value = "pageNum") int pageNum,
+//            @RequestParam(value = "search", required = false) String search){
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("/main/pageList");
+//        PageHelper.startPage(pageNum, Paging.LIMIT.getValue()-2);
+//        PageInfo pageInfo = paperService.findAllPapers(search,pageNum);
+//        modelAndView.addObject("pageInfo",pageInfo);
+//        return modelAndView;
+//    }
+
+    /**
+     *
+     * @param pageNum
+     * @param search
+     * @return
+     */
     @RequestMapping("/paper/test/{pageNum}")
     public @ResponseBody
     PageInfo pageTest(
@@ -121,22 +114,6 @@ public class PaperController {
     }
 
 
-    @RequestMapping("/ColumnPage2/{column}/{pageNum}")
-    public @ResponseBody
-    Map<String,Object>  ColumnPage2(
-            @PathVariable(value = "pageNum") int pageNum,
-            @PathVariable(value = "column") String column
-    ) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("list",paperService.findPaperInColumn(column));
-        ModelAndView modelAndView = new ModelAndView();
-        PageHelper.startPage(pageNum,3);
-        PageInfo pageInfo = new PageInfo(paperService.findPaperInColumn(column));
-        modelAndView.setViewName("Column");
-        map.put("pageInfo",pageInfo);
-        map.put("column",column);
-        return map;
-    }
 
 
     @RequestMapping("/paper/{id}")
@@ -155,23 +132,6 @@ public class PaperController {
                 modelAndView.addAllObjects(map);
                 return modelAndView;
     }
-
-    @RequestMapping("/ColumnPage/{column}/{pageNum}")
-    public @ResponseBody
-    ModelAndView  ColumnPage(
-            @PathVariable(value = "pageNum") int pageNum,
-            @PathVariable(value = "column") String column
-            ) {
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("Column");
-        PageHelper.startPage(pageNum,10);
-        PageInfo pageInfo = new PageInfo(paperService.findPaperInColumn(column));
-        modelAndView.addObject("pageInfo",pageInfo);
-        modelAndView.addObject("column",column);
-        return modelAndView;
-    }
-
 
 
     /**
@@ -207,7 +167,12 @@ public class PaperController {
         }
     }
 
-
+    /**
+     * 根据
+     * @param name
+     * @param pageNum
+     * @return
+     */
     @RequestMapping("/paper/findPaperByName/{name}/{pageNum}")
     public @ResponseBody Map<String,Object> findPaperByName(
             @PathVariable("name") String name, @PathVariable("pageNum") String pageNum){
@@ -216,12 +181,19 @@ public class PaperController {
         return map;
     }
 
+    /**
+     * 更新文章内容
+     * @param id
+     * @param content
+     * @return
+     */
     @RequestMapping("/paper/updateContent/{id}")
     public @ResponseBody int updateContent(@PathVariable("id") String id,String content){
         return paperService.updatePaperContentById(content,id);
     }
 
     /**
+     * 新建文章
      * @param insertPojo 插入的数据类型
      * @return 返回值 根据返回值判断是否返回成功
      */
@@ -281,7 +253,7 @@ public class PaperController {
     }
 
     /**
-     *
+     * 后台文章管理的数据
      * @return 所有文章的数据
      */
     @RequestMapping(value = {"/paper/adminPapersData/{pageNum}","/paper/adminPapersData/{pageNum}/{timePick}"})
@@ -289,7 +261,6 @@ public class PaperController {
             @PathVariable(value = "pageNum") int pageNum,
             @PathVariable(value = "timePick",required = false) String timePick,
             @RequestParam(value = "title",required = false) String search){
-        logger.info("search"+search);
         return paperService.findPapers(pageNum,search,timePick);
     }
 

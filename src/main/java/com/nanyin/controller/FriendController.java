@@ -36,7 +36,12 @@ public class FriendController {
     @Autowired
     UserService userService;
 
-
+    /**
+     * 检查是否是好友
+     * @param userId
+     * @param friendId
+     * @return
+     */
     @RequestMapping("/user/checkFriends")
     public @ResponseBody
     Map<String,Boolean> findFriends(@RequestParam("userId") String userId, @RequestParam("friendId") String friendId){
@@ -69,6 +74,13 @@ public class FriendController {
     public @ResponseBody int deleteFriends(@RequestParam("userId") String userId, @RequestParam("friendId") String friendId){
         return friendService.deleteFriendRelation(userId, friendId);
     }
+
+    /**
+     * 查看好友列表
+     * @param request
+     * @param pageNum
+     * @return
+     */
     @RequestMapping("/user/friendTable/{pageNum}")
     public @ResponseBody Map<String,Object> friendTable(HttpServletRequest request,@PathVariable("pageNum") int pageNum){
         HttpSession session = request.getSession();
@@ -84,6 +96,11 @@ public class FriendController {
         return map;
     }
 
+    /**
+     * 返回好友列表页
+     * @param url
+     * @return
+     */
     @RequestMapping("/user/friendPage")
     public ModelAndView friendPage(@Param("url") String url){
         ModelAndView modelAndView = new ModelAndView();
@@ -117,6 +134,11 @@ public class FriendController {
         }
     }
 
+    /**
+     * 个人页面的好友列表 开放权限
+     * @param userName
+     * @return
+     */
     @RequestMapping("/user/FrientsWithUserId")
     public @ResponseBody Map<String,Object> FrientsWithUserId(@RequestParam("userName") String userName){
         return friendService.friendsWithUserId(userName);

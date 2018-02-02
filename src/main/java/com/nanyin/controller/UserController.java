@@ -51,16 +51,21 @@ public class UserController {
     UserDetailService userDetailService;
     @Autowired
     PaperController paperController;
-//     主页名称
-//    @RequestMapping("/index")
-//    public String index(){
-//        return "redirect:/user/login";
-//    }
 
+    /**
+     * 返回login登录界面
+     * @return
+     */
     @RequestMapping("/user/login")
     public String login(){
         return "login";
     }
+
+    /**
+     * 当权限不足需要登录是返回登录前的状态页面
+     * @param url
+     * @return
+     */
     @RequestMapping("/user/reLogin")
     public ModelAndView reLogin(@RequestParam(value = "url",required = false) String url){
         ModelAndView modelAndView = new ModelAndView("login");
@@ -68,11 +73,20 @@ public class UserController {
         return modelAndView;
     }
 
+    /**
+     * 返回注册页面
+     * @return
+     */
     @RequestMapping("/user/signUp")
     public String signUp(){
         return null;
     }
 
+    /**
+     * 登出
+     * @param request
+     * @return
+     */
     @RequestMapping("/user/logout")
     public String logout(HttpServletRequest request){
         org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
@@ -94,7 +108,7 @@ public class UserController {
         HttpSession session = request.getSession();
         String reDirectUrl ;
         if(url == null || "".equals(url)){
-            reDirectUrl="/HomePage/1";
+            reDirectUrl="/main/index";
         }else{
             reDirectUrl=url;
         }
@@ -124,12 +138,6 @@ public class UserController {
         return userService.findUsersByName(name);
     }
 
-    @RequestMapping("/user/detailPage2/{name}")
-    public @ResponseBody Map<String,Object> getDetail2(@PathVariable("name") String name){
-        Map<String,Object> map = new HashMap<>();
-        map.put("user",userService.getUserParam(name));
-        return map;
-    }
 
     @RequestMapping("/user/detailPage")
     public @ResponseBody
@@ -142,6 +150,19 @@ public class UserController {
         return modelAndView;
     }
 
+    /**
+     * 更新用户信息
+     * @param imgMes
+     * @param userName
+     * @param realName
+     * @param position
+     * @param data
+     * @param email
+     * @param address
+     * @param sketch
+     * @return
+     * @throws ParseException
+     */
     @RequestMapping("/user/updateDetail")
     public @ResponseBody int updateUserDetail(@RequestParam("imgMes") String imgMes,
                                               @RequestParam("userName") String userName,
@@ -207,6 +228,11 @@ public class UserController {
         return map;
     }
 
+    /**
+     * 人员管理
+     * @param url
+     * @return
+     */
     @RequestMapping("/user/returnUserManage")
     public ModelAndView returnUserManage(@RequestParam(value = "url",required = false) String url){
         ModelAndView modelAndView = new ModelAndView();

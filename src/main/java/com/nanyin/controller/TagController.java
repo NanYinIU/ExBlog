@@ -61,7 +61,11 @@ public class TagController {
     }
 
 
-
+    /**
+     * 查找对应用户的所有tag
+     * @param name
+     * @return
+     */
     @RequestMapping("/findAllTagsByName/{name}")
     public @ResponseBody Map<String,Object> findAllTagsByName(@PathVariable("name") String name){
             Set<String> list = tagService.findTagNameByUser(name);
@@ -77,34 +81,74 @@ public class TagController {
             return map;
     }
 
+    /**
+     * 返回后台的tag管理页面
+     * @param id
+     * @return
+     */
     @RequestMapping("/tagPage/{id}")
     public String tagPage(@PathVariable("id") int id){
         return "InnerLayui/tagMes";
     }
 
+    /**
+     * 查询对应文章的所有tag
+     * @param id
+     * @return
+     */
     @RequestMapping("/tagsByPaperId/{id}")
     public @ResponseBody Map<String, Object> tagsByPaperId(@PathVariable("id") int id){
         return tagService.findTagNamesByPaperId(id);
     }
+
+    /**
+     * 返回修改tag的页面
+     * @return
+     */
     @RequestMapping("/updateTag")
     public String updateTag(){
         return "InnerLayui/updateTag";
     }
 
+    /**
+     * 删除tag
+     * @param id
+     * @param tags
+     * @return
+     */
     @RequestMapping("/delectTags/{id}/{tags}")
     public @ResponseBody int delectTags(@PathVariable("id") int id,@PathVariable("tags") String tags){
         return tagService.delectTagByPaperIdAndTagName(id,tags);
     }
 
+    /**
+     * 后台修改tag
+     * @param id
+     * @param oldTag
+     * @param newTag
+     * @return
+     */
     @RequestMapping("/updateTags/{id}/{oldTag}")
     public @ResponseBody int updateTags(@PathVariable("id") int id,@PathVariable("oldTag") String oldTag,@RequestParam("title") String newTag){
         return tagService.updateTagNameByPaperIdAndTagName(newTag,id,oldTag);
     }
+
+    /**
+     * 插入tag
+     * @param name
+     * @param id
+     * @return
+     */
     @RequestMapping("/insertTags/{id}")
     public @ResponseBody int insertTags(@RequestParam("newTag") String name,@PathVariable("id") int id){
         return tagService.insertTagNameByPaperId(name, id);
     }
 
+    /**
+     * 返回前台的tagList页面
+     * @param tagName
+     * @return
+     */
     @RequestMapping("/returnTagPage/{tagName}")
     public @ResponseBody ModelAndView returnTagPage(@PathVariable("tagName") String tagName){
         ModelAndView modelAndView = new ModelAndView("/main/tagList");

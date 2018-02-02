@@ -68,7 +68,7 @@ public interface PaperMapper {
     /**
     * 按照热度排序
     */
-    @Select("SELECT * FROM  social_blog.paper p WHERE p.is_pass = \"审核通过\"  ORDER BY p.mark DESC LIMIT 0,5")
+    @Select("SELECT * FROM  social_blog.paper p WHERE p.is_pass = \"审核通过\"  ORDER BY p.mark DESC LIMIT 0,3")
     List<Paper> findAllPapersByMark();
 
     /**

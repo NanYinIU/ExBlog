@@ -42,68 +42,58 @@
     <div th:fragment="navbar">
 		<div class="header">
 		    <div class="header-bottom">
-			<div class="navigation">
-				<nav class="navbar navbar-default" role="navigation">
-		    <div class="wrap">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-				</div>
-				<!--/.navbar-header-->
-
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav">
-                             <li class="active"><a href="/main/index">SOCIAL BLOG</a></li>
-                                <li><a href="/main/columnList"><h4>博客专栏</h4></a></li>
-                            <li><a onclick="OpenPersonPage" data-toggle="dropdown"><h4>个人主页</h4></a></li>
-                            <input type="hidden" th:value="${session.user}" id="sessionUser">
-                            <script>
-                                function OpenPersonPage() {
-                                    var sessionUser = document.getElementById("sessionUser").value;
-                                    if(sessionUser!=null){
-                                            window.location.href("/main/personal/"+sessionUser);
-                                    }else {
-                                        alert("请先登录!!")
-                                    }
-                                }
-                            </script>
-                            <li><a href="/cit"><h4>博客管理</h4></a></li>
-                            <li><a href="/main/pageList"><h4>文章库</h4></a></li>
-                            <li th:if="${session.user == null}"><a href="/user/login" ><h4>登录</h4></a></li>
-                            <li th:if="${session.user != null}"><a href="/user/logout"><h4>登出</h4></a></li>
-                            <div class="clearfix"></div>
-                        </ul>
-                        <div class="search">
-                            <!-- start search-->
-                            <div class="search-box">
-                                <div id="sb-search" class="sb-search">
-                                    <form>
-                                        <input class="sb-search-input" placeholder="Enter your search term..." type="search" name="search" id="search"/>
-                                        <input class="sb-search-submit" type="submit" value=""/>
-                                        <span class="sb-icon-search"> </span>
-                                    </form>
+                <div class="navigation">
+                    <nav class="navbar navbar-default" role="navigation">
+                        <div class="wrap">
+                            <!--/.navbar-header-->
+                                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                    <ul class="nav navbar-nav">
+                                         <li class="active"><a href="/main/index">SOCIAL BLOG</a></li>
+                                         <li><a href="/main/columnList"><h4>博客专栏</h4></a></li>
+                                        <li><a href="javascript:void(0)" onclick="OpenPersonPage(this)"><h4 >个人主页</h4></a></li>
+                                        <input type="hidden" th:value="${session.user}" id="sessionUser">
+                                        <script type="text/javascript">
+                                            function OpenPersonPage(obj) {
+                                                var sessionUser = document.getElementById("sessionUser").value;
+                                                if(sessionUser!=null & sessionUser!=""){
+                                                    window.location.href("/main/personal/"+sessionUser);
+                                                }else {
+                                                    alert("请先登录!!")
+                                                    window.open("/user/login")
+                                                }
+                                            }
+                                        </script>
+                                        <li><a href="/cit"><h4>博客管理</h4></a></li>
+                                        <li><a href="/main/pageList"><h4>文章库</h4></a></li>
+                                        <li th:if="${session.user == null}"><a href="/user/login" ><h4>登录</h4></a></li>
+                                        <li th:if="${session.user != null}"><a href="/user/logout"><h4>登出</h4></a></li>
+                                        <div class="clearfix"></div>
+                                    </ul>
+                                    <div class="search">
+                                        <!-- start search-->
+                                        <div class="search-box">
+                                            <div id="sb-search" class="sb-search">
+                                                <form>
+                                                    <input class="sb-search-input" placeholder="Enter your search term..." type="search" name="search" id="search"/>
+                                                    <input class="sb-search-submit" type="submit" value=""/>
+                                                    <span class="sb-icon-search"> </span>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- search-scripts -->
+                                        <script src="/main/js/classie.js"></script>
+                                        <script src="/main/js/uisearch.js"></script>
+                                        <script>
+                                                new UISearch( document.getElementById( 'sb-search' ) );
+                                            </script>
+                                        <!-- //search-scripts -->
+                                    </div>
+                                        <div class="clearfix"></div>
                                 </div>
-                            </div>
-                            <!-- search-scripts -->
-                            <script src="/main/js/classie.js"></script>
-                            <script src="/main/js/uisearch.js"></script>
-                            <script>
-                                    new UISearch( document.getElementById( 'sb-search' ) );
-                                </script>
-                            <!-- //search-scripts -->
                         </div>
-                            <div class="clearfix"></div>
-                    </div>
+                    </nav>
+                </div>
             </div>
-
-
-				</nav>
-			</div>
-        </div>
         </div>
     </div>
 
@@ -159,7 +149,8 @@
 					 </div>
 					 <div class="secound_half">
 						 <!--标签栏 全部标签 限量20-->
-					 <div class="tags">
+                         <div th:fragment="tags">
+					        <div class="tags">
 
 						<header>
 							<h3 class="title-head">Tags</h3>
@@ -199,49 +190,212 @@
 						 <p id="tagContent"></p>
 
 					 </div>
+                         </div>
+                         <!--标签tag 结束-->
+                     <div th:fragment="threeDoubleLabel">
+                        <!--右侧 三重合label ajax数据显示 开始-->
+                         <div class="list_vertical">
+                                 <section class="accordation_menu">
+                                     <div>
+                                         <input id="label-1" name="lida" type="radio" checked/>
+                                         <label for="label-1" id="item1"><i class="ferme"> </i>一月内热文排行<i class="icon-plus-sign i-right1"></i><i class="icon-minus-sign i-right2"></i></label>
+                                         <div class="content" id="a1">
+                                             <div class="scrollbar" id="style-2">
+                                                 <div class="force-overflow">
+                                                     <div class="popular-post-grids">
+                                                         <script type="text/html" id="hotPaper">
+                                                             <div class="popular-post-grid">
+                                                                 <div class="post-img">
+                                                                     <a href="/paper/{{id}}"><img src="{{paper_image}}" alt="" /></a>
+                                                                 </div>
+                                                                 <div class="post-text">
+                                                                     <a class="pp-title" href="/paper/{{id}}"> {{title}}</a>
+                                                                     <p>{{create_time}} <a class="span_link" href="#"> &nbsp;&nbsp;&nbsp;观看数:<span class="glyphicon glyphicon-eye-open"></span>{{mark}} </a></p>
+                                                                 </div>
+                                                                 <div class="clearfix"></div>
+                                                             </div>
+                                                         </script>
+                                                         <script type="text/javascript">
+                                                             var hotPaper ='';
+                                                             $(document).ready(function () {
+                                                                 var url = '/paper/hotPapersInMonth';
+                                                                 $.ajax( {
+                                                                     type : "post",
+                                                                     dataType:"json",
+                                                                     url : url,
+                                                                     timeout : 20000,
+                                                                     cache : false,
+                                                                     success : function(data) {
+                                                                         var i;
+                                                                         for(i in data.list){
+                                                                             hotPaper = template('hotPaper', data.list[i])+hotPaper;
+                                                                         }
+                                                                         document.getElementById('hotPaperInMonth').innerHTML = hotPaper;
+                                                                     }
 
+                                                                 });
+                                                             })
+                                                         </script>
+                                                         <div id="hotPaperInMonth"></div>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                     <div>
+                                         <input id="label-2" name="lida" type="radio"/>
+                                         <label for="label-2" id="item2"><i class="icon-leaf" id="i2"></i>热门主题<i class="icon-plus-sign i-right1"></i><i class="icon-minus-sign i-right2"></i></label>
+                                         <div class="content" id="a2">
+                                             <div class="scrollbar" id="style-2">
+                                                 <div class="force-overflow">
+                                                     <div class="popular-post-grids">
+                                                         <script type="text/html" id="hotTheme">
+                                                             <div class="popular-post-grid">
+                                                                 <div class="post-img">
+                                                                     <a href="/main/columnItem/{{id}}"><img src="{{image}}" width="100" style="height: 80px" alt="" /></a>
+                                                                 </div>
+                                                                 <div class="post-text">
+                                                                     <a class="pp-title" href="/main/columnItem/{{id}}"> {{title}}</a>
+                                                                     <p>{{c_create_time}}"></p>
+                                                                 </div>
+                                                                 <div class="clearfix"></div>
+                                                             </div>
+                                                         </script>
+                                                         <script type="text/javascript">
+                                                             hotTheme ='';
+                                                             $(document).ready(function () {
+                                                                 var url = '/column/findColumByCount';
+                                                                 $.ajax( {
+                                                                     type : "post",
+                                                                     dataType:"json",
+                                                                     url : url,
+                                                                     timeout : 20000,
+                                                                     cache : false,
+                                                                     success : function(data) {
 
-					 <div class="popular-news">
-						<header>
-							<h3 class="title-popular">精品文章</h3>
-						</header>
-						 <!-- 侧边栏热门文章 art-templete 开始-->
-						 <script type="text/html" id="post_list">
-							 <div class="popular-grid">
-								 <a href="/paper/{{id}}"><img src="{{paper_image}}" alt="" /></a>
-								 <a class="title" href="/paper/{{id}}">{{title}}</a>
-								 <p href="single.html">{{segment}}</p>
-								 <p>{{create_time}} <a class="span_link" href="#"><span class="glyphicon glyphicon-comment"></span>{{count}} </a><a class="span_link" href="#"><span class="glyphicon glyphicon-thumbs-up"></span>{{mark}}</a></p>
-							 </div>
-						 </script>
-						 <script type="text/javascript">
-                             var html3 ='';
-                             $(document).ready(function () {
-                                 url = '/paper/PapersByMark';
-                                 $.ajax( {
-                                     type : "post",
-                                     dataType:"json",
-                                     url : url,
-                                     timeout : 20000,
-                                     cache : false,
-                                     success : function(data) {
-//                alert(JSON.stringify(data.column[0]));
-                                         var i;
-                                         var j;
-                                         for(i in data.paper){
-                                             html3 = template('post_list', data.paper[i])+html3;
+                                                                         // alert(data.colum[1].c_create_time)
+                                                                         var i;
+                                                                         var j;
+                                                                         for(i in data.colum){
+                                                                             hotTheme = template('hotTheme', data.colum[i])+hotTheme;
+                                                                         }
+                                                                         document.getElementById('hotThemeContent').innerHTML = hotTheme;
+                                                                     }
+
+                                                                 });
+                                                             })
+                                                         </script>
+                                                         <div id="hotThemeContent"></div>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                     <div>
+                                         <input id="label-3" name="lida" type="radio"/>
+                                         <label for="label-3" id="item3"><i class="icon-trophy" id="i3"></i>旧文新评<i class="icon-plus-sign i-right1"></i><i class="icon-minus-sign i-right2"></i></label>
+                                         <div class="content" id="a3">
+                                             <div class="scrollbar" id="style-2">
+                                                 <div class="force-overflow">
+                                                     <div class="response">
+                                                         <script type="text/html" id="recentComment">
+                                                             <div class="media response-info">
+                                                                 <div class="media-left response-text-left">
+                                                                     <a href="/paper/{{paper_id}}">
+                                                                         <img class="media-object" src="{{paper_image}}" height="50" style="width: 80px" alt="" />
+                                                                     </a>
+                                                                     <h5><a href="/paper/{{paper_id}}">{{title}}</a></h5>
+                                                                 </div>
+                                                                 <div class="media-right response-text-right">
+                                                                     <p>{{comments_user_name}} Ref: {{comments_content}}</p>
+                                                                     <ul>
+                                                                         <li>{{comments_time}}</li>
+                                                                         <li><a href="/paper/{{paper_id}}">Reply</a></li>
+                                                                     </ul>
+                                                                 </div>
+                                                                 <div class="clearfix"> </div>
+                                                             </div>
+                                                         </script>
+                                                         <script type="text/javascript">
+                                                             var recentComment ='';
+                                                             $(document).ready(function () {
+                                                                 var url = '/comments/commentsWithPaperAndUserMes';
+                                                                 $.ajax( {
+                                                                     type : "post",
+                                                                     dataType:"json",
+                                                                     url : url,
+                                                                     timeout : 20000,
+                                                                     cache : false,
+                                                                     success : function(data) {
+                                                                         var i;
+                                                                         var j;
+                                                                         for(i in data.comments){
+                                                                             recentComment = template('recentComment', data.comments[i])+recentComment;
+                                                                         }
+                                                                         document.getElementById('recentCommentContent').innerHTML = recentComment;
+                                                                     }
+
+                                                                 });
+                                                             })
+                                                         </script>
+                                                         <div id="recentCommentContent"></div>
+                                                     </div>
+                                                 </div>
+
+                                             </div>
+                                         </div>
+                                     </div>
+
+                                 </section>
+
+                             </div>
+                        <!--右侧 三重合label ajax数据显示 结束 在div class=first_half里面-->
+                     </div>
+                         <!--popular-news 开始-->
+                         <div th:fragment="popular-news">
+                            <div class="popular-news">
+                            <header>
+                                <h3 class="title-popular">精品文章</h3>
+                            </header>
+                             <!-- 侧边栏热门文章 art-templete 开始-->
+                             <script type="text/html" id="post_list">
+                                 <div class="popular-grid">
+                                     <a href="/paper/{{id}}"><img src="{{paper_image}}" alt="" /></a>
+                                     <a class="title" href="/paper/{{id}}">{{title}}</a>
+                                     <p href="single.html">{{segment}}</p>
+                                     <p>{{create_time}} <a class="span_link" href="#"><span class="glyphicon glyphicon-comment"></span>{{count}} </a><a class="span_link" href="#"><span class="glyphicon glyphicon-thumbs-up"></span>{{mark}}</a></p>
+                                 </div>
+                             </script>
+                             <script type="text/javascript">
+                                 var html3 ='';
+                                 $(document).ready(function () {
+                                     url = '/paper/PapersByMark';
+                                     $.ajax( {
+                                         type : "post",
+                                         dataType:"json",
+                                         url : url,
+                                         timeout : 20000,
+                                         cache : false,
+                                         success : function(data) {
+    //                alert(JSON.stringify(data.column[0]));
+                                             var i;
+                                             var j;
+                                             for(i in data.paper){
+                                                 html3 = template('post_list', data.paper[i])+html3;
+                                             }
+                                             document.getElementById('content4').innerHTML = html3;
                                          }
-                                         document.getElementById('content4').innerHTML = html3;
-                                     }
 
-                                 });
-                             })
-						 </script>
-						<div class="popular-grids">
-							<div id="content4"></div>
-						</div>
-						 <!-- 侧边栏热门文章 art-templete 结束-->
-					</div>
+                                     });
+                                 })
+                             </script>
+                            <div class="popular-grids">
+                                <div id="content4"></div>
+                            </div>
+                             <!-- 侧边栏热门文章 art-templete 结束-->
+                        </div>
+                         </div>
+                         <!--popular-news 结束-->
 					</div>
 					<div class="clearfix"></div>
 			</div>
@@ -249,7 +403,7 @@
 		</div>
 	</div>
 	<!-- content-section-ends-here -->
-            <div th:fragment="footer-section">
+     <div th:fragment="footer-section">
 	<!-- footer-section-starts-here -->
 	            <div class="footer">
 		<div class="footer-top">

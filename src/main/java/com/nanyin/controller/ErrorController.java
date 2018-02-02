@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ErrorController {
-
-@RequestMapping("/error/404")
+    // error全局控制
+    @RequestMapping("/error/404")
     public String get404Page(){
                 return "errorPage/404";
     }

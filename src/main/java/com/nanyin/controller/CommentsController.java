@@ -39,7 +39,10 @@ public class CommentsController {
     }
 
 
-
+    /**
+     * 主页的评论信息 不需要权限控制 而上面的需要权限控制 和request.post控制
+     * @return
+     */
     @RequestMapping("/comments/commentsWithPaperAndUserMes")
     public @ResponseBody Map<String,Object> commentsWithPaperAndUserMes(){
         return commentsService.findAllCommentsOrderByTime();
