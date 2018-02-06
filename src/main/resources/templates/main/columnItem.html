@@ -71,7 +71,7 @@
                                 type: "post",
                                 dataType: "json",
                                 data:{id:id},
-                                url: "/column/getColumnTitle",
+                                url: "/main/column/getColumnTitle",
                                 timeout: 20000,
                                 cache: false,
                                 success: function (data) {
@@ -90,12 +90,12 @@
 							<div class="article-right">
 								<div class="article-title">
 									<p>{{create_time}}</p>
-									<a class="title" href="single.html" >{{title}} </a>
+									<a class="title" href="/main/paper/{{paper_id}}" >{{title}} </a>
 									<p >{{sgement}}</p>
 								</div>
 							</div>
 							<div class="article-left">
-								<a href="single.html"><img src="{{paper_image}}" height="120px" width="180px"  alt="" /></a>
+								<a href="/main/paper/{{paper_id}}"><img src="{{paper_image}}" height="120px" width="180px"  alt="" /></a>
 								<div class="clearfix"></div>
 							</div>
 							<div class="clearfix"></div>
@@ -144,7 +144,7 @@
                                         onPageClick: function (event, page) {
                                             console.log(page);//page为当前页码
                                             $('#page-content').text('Page ' + page);
-                                            url = '/column/paperListWithColumnId/'+page+'?id='+id;
+                                            url = '/main/column/paperListWithColumnId/'+page+'?id='+id;
                                             // if(page!=data.pageNum){
                                                 var  newList= ""
                                                 init(url,newList);
@@ -157,7 +157,7 @@
                         }
                         $(document).ready(function () {
                             id = document.getElementById("columnId").value;
-                            url = '/column/paperListWithColumnId/1?id='+id;
+                            url = '/main/column/paperListWithColumnId/1?id='+id;
                  			init(url);
                         })
 					</script>

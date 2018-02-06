@@ -13,10 +13,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
@@ -27,14 +24,13 @@ import java.util.*;
  * 类描述：
  */
 @Controller
-@RequestMapping("/column")
 public class ColumnController {
     @Autowired
     ColumnService columnService;
 
     Logger logger = Logger.getLogger(this.getClass());
 
-    @RequestMapping("/findColumByCount")
+    @RequestMapping(value = {"/main/column/findColumByCount","/column/findColumByCount"},method = RequestMethod.POST)
     public @ResponseBody
     Map<String, List<Column>> findColumByPaperCount(){
         List<Column> list = columnService.findColumByPaperCount();
@@ -49,7 +45,7 @@ public class ColumnController {
      * @param pageNum
      * @return
      */
-    @RequestMapping("/findAllColumn/{pageNum}")
+    @RequestMapping(value = {"/main/column/findAllColumn/{pageNum}","/column/findAllColumn/{pageNum}"},method = RequestMethod.POST)
     public @ResponseBody
     PageInfo findAllColumn( @RequestParam(value = "search", required = false) String search,
                                 @PathVariable("pageNum") int pageNum){
@@ -58,7 +54,7 @@ public class ColumnController {
     }
 
 
-    @RequestMapping("/PersonalColumn/{name}")
+    @RequestMapping(value = "/column/PersonalColumn/{name}")
     public @ResponseBody Map<String, List<Map<String,Object>>> personalColumn(@PathVariable("name") String name){
 //        column 的 title 集合
         Map<String, List<Map<String,Object>>> map = Maps.newHashMap();
@@ -80,46 +76,46 @@ public class ColumnController {
         }
     }
 
-    @RequestMapping("/updateTheme")
+    @RequestMapping(value = "/column/updateTheme")
     public String updateTheme(){
         return "InnerLayui/colMes";
     }
 
-    @RequestMapping("/updateColumnName/{id}")
+    @RequestMapping(value = "/column/updateColumnName/{id}",method = RequestMethod.POST)
     public @ResponseBody int updateColumnName(@PathVariable(name = "id") int paperId,@RequestParam("theme") String title){
         return columnService.updateColumnByPaperId(paperId,title);
     }
 
-    @RequestMapping("/addColumn")
+    @RequestMapping(value = "/column/addColumn")
     public String addColumn(String url){
         return "InnerLayui/addColumn";
     }
 
-    @RequestMapping("/columnPage")
+    @RequestMapping(value = "/column/columnPage")
     public ModelAndView columnPage(@RequestParam(value = "url",required = false) String url){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("InnerLayui/columnPage");
         modelAndView.addObject("url",url);
         return modelAndView;
     }
-    @RequestMapping("/allColumn/{pageNum}")
+    @RequestMapping(value = "/column/allColumn/{pageNum}")
     public @ResponseBody Map<String,Object> allColumn(@PathVariable("pageNum") String pageNum){
         Map<String,Object> map = columnService.allColumn(pageNum);
         map.put("pageNum",pageNum);
         return map;
     }
 
-    @RequestMapping("/insertInlet")
+    @RequestMapping(value = "/column/insertInlet" ,method = RequestMethod.POST)
     public @ResponseBody int insertInlet(@RequestParam("userName") String name,@RequestParam("btn") String image){
     return columnService.insertInlet(name,image);
     }
 
-    @RequestMapping("/deleteColumn/{id}")
+    @RequestMapping(value = "/column/deleteColumn/{id}",method = RequestMethod.POST)
     public @ResponseBody int deleteColumn(@PathVariable("id") int id){
         return columnService.deleteColumnById(id);
     }
 
-    @RequestMapping("/editColumn/{id}")
+    @RequestMapping(value = "/column/editColumn/{id}")
     public ModelAndView editColumn(@PathVariable("id") int id){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("InnerLayui/editColumn");
@@ -127,17 +123,17 @@ public class ColumnController {
         modelAndView.addObject("column",column);
         return modelAndView;
     }
-    @RequestMapping("/updateInlet/{id}")
+    @RequestMapping(value = "/column/updateInlet/{id}",method = RequestMethod.POST)
     public @ResponseBody int updateInlet(@RequestParam("sTitle") String name,@RequestParam("imgMes")String image,@PathVariable("id") String id){
         return columnService.updateInlet(name, image, id);
     }
 
-    @RequestMapping("/paperListWithColumnId/{pageNum}")
+    @RequestMapping(value = "/main/column/paperListWithColumnId/{pageNum}",method = RequestMethod.POST)
     public @ResponseBody PageInfo<Paper> paperListWithColumnId(@PathVariable(value = "pageNum") int pageNum,@RequestParam("id") int id){
         return columnService.findPapersWithColumnId(id,pageNum);
     }
 
-    @RequestMapping("/getColumnTitle")
+    @RequestMapping("/main/column/getColumnTitle")
     public @ResponseBody Map<String,String> getColumnTitle(@RequestParam("id") int id){
         Map<String,String> map = Maps.newHashMap();
         map.put("title",columnService.getColumnTitle(id));

@@ -2,6 +2,7 @@ package com.nanyin.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
@@ -44,7 +45,7 @@ public class PaperController {
      * 返回文章和评论的信息 按时间排序
      * @return
      */
-    @RequestMapping("/paper/PapersByTime")
+    @RequestMapping(value = "/main/paper/PapersByTime",method = RequestMethod.POST)
     public @ResponseBody
     Map<String,List<PaperAndComments>>PapersByTime(){
         return paperService.findAllPapersByTime();
@@ -55,7 +56,7 @@ public class PaperController {
      * 返回文章和评论信息 按热度排序
      * @return
      */
-    @RequestMapping("/paper/PapersByMark")
+    @RequestMapping(value = "/main/paper/PapersByMark",method = RequestMethod.POST)
     public @ResponseBody
     Map<String,List<PaperAndComments>> papersByMark(){
         return paperService.findAllPapersByMark();
@@ -66,7 +67,7 @@ public class PaperController {
      * @param url
      * @return
      */
-    @RequestMapping("/manage/pageMes")
+    @RequestMapping(value = "/manage/pageMes",method = RequestMethod.GET)
     public ModelAndView pageManage(String url){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("InnerLayui/pageMes");
@@ -76,24 +77,7 @@ public class PaperController {
         return modelAndView;
     }
 
-//    /**
-//     * 前台显示所有页面
-//     * @param pageNum
-//     * @param search
-//     * @return
-//     */
-//    @RequestMapping("/main/pageList/{pageNum}")
-//    public @ResponseBody
-//    ModelAndView  HomePage(
-//            @PathVariable(value = "pageNum") int pageNum,
-//            @RequestParam(value = "search", required = false) String search){
-//        ModelAndView modelAndView = new ModelAndView();
-//        modelAndView.setViewName("/main/pageList");
-//        PageHelper.startPage(pageNum, Paging.LIMIT.getValue()-2);
-//        PageInfo pageInfo = paperService.findAllPapers(search,pageNum);
-//        modelAndView.addObject("pageInfo",pageInfo);
-//        return modelAndView;
-//    }
+
 
     /**
      *
@@ -101,7 +85,7 @@ public class PaperController {
      * @param search
      * @return
      */
-    @RequestMapping("/paper/test/{pageNum}")
+    @RequestMapping(value = "/main/paper/test/{pageNum}",method = RequestMethod.POST)
     public @ResponseBody
     PageInfo pageTest(
             @PathVariable(value = "pageNum") int pageNum,
@@ -116,7 +100,7 @@ public class PaperController {
 
 
 
-    @RequestMapping("/paper/{id}")
+    @RequestMapping(value = "/main/paper/{id}",method = RequestMethod.GET)
     public @ResponseBody
     ModelAndView page(@PathVariable("id") int id){
                 ModelAndView modelAndView = new ModelAndView();
@@ -139,7 +123,7 @@ public class PaperController {
      * @param id 文章的id
      * @return
      */
-    @RequestMapping("/paper/delect/{id}")
+    @RequestMapping(value = "/paper/delect/{id}",method = RequestMethod.POST)
     public @ResponseBody
     int deletePaperByPaperId(@PathVariable("id") int id){
         int hasTag = tagService.findHasTagByPaperId(id);
@@ -173,7 +157,7 @@ public class PaperController {
      * @param pageNum
      * @return
      */
-    @RequestMapping("/paper/findPaperByName/{name}/{pageNum}")
+    @RequestMapping(value = "/paper/findPaperByName/{name}/{pageNum}")
     public @ResponseBody Map<String,Object> findPaperByName(
             @PathVariable("name") String name, @PathVariable("pageNum") String pageNum){
         Map<String ,Object> map = paperService.findPaperByUser(name,pageNum);
@@ -187,7 +171,7 @@ public class PaperController {
      * @param content
      * @return
      */
-    @RequestMapping("/paper/updateContent/{id}")
+    @RequestMapping(value = "/paper/updateContent/{id}", method = RequestMethod.POST)
     public @ResponseBody int updateContent(@PathVariable("id") String id,String content){
         return paperService.updatePaperContentById(content,id);
     }
@@ -235,10 +219,16 @@ public class PaperController {
      * @param newTag
      */
         private void addTags(List<String> tags,List<String> tag ,String newTag){
-            if(tag!=null){
+            try{
+                //判断是否是空
+                Optional<String> optional = Optional.of(newTag);
+                tags.add(newTag);
+            }catch (NullPointerException n){
+                logger.warning("the tag is null");
+            }finally {
                 tags.addAll(tag);
+                logger.info("add tag operation is over");
             }
-            tags.add(newTag);
         }
 
     /**
@@ -246,7 +236,7 @@ public class PaperController {
      * @param paperId
      * @return
      */
-    @RequestMapping("/paper/PreAndNextPage/{paperId}")
+    @RequestMapping(value = "/main/paper/PreAndNextPage/{paperId}",method = RequestMethod.POST)
     public @ResponseBody Map<String ,Object> findPreAndNextPage(@PathVariable("paperId") int paperId){
          Map<String,Object> map = paperService.findPreAndNextPage(paperId);
          return map;
@@ -256,7 +246,7 @@ public class PaperController {
      * 后台文章管理的数据
      * @return 所有文章的数据
      */
-    @RequestMapping(value = {"/paper/adminPapersData/{pageNum}","/paper/adminPapersData/{pageNum}/{timePick}"})
+    @RequestMapping(value = {"/paper/adminPapersData/{pageNum}","/paper/adminPapersData/{pageNum}/{timePick}"},method = RequestMethod.POST)
     public @ResponseBody Map<String,Object> adminPapers(
             @PathVariable(value = "pageNum") int pageNum,
             @PathVariable(value = "timePick",required = false) String timePick,
@@ -268,7 +258,7 @@ public class PaperController {
      * 返回admin文章审核页面
      *
      */
-    @RequestMapping("/paper/adminPapers")
+    @RequestMapping(value = "/paper/adminPapers",method = RequestMethod.GET)
     public ModelAndView returnAdminPapers(@RequestParam(value = "url",required = false) String url){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("url",url);
@@ -281,7 +271,7 @@ public class PaperController {
      * @param id
      * @return
      */
-    @RequestMapping("/paper/FixPaperStatues/{id}")
+    @RequestMapping(value = "/paper/FixPaperStatues/{id}",method = RequestMethod.GET)
     public ModelAndView returnFixPaperStatues(@PathVariable(value = "id") int id){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("paperId",id);
@@ -295,7 +285,7 @@ public class PaperController {
      * @param id 文章id
      * @return
      */
-    @RequestMapping("/paper/updatePaperStatus/{id}")
+    @RequestMapping(value = "/paper/updatePaperStatus/{id}",method = RequestMethod.POST)
     public @ResponseBody int updatePaperStatus(
             @RequestParam(value = "review") String review,
             @PathVariable(value = "id") int id){
@@ -306,7 +296,7 @@ public class PaperController {
      * 获得一月内热门文章的json
      * @return
      */
-    @RequestMapping("/paper/hotPapersInMonth")
+    @RequestMapping(value = "/main/paper/hotPapersInMonth",method = RequestMethod.POST)
     public @ResponseBody PageInfo<Paper> hotPapersInMonth(){
         PageInfo pageInfo = paperService.findPaperInMonth();
 
@@ -327,7 +317,7 @@ public class PaperController {
      * @param name
      * @return
      */
-    @RequestMapping("/paper/personalPaperList/{name}/{pageNum}")
+    @RequestMapping(value = "/main/paper/personalPaperList/{name}/{pageNum}",method = RequestMethod.POST)
     public @ResponseBody PageInfo<Paper> personalPaperList(@PathVariable("pageNum") int pageNum
             ,@RequestParam(value = "search",required = false) String search
             ,@PathVariable("name")String name){

@@ -3,10 +3,7 @@ package com.nanyin.controller;
 import com.nanyin.service.CommentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -20,20 +17,20 @@ public class CommentsController {
     @Autowired
     CommentsService commentsService;
 
-    @RequestMapping("/comments/getComments")
+    @RequestMapping( value = "/comments/getComments")
     public String getComments(){
         return "InnerLayui/comMes";
     }
-    @RequestMapping("/comments/deleteComment/{id}")
+    @RequestMapping(value = "/comments/deleteComment/{id}",method = RequestMethod.POST)
     public @ResponseBody int deleteComment(@PathVariable("id") int id){
         return commentsService.deleteCommentById(id);
     }
-    @RequestMapping("/comments/ByPaperId/{id}")
+    @RequestMapping(value = "/comments/ByPaperId/{id}",method = RequestMethod.POST)
     public @ResponseBody Map<String,Object> commentsByPaperId(@PathVariable("id") int id){
         return commentsService.findAllCommentsByPaperId(id);
     }
 
-    @RequestMapping("/comments/insertComment")
+    @RequestMapping(value = "/main/comments/insertComment",method = RequestMethod.POST)
     public @ResponseBody int insertComment(@RequestParam("userName") String userName,@RequestParam("pageId") int pageId,@RequestParam("text") String text){
         return commentsService.insertComments(text,pageId,userName);
     }
@@ -43,12 +40,12 @@ public class CommentsController {
      * 主页的评论信息 不需要权限控制 而上面的需要权限控制 和request.post控制
      * @return
      */
-    @RequestMapping("/comments/commentsWithPaperAndUserMes")
+    @RequestMapping(value = "/main/comments/commentsWithPaperAndUserMes",method = RequestMethod.POST)
     public @ResponseBody Map<String,Object> commentsWithPaperAndUserMes(){
         return commentsService.findAllCommentsOrderByTime();
     }
 
-    @RequestMapping("/comments/PersonalComments")
+    @RequestMapping(value = "/main/comments/PersonalComments",method = RequestMethod.POST)
     public @ResponseBody Map<String,Object> PersonalComments(@RequestParam("userName") String userName){
         return commentsService.findCommentsByUserId(userName);
     }

@@ -6,7 +6,7 @@
     <title>layui在线调试</title>
     <link rel="stylesheet" href="/layui/plugins/layui/css/layui.css" media="all" />
     <script src="/layui/plugins/layui/layui.js"></script>
-    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/main/js/jquery.min.js"></script>
     <style>
         body{margin: 10px;}
         .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
@@ -73,7 +73,7 @@
         $.ajax({
             url:turl,
             dataType:"json",   //返回格式为json
-            type:"GET" , //请求方式 get 或者post
+            type:"get" , //请求方式 get 或者post
             success:function (data) {
                 page(data);
             }
@@ -95,7 +95,8 @@
                     if (!first) {
                         var currentPage = obj.curr;//获取点击的页码
 //                        alert(obj.curr);
-                        url = '/paper/findPaperByName/' + username + '/' + currentPage;
+                        url = '/paper/findPaperByNam:w' +
+                            'e/' + username + '/' + currentPage;
                         window.location.href = '/cte?url=' + url;
                     }
                 }
@@ -125,7 +126,7 @@
                         $.ajax({
                             url:"/paper/delect/"+id,    //请求的url地址
                             dataType:"json",   //返回格式为json
-                            type:"GET",   //请求方式
+                            type:"post",   //请求方式
                             success:function (data) {
                                 if (data == '1'){
                                     layer.confirm('删除成功')

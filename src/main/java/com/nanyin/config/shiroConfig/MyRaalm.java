@@ -58,11 +58,11 @@ public class MyRaalm extends AuthorizingRealm {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String name = token.getUsername();
         Users user = userService.findUsersByName(name);
-//        if(user.getStatus()==0){
-//            logger.info("该用户帐号以冻结");
-//        }else{
-//            logger.info("用户正常登录");
-//        }
+        if(user.getStatus()==0){
+            logger.info("该用户帐号以冻结");
+        }else{
+            logger.info("用户正常登录");
+        }
 
         String password = user.getPassword();
         //password 使用md5加载

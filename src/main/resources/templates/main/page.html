@@ -139,7 +139,7 @@
                             type : "post",
                             data:{userName:userName,pageId:pageId},
                             dataType:"json",
-                            url : '/faves/checkIsFaves',
+                            url : '/main/faves/checkIsFaves',
                             timeout : 20000,
                             cache : false,
                             success : function(data) {
@@ -151,7 +151,7 @@
                                         type : "post",
                                         data:{userName:userName,pageId:pageId},
                                         dataType:"json",
-                                        url : '/faves/addItem',
+                                        url : '/main/faves/addItem',
                                         timeout : 20000,
                                         cache : false,
                                         success : function(data) {
@@ -189,21 +189,21 @@
                     <div class="world-news-grids">
                         <script id="preAndNext"  type="text/html">
                         <div class="world-news-grid">
-                            <a href="/paper/{{prePaper.id}}" class="title">{{prePaper.title}} </a>
+                            <a href="/main/paper/{{prePaper.id}}" class="title">{{prePaper.title}} </a>
                             <p>{{prePaper.sgement}}</p>
-							<a class="reu" href="/paper/{{prePaper.id}}"></a>
+							<a class="reu" href="/main/paper/{{prePaper.id}}"></a>
                         </div>
                         <div class="world-news-grid">
-                            <a href="/paper/{{nextPaper.id}}" class="title">{{nextPaper.title}} </a>
+                            <a href="/main/paper/{{nextPaper.id}}" class="title">{{nextPaper.title}} </a>
                             <p>{{nextPaper.sgement}}</p>
-                            <a class="reu" href="/paper/{{nextPaper.id}}"></a>
+                            <a class="reu" href="/main/paper/{{nextPaper.id}}"></a>
                         </div>
                         </script>
                         <script type="text/javascript">
                             var preAndNextItem ='';
                             var paperId = document.getElementById("paperId").value;
                             $(document).ready(function () {
-                                var url = '/paper/PreAndNextPage/'+paperId;
+                                var url = '/main/paper/PreAndNextPage/'+paperId;
                                 $.ajax( {
                                     type : "post",
                                     dataType:"json",
@@ -249,8 +249,8 @@
                         </div>
                         <div class="coment-form">
                             <h4>Leave your comment</h4>
-                                <textarea id="comment" placeholder="Your Comment..." ></textarea>
-                                <input type="submit" onclick="submitBTN()" value="Submit Comment" />
+                                <textarea id="comment" placeholder="你的评论..." ></textarea>
+                                <input type="submit" onclick="submitBTN()" value="提交评论" />
                         </div>
                         <div class="clearfix"></div>
                         <script>
@@ -272,14 +272,14 @@
                                     $.ajax({
                                         type: "post",
                                         dataType: "json",
-                                        url: '/comments/insertComment',
+                                        url: '/main/comments/insertComment',
                                         data: {userName: userName, pageId: pageId, text: text},
                                         timeout: 20000,
                                         cache: false,
                                         success: function (data) {
                                             if (data === 1) {
                                                 window.location.reload();
-                                                location.href = "/paper/" + pageId ;
+                                                location.href = "/main/paper/" + pageId ;
                                             }
 
 
@@ -332,7 +332,7 @@
                                 type : "post",
                                 data:{userId:userId,friendId:ByFocal},
                                 dataType:"json",
-                                url : '/user/checkFriends',
+                                url : '/main/user/checkFriends',
                                 timeout : 20000,
                                 cache : false,
                                 success : function(data) {
@@ -358,7 +358,7 @@
                                 type : "post",
                                 data:{userId:userId,friendId:ByFocal},
                                 dataType:"json",
-                                url : '/user/deleteFriends',
+                                url : '/main/user/deleteFriends',
                                 timeout : 20000,
                                 cache : false,
                                 success : function(data) {
@@ -391,7 +391,7 @@
                                 type : "post",
                                 data:{userId:userId,friendId:ByFocal},
                                 dataType:"json",
-                                url : '/user/addFriends',
+                                url : '/main/user/addFriends',
                                 timeout : 20000,
                                 cache : false,
                                 success : function(data) {

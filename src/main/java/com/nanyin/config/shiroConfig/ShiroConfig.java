@@ -31,27 +31,27 @@ public class ShiroConfig {
         bean.setSecurityManager(manager);
         //配置登录的url和登录成功的url
         bean.setLoginUrl("/user/login");
-
         bean.setUnauthorizedUrl("/error/unAuthorized");
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap=new LinkedHashMap<>();
-        filterChainDefinitionMap.put("/comments/**", "anon"); //表示可以匿名访问
-        filterChainDefinitionMap.put("/column/**", "anon"); //表示可以匿名访问
+        /*
+         * 第一部分 前台无权限url
+         */
         filterChainDefinitionMap.put("/main/**", "anon"); //表示可以匿名访问
-        filterChainDefinitionMap.put("/paper/**", "anon"); //表示可以匿名访问
-        filterChainDefinitionMap.put("/tag/**", "anon"); //表示可以匿名访问
-        filterChainDefinitionMap.put("/faves/FavesPaper", "anon"); //表示可以匿名访问
+        filterChainDefinitionMap.put("/error/**", "anon"); //表示可以匿名访问
 
+//      静态可访问资源
+        filterChainDefinitionMap.put("/Error/*", "anon");
         filterChainDefinitionMap.put("/user/*", "anon"); //表示可以匿名访问
         filterChainDefinitionMap.put("/home", "anon");
-        filterChainDefinitionMap.put("/assets/**", "anon");
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/images/**", "anon");
         filterChainDefinitionMap.put("/editmd/**", "anon");
+//       需要特殊权限的url 如管理员设置
         filterChainDefinitionMap.put("/column/columnPage", "roles[admin]");
-
-        filterChainDefinitionMap.put("/*", "authc");//表示需要认证才可以访问
-        filterChainDefinitionMap.put("/**", "authc");
+//       其他设置user 即登录和rememberMe都可直接操作的
+        filterChainDefinitionMap.put("/*", "user");//表示需要认证才可以访问
+        filterChainDefinitionMap.put("/**", "user");
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }
@@ -70,11 +70,7 @@ public class ShiroConfig {
         MyRaalm authRealm=new MyRaalm();
         return authRealm;
     }
-//   //配置自定义的密码比较器
-//    @Bean(name="credentialsMatcher")
-//    public CredentialsMatcher credentialsMatcher() {
-//        return new CredentialsMatcher();
-//    }
+
     @Bean
     public LifecycleBeanPostProcessor lifecycleBeanPostProcessor(){
         return new LifecycleBeanPostProcessor();

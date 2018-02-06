@@ -56,7 +56,7 @@ public class UserController {
      * 返回login登录界面
      * @return
      */
-    @RequestMapping("/user/login")
+    @RequestMapping(value = "/user/login")
     public String login(){
         return "login";
     }
@@ -66,7 +66,7 @@ public class UserController {
      * @param url
      * @return
      */
-    @RequestMapping("/user/reLogin")
+    @RequestMapping(value = "/user/reLogin")
     public ModelAndView reLogin(@RequestParam(value = "url",required = false) String url){
         ModelAndView modelAndView = new ModelAndView("login");
         modelAndView.addObject("url",url);
@@ -77,7 +77,7 @@ public class UserController {
      * 返回注册页面
      * @return
      */
-    @RequestMapping("/user/signUp")
+    @RequestMapping(value = "/user/signUp")
     public String signUp(){
         return null;
     }
@@ -87,7 +87,7 @@ public class UserController {
      * @param request
      * @return
      */
-    @RequestMapping("/user/logout")
+    @RequestMapping(value = "/user/logout")
     public String logout(HttpServletRequest request){
         org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
         subject.logout();
@@ -96,7 +96,7 @@ public class UserController {
     }
 
     @Log(operationName = "用户登录" )
-    @RequestMapping("/user/gotoIndex")
+    @RequestMapping(value = "/user/gotoIndex")
     public String gotoIndex(@RequestParam("username") String username
             ,@RequestParam("password") String password
             ,@RequestParam(value = "rememberMe",required = false)String rememberMe
@@ -132,14 +132,14 @@ public class UserController {
 
     }
 
-    @RequestMapping("/userMes/{name}")
+    @RequestMapping(value = {"/userMes/{name}","/main/userMes/{name}"})
     public @ResponseBody Users userMes(
             @PathVariable("name") String name){
         return userService.findUsersByName(name);
     }
 
 
-    @RequestMapping("/user/detailPage")
+    @RequestMapping(value = "/user/detailPage")
     public @ResponseBody
     ModelAndView getDetail(HttpServletRequest request){
         HttpSession session = request.getSession();
@@ -163,7 +163,7 @@ public class UserController {
      * @return
      * @throws ParseException
      */
-    @RequestMapping("/user/updateDetail")
+    @RequestMapping(value = "/user/updateDetail")
     public @ResponseBody int updateUserDetail(@RequestParam("imgMes") String imgMes,
                                               @RequestParam("userName") String userName,
                                               @RequestParam("realName") String realName,
@@ -175,12 +175,12 @@ public class UserController {
         return userService.updateUserMes(imgMes, userName, realName, position, data, email, address, sketch);
     }
 
-    @RequestMapping("/user/headPic")
+    @RequestMapping(value = "/user/headPic")
     public String headPic(){
         return "InnerLayui/pic";
     }
 
-    @RequestMapping("/user/updateUserPass")
+    @RequestMapping(value = "/user/updateUserPass")
     public @ResponseBody int updateUserPass(@RequestParam("oldPassword") String oldPassword,
                               @RequestParam("newPassword")String newPassword,
                               @RequestParam("newPassword1")String newPassword1,HttpServletRequest request){
@@ -201,7 +201,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/user/userAndAuthor/{pageNum}")
+    @RequestMapping(value = "/user/userAndAuthor/{pageNum}")
     public @ResponseBody Map<String,Object> userAndAuthor(@PathVariable("pageNum") int pageNum,
                                                           @RequestParam(value = "search",required = false) String search){
         Map<String,Object> map = userService.userAndAuthor(search, pageNum);
@@ -209,14 +209,14 @@ public class UserController {
         return map;
     }
 
-    @RequestMapping("/user/returnAuthor")
+    @RequestMapping(value = "/user/returnAuthor")
     public @ResponseBody ModelAndView returnAuthor(@RequestParam(value = "url",required = false) String url){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("InnerLayui/authorPage");
         modelAndView.addObject("url",url);
         return modelAndView;
     }
-    @RequestMapping("/user/userManage/{pageNum}")
+    @RequestMapping(value = "/user/userManage/{pageNum}")
     public @ResponseBody Map<String,Object> userManage(@PathVariable("pageNum") int pageNum){
         Map<String,Object> map = Maps.newHashMap();
 
@@ -233,7 +233,7 @@ public class UserController {
      * @param url
      * @return
      */
-    @RequestMapping("/user/returnUserManage")
+    @RequestMapping(value = "/user/returnUserManage")
     public ModelAndView returnUserManage(@RequestParam(value = "url",required = false) String url){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("InnerLayui/userManage");
@@ -241,7 +241,7 @@ public class UserController {
         return modelAndView;
     }
 
-    @RequestMapping("/user/admin/CheckUserMesPage")
+    @RequestMapping(value = "/user/admin/CheckUserMesPage")
     public @ResponseBody ModelAndView returnCheckUserMesPage(@RequestParam(value = "id",required = false) int id){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("user",userService.checkUserMes(id));
@@ -249,7 +249,7 @@ public class UserController {
         return modelAndView;
     }
 
-    @RequestMapping("/user/personalMes")
+    @RequestMapping(value = "/main/user/personalMes")
     public @ResponseBody Users personalMes(@RequestParam("userName") String userName){
         return userService.findUsersByName(userName);
     }

@@ -74,6 +74,9 @@ public class test {
         System.out.println(new Md5Hash("123", null,1024));
         System.out.println();
     }
+    public void test6(){
+        System.out.println("hello world");
+    }
 
 
 }

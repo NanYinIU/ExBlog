@@ -3,10 +3,7 @@ package com.nanyin.controller;
 import com.nanyin.service.FavesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +21,7 @@ public class FavesController {
     @Autowired
     FavesService favesService;
 
-    @RequestMapping("/faves/addItem")
+    @RequestMapping(value = "/main/faves/addItem",method = RequestMethod.POST)
     public@ResponseBody int addFavesItem(@RequestParam("userName") String userName,@RequestParam("pageId") String pageId){
         return favesService.insertFavesItem(userName, pageId);
     }
@@ -35,7 +32,7 @@ public class FavesController {
      * @param pageId
      * @return
      */
-    @RequestMapping("/faves/checkIsFaves")
+    @RequestMapping(value = "/main/faves/checkIsFaves",method = RequestMethod.POST)
     public @ResponseBody Map<String,Boolean> checkIsFaves(@RequestParam("userName") String userName,@RequestParam("pageId") String pageId){
         return favesService.checkIsFaves(userName, pageId);
     }
@@ -45,7 +42,7 @@ public class FavesController {
      * @param url
      * @return
      */
-    @RequestMapping("/faves/favesTable")
+    @RequestMapping(value = "/faves/favesTable")
     public @ResponseBody ModelAndView favesTable(@RequestParam(value = "url",required = false) String url){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("InnerLayui/myFaves");
@@ -54,7 +51,7 @@ public class FavesController {
     }
 
 
-    @RequestMapping("/faves/findFaves/{pageNum}")
+    @RequestMapping(value = "/faves/findFaves/{pageNum}")
     public @ResponseBody Map<String,Object> findFaves(HttpServletRequest request,
                                                       @RequestParam(value = "search",required = false) String search,
                                                       @PathVariable("pageNum") int pageNum){
@@ -69,7 +66,7 @@ public class FavesController {
      * @param pageId
      * @return
      */
-    @RequestMapping("/faves/subItem")
+    @RequestMapping(value = "/faves/subItem",method = RequestMethod.POST)
     public @ResponseBody int subItem(@RequestParam("userName") String userName,@RequestParam("pageId")int pageId){
         return favesService.deleteFaverItem(userName, pageId);
     }

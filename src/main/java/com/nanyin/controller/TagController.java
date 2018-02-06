@@ -9,10 +9,7 @@ import com.nanyin.model.Paper;
 import com.nanyin.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
@@ -24,21 +21,20 @@ import java.util.logging.Logger;
  * 类描述：
  */
 @Controller
-@RequestMapping("/tag")
 public class TagController {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Autowired
     TagService tagService;
 
-    @RequestMapping("/tags")
+    @RequestMapping(value = {"/main/tag/tags","/tag/tags"})
     public @ResponseBody Map<String,Set<String>> AllTags(){
         Map<String,Set<String>> map = Maps.newHashMap();
         map.put("tags",tagService.findAllTagName());
         return map;
     }
 
-    @RequestMapping("/PersonalTag/{name}")
+    @RequestMapping(value = "/tag/PersonalTag/{name}",method = RequestMethod.POST)
     public @ResponseBody
     Multimap<String,Map<String,Object>> PersonalTag(@PathVariable("name") String name){
         Set<String> tagname = tagService.findTagNameByUser(name);
@@ -66,7 +62,7 @@ public class TagController {
      * @param name
      * @return
      */
-    @RequestMapping("/findAllTagsByName/{name}")
+    @RequestMapping(value = "/tag/findAllTagsByName/{name}")
     public @ResponseBody Map<String,Object> findAllTagsByName(@PathVariable("name") String name){
             Set<String> list = tagService.findTagNameByUser(name);
             Map<String ,Object> map = Maps.newHashMap();
@@ -86,7 +82,7 @@ public class TagController {
      * @param id
      * @return
      */
-    @RequestMapping("/tagPage/{id}")
+    @RequestMapping(value = "/tag/tagPage/{id}")
     public String tagPage(@PathVariable("id") int id){
         return "InnerLayui/tagMes";
     }
@@ -96,7 +92,7 @@ public class TagController {
      * @param id
      * @return
      */
-    @RequestMapping("/tagsByPaperId/{id}")
+    @RequestMapping(value = "/tag/tagsByPaperId/{id}")
     public @ResponseBody Map<String, Object> tagsByPaperId(@PathVariable("id") int id){
         return tagService.findTagNamesByPaperId(id);
     }
@@ -105,7 +101,7 @@ public class TagController {
      * 返回修改tag的页面
      * @return
      */
-    @RequestMapping("/updateTag")
+    @RequestMapping(value = "/tag/updateTag")
     public String updateTag(){
         return "InnerLayui/updateTag";
     }
@@ -116,7 +112,7 @@ public class TagController {
      * @param tags
      * @return
      */
-    @RequestMapping("/delectTags/{id}/{tags}")
+    @RequestMapping(value = "/tag/delectTags/{id}/{tags}",method = RequestMethod.POST)
     public @ResponseBody int delectTags(@PathVariable("id") int id,@PathVariable("tags") String tags){
         return tagService.delectTagByPaperIdAndTagName(id,tags);
     }
@@ -128,7 +124,7 @@ public class TagController {
      * @param newTag
      * @return
      */
-    @RequestMapping("/updateTags/{id}/{oldTag}")
+    @RequestMapping(value = "/tag/updateTags/{id}/{oldTag}",method = RequestMethod.POST)
     public @ResponseBody int updateTags(@PathVariable("id") int id,@PathVariable("oldTag") String oldTag,@RequestParam("title") String newTag){
         return tagService.updateTagNameByPaperIdAndTagName(newTag,id,oldTag);
     }
@@ -139,7 +135,7 @@ public class TagController {
      * @param id
      * @return
      */
-    @RequestMapping("/insertTags/{id}")
+    @RequestMapping(value = "/tag/insertTags/{id}",method = RequestMethod.POST)
     public @ResponseBody int insertTags(@RequestParam("newTag") String name,@PathVariable("id") int id){
         return tagService.insertTagNameByPaperId(name, id);
     }
@@ -149,7 +145,7 @@ public class TagController {
      * @param tagName
      * @return
      */
-    @RequestMapping("/returnTagPage/{tagName}")
+    @RequestMapping(value = "/main/tag/returnTagPage/{tagName}")
     public @ResponseBody ModelAndView returnTagPage(@PathVariable("tagName") String tagName){
         ModelAndView modelAndView = new ModelAndView("/main/tagList");
         modelAndView.addObject("tagName",tagName);
@@ -162,7 +158,7 @@ public class TagController {
      * @param pageNum
      * @return
      */
-    @RequestMapping("/tagPages/{pageNum}")
+    @RequestMapping(value = "/main/tag/tagPages/{pageNum}",method = RequestMethod.POST)
     public @ResponseBody PageInfo<Paper> tagPages(@RequestParam("tagName") String tagName, @PathVariable("pageNum") int pageNum){
         return tagService.tagPage(tagName,pageNum);
     }

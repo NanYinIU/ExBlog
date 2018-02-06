@@ -68,12 +68,12 @@
 							<div class="article-right">
 								<div class="article-title">
 									<p>{{create_time}}</p>
-									<a class="title" href="/paper/{{id}}" >{{title}} </a>
+									<a class="title" href="/main/paper/{{id}}" >{{title}} </a>
 									<p >{{sgement}}</p>
 								</div>
 							</div>
 							<div class="article-left">
-								<a href="/paper/{{id}}"><img src="{{paper_image}}" height="120px" width="180px"  alt="" /></a>
+								<a href="/main/paper/{{id}}"><img src="{{paper_image}}" height="120px" width="180px"  alt="" /></a>
 								<div class="clearfix"></div>
 							</div>
 							<div class="clearfix"></div>
@@ -126,7 +126,7 @@
                                         onPageClick: function (event, page) {
                                             console.log(page);//page为当前页码
                                             $('#page-content').text('Page ' + page);
-                                            url = '/paper/test/'+page+search;
+                                            url = '/main/paper/test/'+page+search;
                                             // if(page!=data.pageNum){
                                                 var  newList= ""
                                                 init(url,newList);
@@ -138,7 +138,7 @@
                             })
                         }
                         $(document).ready(function () {
-                            url = '/paper/test/1';
+                            url = '/main/paper/test/1';
                  			init(url);
                         })
 					</script>

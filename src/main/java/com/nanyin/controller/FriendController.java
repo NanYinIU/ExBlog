@@ -42,7 +42,7 @@ public class FriendController {
      * @param friendId
      * @return
      */
-    @RequestMapping("/user/checkFriends")
+    @RequestMapping("/main/user/checkFriends")
     public @ResponseBody
     Map<String,Boolean> findFriends(@RequestParam("userId") String userId, @RequestParam("friendId") String friendId){
         Map<String,Boolean> map = Maps.newHashMap();
@@ -65,12 +65,12 @@ public class FriendController {
         }
     }
 
-    @RequestMapping("/user/addFriends")
+    @RequestMapping("/main/user/addFriends")
     public @ResponseBody int addFriends(@RequestParam("userId") String userId, @RequestParam("friendId") String friendId){
         return friendService.insertFriendRelation(userId, friendId);
     }
 
-    @RequestMapping("/user/deleteFriends")
+    @RequestMapping("/main/user/deleteFriends")
     public @ResponseBody int deleteFriends(@RequestParam("userId") String userId, @RequestParam("friendId") String friendId){
         return friendService.deleteFriendRelation(userId, friendId);
     }
@@ -139,7 +139,7 @@ public class FriendController {
      * @param userName
      * @return
      */
-    @RequestMapping("/user/FrientsWithUserId")
+    @RequestMapping("/main/user/FrientsWithUserId")
     public @ResponseBody Map<String,Object> FrientsWithUserId(@RequestParam("userName") String userName){
         return friendService.friendsWithUserId(userName);
     }

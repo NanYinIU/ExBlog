@@ -13,12 +13,12 @@
               <div class="article-right">
                   <div class="article-title">
                       <p>{{create_time}} <a class="span_link" href="#"><span class="glyphicon glyphicon-comment"></span>{{count}} </a><a class="span_link" href="#"><span class="glyphicon glyphicon-thumbs-up"></span>{{mark}}</a></p>
-                      <a class="title" href="/paper/{{id}}"> {{title}}</a>
+                      <a class="title" href="/main/paper/{{id}}"> {{title}}</a>
                       <p>{{segment}}</p>
                   </div>
               </div>
               <div class="article-left">
-                  <a href="/paper/{{id}}"><img height="180px" src="{{paper_image}}" alt="" /></a>
+                  <a href="/main/paper/{{id}}"><img height="180px" src="{{paper_image}}" alt="" /></a>
                   <div class="clearfix"></div>
               </div>
               <div class="clearfix"></div>
@@ -27,7 +27,7 @@
         <script type="text/javascript">
             var h2 ='';
             $(document).ready(function () {
-                var url = '/paper/PapersByTime';
+                var url = '/main/paper/PapersByTime';
                 $.ajax( {
                     type : "post",
                     dataType:"json",
@@ -63,13 +63,13 @@
                   <script type="text/html" id="comment">
                       <div class="s-grid-small">
                           <div class="sc-image">
-                              <a href=""><img src="{{paper_image}}" alt="" /></a>
+                              <a href="/main/paper/{{id}}"><img src="{{paper_image}}" alt="" /></a>
                           </div>
                           <div class="sc-text">
                               <h5>{{title}}</h5>
                               <b class="power">{{comments_user_name}} Ref: {{comments_content}}</b>
                               <p class="date">{{comments_time}}</p>
-                              <a class="reu" href="/paper/{{id}}">该文章更多新评<img src="images/more.png" alt="" /></a>
+                              <a class="reu" href="/main/paper/{{id}}">该文章更多新评<img src="images/more.png" alt="" /></a>
                               <div class="clearfix"></div>
                           </div>
                           <div class="clearfix"></div>
@@ -79,7 +79,7 @@
                   <script type="text/javascript">
                       var comment ='';
                       $(document).ready(function () {
-                          var url = '/comments/commentsWithPaperAndUserMes';
+                          var url = '/main/comments/commentsWithPaperAndUserMes';
                           $.ajax( {
                               type : "post",
                               dataType:"json",
@@ -128,7 +128,7 @@
                   <script type="text/javascript">
                        h ='';
                       $(document).ready(function () {
-                          var url = '/column/findColumByCount';
+                          var url = '/main/column/findColumByCount';
                           $.ajax( {
                               type : "post",
                               dataType:"json",

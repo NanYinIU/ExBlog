@@ -74,7 +74,7 @@
                                         <div class="search-box">
                                             <div id="sb-search" class="sb-search">
                                                 <form>
-                                                    <input class="sb-search-input" placeholder="Enter your search term..." type="search" name="search" id="search"/>
+                                                    <input class="sb-search-input" placeholder="输入查询内容。。。" type="search" name="search" id="search"/>
                                                     <input class="sb-search-submit" type="submit" value=""/>
                                                     <span class="sb-icon-search"> </span>
                                                 </form>
@@ -132,7 +132,7 @@
                             $.ajax({
                                 type: "post",
                                 dataType: "json",
-                                url: '/userMes/' + user,
+                                url: '/main/userMes/' + user,
                                 timeout: 20000,
                                 cache: false,
                                 success: function (data) {
@@ -158,7 +158,7 @@
 						 <script type="text/javascript">
                              var h1 ='';
                              $(document).ready(function () {
-                                 var url = '/tag/tags';
+                                 var url = '/main/tag/tags';
                                  $.ajax( {
                                      type : "post",
                                      dataType:"json",
@@ -206,10 +206,10 @@
                                                          <script type="text/html" id="hotPaper">
                                                              <div class="popular-post-grid">
                                                                  <div class="post-img">
-                                                                     <a href="/paper/{{id}}"><img src="{{paper_image}}" alt="" /></a>
+                                                                     <a href="/main/paper/{{id}}"><img src="{{paper_image}}" alt="" /></a>
                                                                  </div>
                                                                  <div class="post-text">
-                                                                     <a class="pp-title" href="/paper/{{id}}"> {{title}}</a>
+                                                                     <a class="pp-title" href="/main/paper/{{id}}"> {{title}}</a>
                                                                      <p>{{create_time}} <a class="span_link" href="#"> &nbsp;&nbsp;&nbsp;观看数:<span class="glyphicon glyphicon-eye-open"></span>{{mark}} </a></p>
                                                                  </div>
                                                                  <div class="clearfix"></div>
@@ -218,7 +218,7 @@
                                                          <script type="text/javascript">
                                                              var hotPaper ='';
                                                              $(document).ready(function () {
-                                                                 var url = '/paper/hotPapersInMonth';
+                                                                 var url = '/main/paper/hotPapersInMonth';
                                                                  $.ajax( {
                                                                      type : "post",
                                                                      dataType:"json",
@@ -264,7 +264,7 @@
                                                          <script type="text/javascript">
                                                              hotTheme ='';
                                                              $(document).ready(function () {
-                                                                 var url = '/column/findColumByCount';
+                                                                 var url = '/main/column/findColumByCount';
                                                                  $.ajax( {
                                                                      type : "post",
                                                                      dataType:"json",
@@ -301,16 +301,16 @@
                                                          <script type="text/html" id="recentComment">
                                                              <div class="media response-info">
                                                                  <div class="media-left response-text-left">
-                                                                     <a href="/paper/{{paper_id}}">
+                                                                     <a href="/main/paper/{{paper_id}}">
                                                                          <img class="media-object" src="{{paper_image}}" height="50" style="width: 80px" alt="" />
                                                                      </a>
-                                                                     <h5><a href="/paper/{{paper_id}}">{{title}}</a></h5>
+                                                                     <h5><a href="/main/paper/{{paper_id}}">{{title}}</a></h5>
                                                                  </div>
                                                                  <div class="media-right response-text-right">
                                                                      <p>{{comments_user_name}} Ref: {{comments_content}}</p>
                                                                      <ul>
                                                                          <li>{{comments_time}}</li>
-                                                                         <li><a href="/paper/{{paper_id}}">Reply</a></li>
+                                                                         <li><a href="/main/paper/{{paper_id}}">Reply</a></li>
                                                                      </ul>
                                                                  </div>
                                                                  <div class="clearfix"> </div>
@@ -319,7 +319,7 @@
                                                          <script type="text/javascript">
                                                              var recentComment ='';
                                                              $(document).ready(function () {
-                                                                 var url = '/comments/commentsWithPaperAndUserMes';
+                                                                 var url = '/main/comments/commentsWithPaperAndUserMes';
                                                                  $.ajax( {
                                                                      type : "post",
                                                                      dataType:"json",
@@ -369,7 +369,7 @@
                              <script type="text/javascript">
                                  var html3 ='';
                                  $(document).ready(function () {
-                                     url = '/paper/PapersByMark';
+                                     url = '/main/paper/PapersByMark';
                                      $.ajax( {
                                          type : "post",
                                          dataType:"json",
