@@ -12,8 +12,8 @@
 		<meta name="format-detection" content="telephone=no"/>
 
 		<link rel="stylesheet" href="/layui/plugins/layui/css/layui.css" media="all" />
-		<script src="/assets/js/jquery.min.js"></script>
-        <script src="/assets/js/template-web.js"></script>
+		<script src="/main/js/jquery.min.js"></script>
+        <script src="/main/js/template-web.js"></script>
         <script src="/layui/plugins/layui/layui.js"></script>
     </head>
 
@@ -32,8 +32,8 @@
 			邮箱：<a th:text="${user.email}"></a>
             <hr/>
             账号状态：
-            <a th:if="${user.status == 0}" ><a>账号已停用</a> </a>
-			<a th:if="${user.status == 1}"><a>账号正在使用</a></a>
+            <a th:if="${user.status == 0}" th:text="帐号已停用" ></a>
+			<a th:if="${user.status == 1}" th:text="账号正在使用"></a>
             <hr/>
             <blockquote class="layui-elem-quote">请严格遵守管理人员守则！切勿随意改动用户数据！</blockquote>
 		</div>

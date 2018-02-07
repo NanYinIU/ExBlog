@@ -246,7 +246,7 @@ public class PaperController {
      * 后台文章管理的数据
      * @return 所有文章的数据
      */
-    @RequestMapping(value = {"/paper/adminPapersData/{pageNum}","/paper/adminPapersData/{pageNum}/{timePick}"},method = RequestMethod.POST)
+    @RequestMapping(value = {"/paper/adminPapersData/{pageNum}","/paper/adminPapersData/{pageNum}/{timePick}"})
     public @ResponseBody Map<String,Object> adminPapers(
             @PathVariable(value = "pageNum") int pageNum,
             @PathVariable(value = "timePick",required = false) String timePick,

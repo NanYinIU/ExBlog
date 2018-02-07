@@ -47,8 +47,21 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/images/**", "anon");
         filterChainDefinitionMap.put("/editmd/**", "anon");
-//       需要特殊权限的url 如管理员设置
+        /*
+         * 需要特殊权限的url 如管理员设置
+         */
+//          专题和专题插入删除
         filterChainDefinitionMap.put("/column/columnPage", "roles[admin]");
+        filterChainDefinitionMap.put("/column/insertInlet", "roles[admin]");
+        filterChainDefinitionMap.put("/column/deleteColumn", "roles[admin]");
+        filterChainDefinitionMap.put("/column/editColumn", "roles[admin]");
+//        管理源文章审核
+        filterChainDefinitionMap.put("/paper/adminPapers", "roles[admin]");
+        filterChainDefinitionMap.put("/paper/FixPaperStatues/*", "roles[admin]");
+        filterChainDefinitionMap.put("/paper/updatePaperStatus", "roles[admin]");
+        filterChainDefinitionMap.put("/paper/admin", "roles[admin]");
+//       人员管理（未完成）
+
 //       其他设置user 即登录和rememberMe都可直接操作的
         filterChainDefinitionMap.put("/*", "user");//表示需要认证才可以访问
         filterChainDefinitionMap.put("/**", "user");

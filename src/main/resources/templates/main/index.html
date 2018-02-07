@@ -56,7 +56,7 @@
                                             function OpenPersonPage(obj) {
                                                 var sessionUser = document.getElementById("sessionUser").value;
                                                 if(sessionUser!=null & sessionUser!=""){
-                                                    window.location.href("/main/personal/"+sessionUser);
+                                                    window.open("/main/personal/"+sessionUser);
                                                 }else {
                                                     alert("请先登录!!")
                                                     window.open("/user/login")

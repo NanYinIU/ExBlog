@@ -109,7 +109,6 @@ public class ColumnController {
     public @ResponseBody int insertInlet(@RequestParam("userName") String name,@RequestParam("btn") String image){
     return columnService.insertInlet(name,image);
     }
-
     @RequestMapping(value = "/column/deleteColumn/{id}",method = RequestMethod.POST)
     public @ResponseBody int deleteColumn(@PathVariable("id") int id){
         return columnService.deleteColumnById(id);
