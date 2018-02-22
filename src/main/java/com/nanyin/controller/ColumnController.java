@@ -30,7 +30,7 @@ public class ColumnController {
 
     Logger logger = Logger.getLogger(this.getClass());
 
-    @RequestMapping(value = {"/main/column/findColumByCount","/column/findColumByCount"},method = RequestMethod.POST)
+    @RequestMapping(value = {"/main/column/findColumByCount","/column/findColumByCount"})
     public @ResponseBody
     Map<String, List<Column>> findColumByPaperCount(){
         List<Column> list = columnService.findColumByPaperCount();
@@ -81,7 +81,7 @@ public class ColumnController {
         return "InnerLayui/colMes";
     }
 
-    @RequestMapping(value = "/column/updateColumnName/{id}",method = RequestMethod.POST)
+    @RequestMapping(value = "/column/updateColumnName/{id}")
     public @ResponseBody int updateColumnName(@PathVariable(name = "id") int paperId,@RequestParam("theme") String title){
         return columnService.updateColumnByPaperId(paperId,title);
     }
@@ -105,11 +105,11 @@ public class ColumnController {
         return map;
     }
 
-    @RequestMapping(value = "/column/insertInlet" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/column/insertInlet" )
     public @ResponseBody int insertInlet(@RequestParam("userName") String name,@RequestParam("btn") String image){
     return columnService.insertInlet(name,image);
     }
-    @RequestMapping(value = "/column/deleteColumn/{id}",method = RequestMethod.POST)
+    @RequestMapping(value = "/column/deleteColumn/{id}")
     public @ResponseBody int deleteColumn(@PathVariable("id") int id){
         return columnService.deleteColumnById(id);
     }
@@ -122,12 +122,12 @@ public class ColumnController {
         modelAndView.addObject("column",column);
         return modelAndView;
     }
-    @RequestMapping(value = "/column/updateInlet/{id}",method = RequestMethod.POST)
+    @RequestMapping(value = "/column/updateInlet/{id}")
     public @ResponseBody int updateInlet(@RequestParam("sTitle") String name,@RequestParam("imgMes")String image,@PathVariable("id") String id){
         return columnService.updateInlet(name, image, id);
     }
 
-    @RequestMapping(value = "/main/column/paperListWithColumnId/{pageNum}",method = RequestMethod.POST)
+    @RequestMapping(value = "/main/column/paperListWithColumnId/{pageNum}")
     public @ResponseBody PageInfo<Paper> paperListWithColumnId(@PathVariable(value = "pageNum") int pageNum,@RequestParam("id") int id){
         return columnService.findPapersWithColumnId(id,pageNum);
     }

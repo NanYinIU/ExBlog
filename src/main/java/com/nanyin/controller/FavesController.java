@@ -32,7 +32,7 @@ public class FavesController {
      * @param pageId
      * @return
      */
-    @RequestMapping(value = "/main/faves/checkIsFaves",method = RequestMethod.POST)
+    @RequestMapping(value = "/main/faves/checkIsFaves")
     public @ResponseBody Map<String,Boolean> checkIsFaves(@RequestParam("userName") String userName,@RequestParam("pageId") String pageId){
         return favesService.checkIsFaves(userName, pageId);
     }

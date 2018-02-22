@@ -34,7 +34,7 @@ public class TagController {
         return map;
     }
 
-    @RequestMapping(value = "/tag/PersonalTag/{name}",method = RequestMethod.POST)
+    @RequestMapping(value = "/tag/PersonalTag/{name}")
     public @ResponseBody
     Multimap<String,Map<String,Object>> PersonalTag(@PathVariable("name") String name){
         Set<String> tagname = tagService.findTagNameByUser(name);
@@ -124,7 +124,7 @@ public class TagController {
      * @param newTag
      * @return
      */
-    @RequestMapping(value = "/tag/updateTags/{id}/{oldTag}",method = RequestMethod.POST)
+    @RequestMapping(value = "/tag/updateTags/{id}/{oldTag}")
     public @ResponseBody int updateTags(@PathVariable("id") int id,@PathVariable("oldTag") String oldTag,@RequestParam("title") String newTag){
         return tagService.updateTagNameByPaperIdAndTagName(newTag,id,oldTag);
     }
@@ -135,7 +135,7 @@ public class TagController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/tag/insertTags/{id}",method = RequestMethod.POST)
+    @RequestMapping(value = "/tag/insertTags/{id}")
     public @ResponseBody int insertTags(@RequestParam("newTag") String name,@PathVariable("id") int id){
         return tagService.insertTagNameByPaperId(name, id);
     }
@@ -158,7 +158,7 @@ public class TagController {
      * @param pageNum
      * @return
      */
-    @RequestMapping(value = "/main/tag/tagPages/{pageNum}",method = RequestMethod.POST)
+    @RequestMapping(value = "/main/tag/tagPages/{pageNum}")
     public @ResponseBody PageInfo<Paper> tagPages(@RequestParam("tagName") String tagName, @PathVariable("pageNum") int pageNum){
         return tagService.tagPage(tagName,pageNum);
     }

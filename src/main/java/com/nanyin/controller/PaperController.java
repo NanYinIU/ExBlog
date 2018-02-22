@@ -67,7 +67,7 @@ public class PaperController {
      * @param url
      * @return
      */
-    @RequestMapping(value = "/manage/pageMes",method = RequestMethod.GET)
+    @RequestMapping(value = "/manage/pageMes")
     public ModelAndView pageManage(String url){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("InnerLayui/pageMes");
@@ -85,7 +85,7 @@ public class PaperController {
      * @param search
      * @return
      */
-    @RequestMapping(value = "/main/paper/test/{pageNum}",method = RequestMethod.POST)
+    @RequestMapping(value = "/main/paper/test/{pageNum}")
     public @ResponseBody
     PageInfo pageTest(
             @PathVariable(value = "pageNum") int pageNum,
@@ -171,7 +171,7 @@ public class PaperController {
      * @param content
      * @return
      */
-    @RequestMapping(value = "/paper/updateContent/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/paper/updateContent/{id}")
     public @ResponseBody int updateContent(@PathVariable("id") String id,String content){
         return paperService.updatePaperContentById(content,id);
     }
@@ -181,7 +181,7 @@ public class PaperController {
      * @param insertPojo 插入的数据类型
      * @return 返回值 根据返回值判断是否返回成功
      */
-    @RequestMapping(value = "/paper/insertAll/{user}",method = RequestMethod.POST)
+    @RequestMapping(value = "/paper/insertAll/{user}")
     public @ResponseBody int insertAll(
               InsertPojo insertPojo
             , @PathVariable("user") String user){
@@ -236,7 +236,7 @@ public class PaperController {
      * @param paperId
      * @return
      */
-    @RequestMapping(value = "/main/paper/PreAndNextPage/{paperId}",method = RequestMethod.POST)
+    @RequestMapping(value = "/main/paper/PreAndNextPage/{paperId}")
     public @ResponseBody Map<String ,Object> findPreAndNextPage(@PathVariable("paperId") int paperId){
          Map<String,Object> map = paperService.findPreAndNextPage(paperId);
          return map;
@@ -285,7 +285,7 @@ public class PaperController {
      * @param id 文章id
      * @return
      */
-    @RequestMapping(value = "/paper/updatePaperStatus/{id}",method = RequestMethod.POST)
+    @RequestMapping(value = "/paper/updatePaperStatus/{id}")
     public @ResponseBody int updatePaperStatus(
             @RequestParam(value = "review") String review,
             @PathVariable(value = "id") int id){
@@ -296,7 +296,7 @@ public class PaperController {
      * 获得一月内热门文章的json
      * @return
      */
-    @RequestMapping(value = "/main/paper/hotPapersInMonth",method = RequestMethod.POST)
+    @RequestMapping(value = "/main/paper/hotPapersInMonth")
     public @ResponseBody PageInfo<Paper> hotPapersInMonth(){
         PageInfo pageInfo = paperService.findPaperInMonth();
 
@@ -317,7 +317,7 @@ public class PaperController {
      * @param name
      * @return
      */
-    @RequestMapping(value = "/main/paper/personalPaperList/{name}/{pageNum}",method = RequestMethod.POST)
+    @RequestMapping(value = "/main/paper/personalPaperList/{name}/{pageNum}")
     public @ResponseBody PageInfo<Paper> personalPaperList(@PathVariable("pageNum") int pageNum
             ,@RequestParam(value = "search",required = false) String search
             ,@PathVariable("name")String name){
