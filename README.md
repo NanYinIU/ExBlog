@@ -21,12 +21,12 @@ jQuery | 函式库  | [http://jquery.com/](http://jquery.com/)
 Bootstrap | 前端框架  | [http://getbootstrap.com/](http://getbootstrap.com/)
 LayUI | 前端框架 | [http://www.layui.com/](http://www.layui.com/)
 ### 开发环境
-; 系统:Linux Arch
-; IDE:intellJ IDEA
-; 数据库:Mysql
-; 应用服务器:tomcat
-; 数据库客户端:DBeaver
-; jdk版本:jdk8
+- 系统:Linux Arch
+- IDE:intellJ IDEA
+- 数据库:Mysql
+- 应用服务器:tomcat
+- 数据库客户端:DBeaver
+- jdk版本:jdk8
 ### 预览图
 #### 首页
 ![首页](screenShot/首页.png)
