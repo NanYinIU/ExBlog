@@ -2,6 +2,7 @@ package com.nanyin.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
+import com.nanyin.config.common.FreezeException;
 import com.nanyin.config.common.ModifiPass;
 import com.nanyin.config.logConfig.Log;
 import com.nanyin.config.shiroConfig.ShiroUtil;
@@ -103,29 +104,33 @@ public class UserController {
             ,HttpServletRequest request
             ,@RequestParam(value = "url",required = false) String url){
 
-        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username,password);
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password);
         org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
         HttpSession session = request.getSession();
-        String reDirectUrl ;
-        if(url == null || "".equals(url)){
-            reDirectUrl="/main/index";
-        }else{
-            reDirectUrl=url;
+        String reDirectUrl;
+        if (url == null || "".equals(url)) {
+            reDirectUrl = "/main/index";
+        } else {
+            reDirectUrl = url;
         }
-        logger.info("url"+reDirectUrl+"url"+(url==null));
+        logger.info("url" + reDirectUrl + "url" + (url == null));
         //设置rememberMe
-        if("on".equals(rememberMe)){
+        if ("on".equals(rememberMe)) {
             usernamePasswordToken.setRememberMe(true);
             logger.info("开启 rememberMe 功能");
-        }else{
+        } else {
             usernamePasswordToken.setRememberMe(false);
             logger.info("未开启 rememberMe 功能");
         }
         try {
+            if (userService.findUsersByName(username).getStatus()==0){
+                logger.info("账户已经被冻结");
+                throw new FreezeException("账户已经被冻结");
+            }
             subject.login(usernamePasswordToken);
-            session.setAttribute("user",username);
-            return "redirect:"+reDirectUrl;
-        }catch (Exception r){
+            session.setAttribute("user", username);
+            return "redirect:" + reDirectUrl;
+        } catch (Exception r) {
             r.printStackTrace();
             return "login";
         }
