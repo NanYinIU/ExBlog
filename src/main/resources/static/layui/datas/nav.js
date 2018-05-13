@@ -40,7 +40,7 @@ var navs = [{
 	"children": [{
 		"title": "人员管理",
 		"icon": "&#xe6b2;",
-		"href": "http://www.qq.com/"
+		"href": "/user/returnUserManage"
 	}, {
         "title": "文章审查",
         "icon": "&#xe60a;",

@@ -319,5 +319,11 @@ public class UserServiceImpl implements UserService {
         return insurePrivacyMes(userMapper.findUserById(id));
     }
 
+    @Override
+    public int updateUserStatus(String review, String status, int userId) {
+        int statusS = Integer.parseInt(status);
+        return userMapper.updateUserStatus(review, statusS, userId);
+    }
+
 
 }

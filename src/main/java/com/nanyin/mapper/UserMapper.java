@@ -121,5 +121,7 @@ public interface UserMapper {
     @Select("SELECT * FROM social_blog.users WHERE id = #{id}")
     Users findUserById(@Param("id") int id);
 
+    @Update(" UPDATE social_blog.users u,social_blog.user_role_permission  urp SET u.status=#{status}, urp.role_id=(SELECT r.id from social_blog.`role` r WHERE r.role_name=#{review}) WHERE u.id=urp.user_id AND u.id=#{userId}")
+    int updateUserStatus(@Param("review") String review,@Param("status") int status,@Param("userId") int userId);
 
 }

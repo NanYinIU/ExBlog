@@ -50,4 +50,6 @@ public interface UserService {
     List<Users> findAllUsers( );
 
     Users checkUserMes(int id);
+
+    int updateUserStatus(String review,String status,int userId);
 }

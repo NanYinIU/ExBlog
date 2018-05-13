@@ -25,7 +25,7 @@ public class CommentsController {
     public @ResponseBody int deleteComment(@PathVariable("id") int id){
         return commentsService.deleteCommentById(id);
     }
-    @RequestMapping(value = "/comments/ByPaperId/{id}",method = RequestMethod.POST)
+    @RequestMapping(value = "/comments/ByPaperId/{id}")
     public @ResponseBody Map<String,Object> commentsByPaperId(@PathVariable("id") int id){
         return commentsService.findAllCommentsByPaperId(id);
     }

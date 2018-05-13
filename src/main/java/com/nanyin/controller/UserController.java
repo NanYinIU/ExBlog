@@ -258,4 +258,21 @@ public class UserController {
     public @ResponseBody Users personalMes(@RequestParam("userName") String userName){
         return userService.findUsersByName(userName);
     }
+
+    @RequestMapping(value = "/user/admin/updateUserStatus")
+    public ModelAndView updateUserStatusPage(@RequestParam(value = "id",required = true) int id){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("currentUserId",id);
+        modelAndView.setViewName("InnerLayui/Admin/updateUserStatus");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/user/updateUserStatus/{id}")
+    public @ResponseBody int updateUserStatus(@RequestParam String review,@RequestParam String status,@PathVariable(value = "id") String userid){
+        int user = Integer.parseInt(userid);
+        logger.info("userid =" + userid+"review="+review+"status="+status);
+        return userService.updateUserStatus(review, status, user);
+    }
+
+
 }

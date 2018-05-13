@@ -45,7 +45,7 @@ public class ColumnController {
      * @param pageNum
      * @return
      */
-    @RequestMapping(value = {"/main/column/findAllColumn/{pageNum}","/column/findAllColumn/{pageNum}"},method = RequestMethod.POST)
+    @RequestMapping(value = {"/main/column/findAllColumn/{pageNum}","/column/findAllColumn/{pageNum}"})
     public @ResponseBody
     PageInfo findAllColumn( @RequestParam(value = "search", required = false) String search,
                                 @PathVariable("pageNum") int pageNum){
