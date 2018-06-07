@@ -154,6 +154,8 @@ public interface PaperMapper {
     @Delete("DELETE FROM social_blog.paper WHERE id=#{id}")
     int deletePaperByPaperId(int id);
 
+    @Delete("delete from social_blog.column_paper  where paper_id=#{id}")
+    int deletePaperInCoulmn(int id);
     /**
      * 查到所有的文章信息
      *  @param name user's name

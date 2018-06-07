@@ -71,7 +71,7 @@ public class test {
     }
     @Test
     public void test5() {
-        System.out.println(new Md5Hash("123", null,1024));
+        System.out.println(new Md5Hash("123", "MD5",1024));
         System.out.println();
     }
     public void test6(){

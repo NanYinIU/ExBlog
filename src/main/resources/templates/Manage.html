@@ -27,7 +27,7 @@
 			<div class="layui-header header header-demo">
 				<div class="layui-main">
 					<div class="admin-login-box">
-						<a class="logo" style="left: 0;" th:href="@{/HomePage/1}">
+						<a class="logo" style="left: 0;" th:href="@{/main/index}">
 							<span style="font-size: 22px;">Social Blog</span>
 						</a>
 						<div class="admin-side-toggle">
@@ -39,13 +39,13 @@
 					</div>
 					<ul class="layui-nav admin-header-item">
 						<li class="layui-nav-item">
-							<a th:href="@{/HomePage/1}">主页</a>
+							<a th:href="@{/main/index}">主页</a>
 						</li>
 						<li class="layui-nav-item">
-							<a th:href="@{/personalPage/}+${session.user}+'/1'">个人主页</a>
+							<a th:href="@{/main/personal/}+${session.user}">个人主页</a>
 						</li>
 						<li class="layui-nav-item" id="video1">
-							<a href="/column/findAllColumn/1">博客专题</a>
+							<a href="/main/columnList">博客专题</a>
 						</li>
 						<li class="layui-nav-item">
 

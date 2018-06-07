@@ -1127,7 +1127,7 @@ a.reu:hover {
 }
 .post-img {
 	float:left;
-	width:25%;
+	width:0%;
 	margin-right:3%;
 }
 .post-img img {
@@ -1135,7 +1135,7 @@ a.reu:hover {
 }
 .post-text {
 	float:left;
-	width:72%;
+	width:97%;
 }
 .post-text p {
     color: #B5B3B3;

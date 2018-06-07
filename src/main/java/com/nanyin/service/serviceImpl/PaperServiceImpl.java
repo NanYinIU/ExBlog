@@ -256,7 +256,7 @@ public class PaperServiceImpl implements PaperService {
 
     @Override
     public int deletePaperByPaperId(int id) {
-
+        paperMapper.deletePaperInCoulmn(id);
         return paperMapper.deletePaperByPaperId(id);
     }
 

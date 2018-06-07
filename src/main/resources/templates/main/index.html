@@ -24,6 +24,25 @@
 		  });
 		});
 	</script>
+    <style>
+        .articles {
+            margin: 4em 0;
+        }
+        .article {
+            border-bottom: 1px solid #eee;
+            margin-top: 3.5em;
+            padding-bottom: 3em;
+        }
+        .article-left {
+            width: 0%;
+            float: left;
+            margin-right:3%;
+        }
+        .article-right {
+            float: right;
+            width: 100%;
+        }
+    </style>
 	<script type="text/javascript" src="/main/js/move-top.js"></script>
 	<script src="/main/js/template-web.js"></script>
 	<script type="text/javascript" src="/main/js/easing.js"></script>
@@ -182,7 +201,7 @@
 
 							<script type="text/html" id="tags">
 								{{each tags value i}}
-								<a id="tagName" class="tag{{i}}" href="/tag/returnTagPage/{{value}}" >{{value}} </a>
+								<a id="tagName" class="tag{{i}}" href="/main/tag/returnTagPage/{{value}}" >{{value}} </a>
 								{{/each}}
 
 							</script>
@@ -205,9 +224,7 @@
                                                      <div class="popular-post-grids">
                                                          <script type="text/html" id="hotPaper">
                                                              <div class="popular-post-grid">
-                                                                 <div class="post-img">
-                                                                     <a href="/main/paper/{{id}}"><img src="{{paper_image}}" alt="" /></a>
-                                                                 </div>
+
                                                                  <div class="post-text">
                                                                      <a class="pp-title" href="/main/paper/{{id}}"> {{title}}</a>
                                                                      <p>{{create_time}} <a class="span_link" href="#"> &nbsp;&nbsp;&nbsp;观看数:<span class="glyphicon glyphicon-eye-open"></span>{{mark}} </a></p>
